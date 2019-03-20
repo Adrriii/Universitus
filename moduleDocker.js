@@ -22,6 +22,35 @@ module.exports = {
             StdinOnce: false
         })
     },
+
+
+    exec: (container, cmd) => {
+        container.exec({
+            "AttachStdin": false,
+            "AttachStdout": true,
+            "AttachStderr": true,
+            "DetachKeys": "ctrl-p,ctrl-q",
+            "Tty": false,
+            "Cmd": [cmd],
+            "Env": []
+            }, (err, exec) => {
+                if (err) {
+                    console.log("Error in execution : " + err);
+                    return;
+                } 
+                exec.start((err, stream) => {
+                    let rep = ''
+                    stream.on('data', chunk => {
+                        rep += chunk.toString('utf-8')
+                        if (chunk.toString('utf8').indexOf("ready") !== -1) {
+                            return rep;
+                        }
+                    })
+                })
+            })
+    },
+
+
     launchCommand: (docker, imageName, cmd) => {
         docker.run(imageName, ['bash', '-c', cmd], process.stdout)
         // .then(container => {

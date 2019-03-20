@@ -113,6 +113,14 @@ wsServer.on('request', function (request) {
                 console.log((new Date()) + ' Received Message from '
                     + userName + ': ' + message.utf8Data);
 
+
+                console.log("Execution in containeur !");
+                let rep = moduleDocker.exec(containeurs[userName], message.utf8Data);
+                console.log("Reponse : " + rep);
+                
+                
+
+
                 // we want to keep history of all sent messages
                 var obj = {
                     time: (new Date()).getTime(),
