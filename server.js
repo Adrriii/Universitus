@@ -1,5 +1,9 @@
 "use strict";
 
+let Docker = require('dockerode')
+let docker = new Docker({ socketPath: '/var/run/docker.sock' })
+let moduleDocker = require('./moduleDocker');
+
 // Port where we'll run the websocket server
 var webSocketsServerPort = 1337;
 
@@ -15,6 +19,7 @@ var history = [];
 // list of currently connected clients (users)
 var clients = [];
 
+let containeurs = {};
 /**
  * Helper function for escaping input strings
  */
@@ -82,6 +87,17 @@ wsServer.on('request', function (request) {
             if (userName === false) {
                 // remember user name
                 userName = htmlEntities(message.utf8Data);
+
+
+                console.log("Creating containeur for " + userName + "...");
+                moduleDocker.create(docker, userName)
+                .then(container => {
+                    containeurs[userName] = container;
+                    console.log("Containeur for " + userName + " succefully created !");
+                    
+                })
+
+
                 // get random color and send it back to the user
                 userColor = colors.shift();
                 connection.sendUTF(
@@ -117,6 +133,11 @@ wsServer.on('request', function (request) {
         if (userName !== false && userColor !== false) {
             console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
+            
+            console.log("Removing container of " + userName);    
+            containeurs[userName].remove();
+            console.log("Containeur succesfully removed !");
+            
 
             // remove user from the list of connected clients
             clients.splice(index, 1);
