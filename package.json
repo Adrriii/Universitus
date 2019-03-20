@@ -1,0 +1,24 @@
+{
+  "name": "universitus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/Adri-/universitus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Adri-/universitus/issues"
+  },
+  "homepage": "https://gitlab.com/Adri-/universitus#readme",
+  "dependencies": {
+    "nodemon": "^1.18.10",
+    "websocket": "^1.0.28"
+  }
+}
