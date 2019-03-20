@@ -10,7 +10,7 @@ function launchListCommandRec(docker, imageName, argsList, index) {
 }
 
 module.exports = {
-    create: (docker, name) => {
+    create: (docker) => {
         return docker.createContainer({
             Image: 'ubuntu',
             AttachStdin: false,

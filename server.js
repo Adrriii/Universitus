@@ -90,11 +90,15 @@ wsServer.on('request', function (request) {
 
 
                 console.log("Creating containeur for " + userName + "...");
-                moduleDocker.create(docker, userName)
+                moduleDocker.create(docker)
                 .then(container => {
-                    containeurs[userName] = container;
-                    console.log("Containeur for " + userName + " succefully created !");
+                    console.log("Starting containeur...");
                     
+                    container.start()
+                    .then(container => {
+                        containeurs[userName] = container;
+                        console.log("Containeur for " + userName + " succefully created and ready !");
+                    })
                 })
 
 
