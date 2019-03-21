@@ -17,7 +17,7 @@ module.exports = {
             AttachStdout: true,
             AttachStderr: true,
             Tty: true,
-            Cmd: ['/bin/bash', '-c', 'tail -f /var/log/dmesg'],
+            Cmd: ['/bin/bash'],
             OpenStdin: false,
             StdinOnce: false
         })
@@ -25,29 +25,27 @@ module.exports = {
 
 
     exec: (container, cmd) => {
-        container.exec({
-            "AttachStdin": false,
-            "AttachStdout": true,
-            "AttachStderr": true,
-            "DetachKeys": "ctrl-p,ctrl-q",
-            "Tty": false,
-            "Cmd": [cmd],
-            "Env": []
-            }, (err, exec) => {
-                if (err) {
-                    console.log("Error in execution : " + err);
-                    return;
-                } 
-                exec.start((err, stream) => {
-                    let rep = ''
-                    stream.on('data', chunk => {
-                        rep += chunk.toString('utf-8')
-                        if (chunk.toString('utf8').indexOf("ready") !== -1) {
-                            return rep;
-                        }
-                    })
-                })
-            })
+            var options = {
+                Cmd: ['bash', '-c', cmd],
+                Env: [],
+                AttachStdout: true,
+                AttachStderr: true
+            };
+
+            container.exec(options, function (err, exec) {
+                if (err) return;
+                exec.start(function (err, stream) {
+                    if (err) return;
+
+                    container.modem.demuxStream(stream, process.stdout, process.stderr);
+
+                    exec.inspect(function (err, data) {
+                        if (err) return;
+                        console.log(data);
+                    });
+                });
+            });
+
     },
 
 

@@ -106,7 +106,8 @@ wsServer.on('request', function (request) {
                 userColor = colors.shift();
                 connection.sendUTF(
                     JSON.stringify({ type: 'color', data: userColor }));
-                console.log((new Date()) + ' User is known as: ' + userName
+                
+                    console.log((new Date()) + ' User is known as: ' + userName
                     + ' with ' + userColor + ' color.');
 
             } else { // log and broadcast the message
