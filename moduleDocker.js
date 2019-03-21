@@ -25,26 +25,7 @@ module.exports = {
 
 
     exec: (container, cmd) => {
-            var options = {
-                Cmd: ['bash', '-c', cmd],
-                Env: [],
-                AttachStdout: true,
-                AttachStderr: true
-            };
-
-            container.exec(options, function (err, exec) {
-                if (err) return;
-                exec.start(function (err, stream) {
-                    if (err) return;
-
-                    container.modem.demuxStream(stream, process.stdout, process.stderr);
-
-                    exec.inspect(function (err, data) {
-                        if (err) return;
-                        console.log(data);
-                    });
-                });
-            });
+            return;
 
     },
 
@@ -60,7 +41,7 @@ module.exports = {
         if (argsList.length == 0) {
             return;
         }
-
+return;
         launchListCommandRec(docker, imageName, argsList, 0);
     }
 }

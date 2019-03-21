@@ -1,5 +1,5 @@
 "use strict";
-
+let Stream = require('stream')
 let Docker = require('dockerode')
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let moduleDocker = require('./moduleDocker');
@@ -45,6 +45,36 @@ server.listen(webSocketsServerPort, function () {
     console.log((new Date()) + " Server is listening on port "
         + webSocketsServerPort);
 });
+
+function exec(container, cmd) {
+
+    let s = new Stream.PassThrough();
+
+    var options = {
+        Cmd: ['bash', '-c', cmd],
+        Env: [],
+        AttachStdout: true,
+        AttachStderr: true
+    };
+    
+    container.exec(options, function (err, exec) {
+        if (err) return;
+        exec.start(function (err, stream) {
+            if (err) return;
+    
+            container.modem.demuxStream(stream, s, s);
+    
+        });
+    });
+
+    return s;
+}
+
+
+
+
+
+
 
 /**
  * WebSocket server
@@ -116,10 +146,29 @@ wsServer.on('request', function (request) {
 
 
                 console.log("Execution in containeur !");
-                let rep = moduleDocker.exec(containeurs[userName], message.utf8Data);
+                let rep = exec(containeurs[userName], message.utf8Data);
                 console.log("Reponse : " + rep);
+                let data = ''
+                rep.on('data', chunk => {
+                    data += chunk.toString('utf-8');
+                    console.log("yolo");
+                    
+                    if (chunk.toString('utf8').indexOf("ready") !== -1) {
+                        console.log("CONTAINER READY");
+                    }
+                    let obj = {
+                        time: (new Date()).getTime(),
+                        text: htmlEntities(data),
+                        author: userName,
+                        color: userColor
+                    };
+                    let json = JSON.stringify({ type: 'message', data: obj });
+                    clients[index].sendUTF(json);
+                });
                 
-                
+                rep.on('end', () => {
+                    console.log("EXEC END !");
+                })
 
 
                 // we want to keep history of all sent messages
