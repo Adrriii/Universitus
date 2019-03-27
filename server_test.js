@@ -1,6 +1,7 @@
 var Docker = require('dockerode');
 let Stream = require('stream')
 var fs = require('fs');
+const util = require('util')
 
 var socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock';
 var stats = fs.statSync(socket);
@@ -8,6 +9,11 @@ var stats = fs.statSync(socket);
 if (!stats.isSocket()) {
     throw new Error('Are you sure the docker is running?');
 }
+
+
+
+
+
 
 var docker = new Docker({
     socketPath: socket
@@ -33,7 +39,7 @@ var previousKey,
     CTRL_P = '\u0010',
     CTRL_Q = '\u0011';
 
-function handler(err, container) {
+function handler(err, container,) {
     var attach_opts = {
         stream: true,
         stdin: true,
@@ -41,28 +47,27 @@ function handler(err, container) {
         stderr: true
     };
 
-    let myStream = new Stream.PassThrough();
-
-    container.attach(attach_opts, function handler(err, stream) {
+    return container.attach(attach_opts, (err, stream) => {
         // Show outputs
-        stream.pipe(myStream);
-
         process.stdin.pipe(stream);
+        stream.on('data', function (key) {
+            console.log("Receive data : " + key);
 
-        process.stdin.on('data', function (key) {
-            // Detects it is detaching a running container
-            if (previousKey === CTRL_P && key === CTRL_Q) exit(stream, isRaw);
+            if (previousKey === CTRL_P && key === CTRL_Q) exit(stream);
             previousKey = key;
+
+            //console.log("Writing ls...");
+            
+            //stream.write("ls");
         });
 
+        //What it does
         container.start(function (err, data) {
             container.wait(function (err, data) {
                 exit(stream);
             });
         });
     });
-
-    return myStream;
 }
 
 // Exit container
@@ -76,17 +81,10 @@ function exit(stream) {
 }
 
 let promiseCreation = docker.createContainer(optsc);
-promiseCreation.then(container => {
-    let rep = handler(1, container);
-    let data = ''
-    rep.on('data', chunk => {
-        data += chunk.toString('utf-8');
-        console.log("Receiving data: " + data);
-        
-    });
 
-    rep.on('end', () => {
-        console.log("EXEC END !");
-    })
+
+
+promiseCreation.then(container => {
+    handler(1, container)
     
-})
+});
