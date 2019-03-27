@@ -1,4 +1,5 @@
-var Docker = require('dockerode')
+var Docker = require('dockerode');
+let Stream = require('stream')
 var fs = require('fs');
 
 var socket = process.env.DOCKER_SOCKET || '/var/run/docker.sock';
@@ -40,9 +41,11 @@ function handler(err, container) {
         stderr: true
     };
 
+    let myStream = new Stream.PassThrough();
+
     container.attach(attach_opts, function handler(err, stream) {
         // Show outputs
-        stream.pipe(process.stdout);
+        stream.pipe(myStream);
 
         process.stdin.pipe(stream);
 
@@ -58,6 +61,8 @@ function handler(err, container) {
             });
         });
     });
+
+    return myStream;
 }
 
 // Exit container
@@ -72,5 +77,16 @@ function exit(stream) {
 
 let promiseCreation = docker.createContainer(optsc);
 promiseCreation.then(container => {
-    handler(1, container);
+    let rep = handler(1, container);
+    let data = ''
+    rep.on('data', chunk => {
+        data += chunk.toString('utf-8');
+        console.log("Receiving data: " + data);
+        
+    });
+
+    rep.on('end', () => {
+        console.log("EXEC END !");
+    })
+    
 })
