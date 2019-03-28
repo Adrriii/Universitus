@@ -133,17 +133,17 @@ wsServer.on('request', function (request) {
                 console.log("Creating containeur for " + userName + "...");
                 docker.createContainer(optsc)
                     .then(container => {
+                        containeurs[userName] = [null,null]
+
                         var attach_opts = {
                             stream: true,
-                            stdin: true,
+                            stdin: false,
                             stdout: true,
-                            stderr: true
+                            stderr: false
                         };
 
-                        //Attach here
-
+                        //stdout
                         container.attach(attach_opts, (err, stream) => {
-                            process.stdin.pipe(stream); //Truc à modifier plus tard
                             
                             stream.on('data', key => {
                                 let obj = {
@@ -162,9 +162,21 @@ wsServer.on('request', function (request) {
                             console.log("Starting containeur...");
                             container.start()
                             .then(container => {
-                                containeurs[userName] = container;
+                                containeurs[userName][1] = stream;
                                 console.log("Containeur for " + userName + " succefully created and ready !");
                             })
+                        });
+
+                        var attach_opts = {
+                            stream: true,
+                            stdin: true,
+                            stdout: false,
+                            stderr: false
+                        };
+
+                        //stdin
+                        container.attach(attach_opts, (err, stream) => {
+                            containeurs[userName][0] = stream;
                         });
                     })
 
@@ -179,6 +191,8 @@ wsServer.on('request', function (request) {
 
                 console.log((new Date()) + ' User is known as: ' + userName +
                     ' with ' + userColor + ' color.');
+            } else {
+                containeurs[userName][0].write("ls\n");
             }
         }
     });
@@ -190,7 +204,7 @@ wsServer.on('request', function (request) {
                 + connection.remoteAddress + " disconnected.");
             
             console.log("Removing container of " + userName);    
-            containeurs[userName].remove();
+            containeurs[userName][0].remove();
             console.log("Containeur succesfully removed !");
             
 
