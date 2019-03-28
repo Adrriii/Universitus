@@ -46,34 +46,29 @@ server.listen(webSocketsServerPort, function () {
         + webSocketsServerPort);
 });
 
-function exec(container, cmd) {
+// function exec(container, cmd) {
 
-    let s = new Stream.PassThrough();
+//     let s = new Stream.PassThrough();
 
-    var options = {
-        Cmd: ['bash', '-c', cmd],
-        Env: [],
-        AttachStdout: true,
-        AttachStderr: true
-    };
+//     var options = {
+//         Cmd: ['bash', '-c', cmd],
+//         Env: [],
+//         AttachStdout: true,
+//         AttachStderr: true
+//     };
     
-    container.exec(options, function (err, exec) {
-        if (err) return;
-        exec.start(function (err, stream) {
-            if (err) return;
+//     container.exec(options, function (err, exec) {
+//         if (err) return;
+//         exec.start(function (err, stream) {
+//             if (err) return;
     
-            container.modem.demuxStream(stream, s, s);
+//             container.modem.demuxStream(stream, s, s);
     
-        });
-    });
+//         });
+//     });
 
-    return s;
-}
-
-
-
-
-
+//     return s;
+// }
 
 
 /**
@@ -86,11 +81,27 @@ var wsServer = new webSocketServer({
     httpServer: server
 });
 
+var optsc = {
+    'Hostname': '',
+    'User': '',
+    'AttachStdin': true,
+    'AttachStdout': true,
+    'AttachStderr': true,
+    'Tty': true,
+    'OpenStdin': true,
+    'StdinOnce': false,
+    'Env': null,
+    'Cmd': ['bash'],
+    'Dns': ['8.8.8.8', '8.8.4.4'],
+    'Image': 'ubuntu',
+    'Volumes': {},
+    'VolumesFrom': []
+};
+
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function (request) {
-    console.log((new Date()) + ' Connection from origin '
-        + request.origin + '.');
+    console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
     // accept connection - you should check 'request.origin' to
     // make sure that client is connecting from your website
@@ -120,72 +131,54 @@ wsServer.on('request', function (request) {
 
 
                 console.log("Creating containeur for " + userName + "...");
-                moduleDocker.create(docker)
-                .then(container => {
-                    console.log("Starting containeur...");
-                    
-                    container.start()
+                docker.createContainer(optsc)
                     .then(container => {
-                        containeurs[userName] = container;
-                        console.log("Containeur for " + userName + " succefully created and ready !");
+                        var attach_opts = {
+                            stream: true,
+                            stdin: true,
+                            stdout: true,
+                            stderr: true
+                        };
+
+                        //Attach here
+
+                        container.attach(attach_opts, (err, stream) => {
+                            process.stdin.pipe(stream); //Truc à modifier plus tard
+                            
+                            stream.on('data', key => {
+                                let obj = {
+                                    time: (new Date()).getTime(),
+                                    text: htmlEntities(key),
+                                    author: userName,
+                                    color: userColor
+                                };
+                                let json = JSON.stringify({
+                                    type: 'message',
+                                    data: obj
+                                });
+                                clients[index].sendUTF(json);
+                            })
+                        
+                            console.log("Starting containeur...");
+                            container.start()
+                            .then(container => {
+                                containeurs[userName] = container;
+                                console.log("Containeur for " + userName + " succefully created and ready !");
+                            })
+                        });
                     })
-                })
 
 
                 // get random color and send it back to the user
                 userColor = colors.shift();
                 connection.sendUTF(
-                    JSON.stringify({ type: 'color', data: userColor }));
-                
-                    console.log((new Date()) + ' User is known as: ' + userName
-                    + ' with ' + userColor + ' color.');
+                    JSON.stringify({
+                        type: 'color',
+                        data: userColor
+                    }));
 
-            } else { // log and broadcast the message
-                console.log((new Date()) + ' Received Message from '
-                    + userName + ': ' + message.utf8Data);
-
-
-                console.log("Execution in containeur !");
-                let rep = exec(containeurs[userName], message.utf8Data);
-                console.log("Reponse : " + rep);
-                let data = ''
-                rep.on('data', chunk => {
-                    data += chunk.toString('utf-8');
-                    console.log("yolo");
-                    
-                    if (chunk.toString('utf8').indexOf("ready") !== -1) {
-                        console.log("CONTAINER READY");
-                    }
-                    let obj = {
-                        time: (new Date()).getTime(),
-                        text: htmlEntities(data),
-                        author: userName,
-                        color: userColor
-                    };
-                    let json = JSON.stringify({ type: 'message', data: obj });
-                    clients[index].sendUTF(json);
-                });
-                
-                rep.on('end', () => {
-                    console.log("EXEC END !");
-                })
-
-
-                // we want to keep history of all sent messages
-                var obj = {
-                    time: (new Date()).getTime(),
-                    text: htmlEntities(message.utf8Data),
-                    author: userName,
-                    color: userColor
-                };
-                history.push(obj);
-                history = history.slice(-100);
-
-                // broadcast message to all connected clients
-                var json = JSON.stringify({ type: 'message', data: obj });
-                for (var i = 0; i < clients.length; i++) {
-                    clients[i].sendUTF(json);
-                }
+                console.log((new Date()) + ' User is known as: ' + userName +
+                    ' with ' + userColor + ' color.');
             }
         }
     });
