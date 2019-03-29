@@ -1,10 +1,8 @@
-$(function () {
+  $(function () {
   "use strict";
-
   // for better performance - to avoid searching in DOM
   var content = $('#content');
   var input = $('#input');
-  var status = $('#status');
 
   // my color assigned by the server
   var myColor = false;
@@ -18,7 +16,7 @@ $(function () {
   // some notification and exit
   if (!window.WebSocket) {
     content.html($('<p>',
-      { text:'Sorry, but your browser doesn\'t support WebSocket.'}
+      { text:'Sorry, but your browser doesn\'t support this application.'}
     ));
     input.hide();
     $('span').hide();
@@ -28,16 +26,17 @@ $(function () {
   // open connection
   var connection = new WebSocket('ws://127.0.0.1:1337');
 
+
+
   connection.onopen = function () {
     // first we want users to enter their names
     input.removeAttr('disabled');
-    status.text('Choose name:');
   };
 
   connection.onerror = function (error) {
     // just in there were some problems with connection...
     content.html($('<p>', {
-      text: 'Sorry, but there\'s some problem with your '
+      text: 'Sorry, but there\'s a problem with your '
          + 'connection or the server is down.'
     }));
   };
@@ -60,7 +59,6 @@ $(function () {
     // first response from the server with user's color
     if (json.type === 'color') { 
       myColor = json.data;
-      status.text(myName + ': ').css('color', myColor);
       input.removeAttr('disabled').focus();
       // from now user can start sending messages
     } else if (json.type === 'history') { // entire message history
@@ -71,7 +69,7 @@ $(function () {
       }
     } else if (json.type === 'message') { // it's a single message
       // let the user write another message
-      input.removeAttr('disabled'); 
+      input.removeAttr('disabled').focus();
       addMessage(json.data.author, json.data.text,
                  json.data.color, new Date(json.data.time));
     } else {
@@ -109,7 +107,6 @@ $(function () {
    */
   setInterval(function() {
     if (connection.readyState !== 1) {
-      status.text('Error');
       input.attr('disabled', 'disabled').val(
           'Unable to communicate with the WebSocket server.');
     }
@@ -119,11 +116,6 @@ $(function () {
    * Add message to the chat window
    */
   function addMessage(author, message, color, dt) {
-    content.prepend('<p><span style="color:' + color + '">'
-        + author + '</span> @ ' + (dt.getHours() < 10 ? '0'
-        + dt.getHours() : dt.getHours()) + ':'
-        + (dt.getMinutes() < 10
-          ? '0' + dt.getMinutes() : dt.getMinutes())
-        + ': ' + message + '</p>');
+    content.append(message+"<br>");
   }
 });

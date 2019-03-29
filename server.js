@@ -1,8 +1,12 @@
 "use strict";
 let Stream = require('stream')
 let Docker = require('dockerode')
+let Convert = require('ansi-to-html')
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let moduleDocker = require('./moduleDocker');
+
+// used for formatting output into html
+var convert = new Convert();
 
 // Port where we'll run the websocket server
 var webSocketsServerPort = 1337;
@@ -133,7 +137,11 @@ wsServer.on('request', function (request) {
                 console.log("Creating containeur for " + userName + "...");
                 docker.createContainer(optsc)
                     .then(container => {
-                        containeurs[userName] = [null,null]
+                        containeurs[userName] = {
+                            stdin: null,
+                            stdout: null,
+                            container: null
+                        };
 
                         var attach_opts = {
                             stream: true,
@@ -142,13 +150,22 @@ wsServer.on('request', function (request) {
                             stderr: false
                         };
 
+                        containeurs[userName][container] = container;
+
                         //stdout
                         container.attach(attach_opts, (err, stream) => {
                             
                             stream.on('data', key => {
+                                var text = String(key);
+                                while(text.includes("#")) {
+                                    var parts = text.split("#");
+                                    parts.shift();
+                                    text = parts.join();
+                                }
+
                                 let obj = {
                                     time: (new Date()).getTime(),
-                                    text: htmlEntities(key),
+                                    text: convert.toHtml(text),
                                     author: userName,
                                     color: userColor
                                 };
@@ -159,10 +176,24 @@ wsServer.on('request', function (request) {
                                 clients[index].sendUTF(json);
                             })
                         
-                            console.log("Starting containeur...");
+                            console.log("Starting container...");
                             container.start()
                             .then(container => {
-                                containeurs[userName][1] = stream;
+                                containeurs[userName]['stdout'] = stream;
+
+                                let obj = {
+                                    time: (new Date()).getTime(),
+                                    text: "Ready !",
+                                    author: userName,
+                                    color: userColor
+                                };
+
+                                let json = JSON.stringify({
+                                    type: 'message',
+                                    data: obj
+                                });
+
+                                clients[index].sendUTF(json);
                                 console.log("Containeur for " + userName + " succefully created and ready !");
                             })
                         });
@@ -176,7 +207,7 @@ wsServer.on('request', function (request) {
 
                         //stdin
                         container.attach(attach_opts, (err, stream) => {
-                            containeurs[userName][0] = stream;
+                            containeurs[userName]['stdin'] = stream;
                         });
                     })
 
@@ -192,7 +223,7 @@ wsServer.on('request', function (request) {
                 console.log((new Date()) + ' User is known as: ' + userName +
                     ' with ' + userColor + ' color.');
             } else {
-                containeurs[userName][0].write("ls\n");
+                containeurs[userName]['stdin'].write(message.utf8Data+"\n");
             }
         }
     });
@@ -203,8 +234,8 @@ wsServer.on('request', function (request) {
             console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
             
-            console.log("Removing container of " + userName);    
-            containeurs[userName][0].remove();
+            console.log("Removing container of " + userName);  
+            containeurs[userName][container].stop();
             console.log("Containeur succesfully removed !");
             
 
