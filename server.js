@@ -157,10 +157,12 @@ wsServer.on('request', function (request) {
                             
                             stream.on('data', key => {
                                 var text = String(key);
-                                while(text.includes("#")) {
-                                    var parts = text.split("#");
-                                    parts.shift();
-                                    text = parts.join();
+                                var parts = text.split("\n");
+                                text = '';
+                                for (var i = 0; i < parts.length; i++) {
+                                    if (!parts[i].includes("#")) {
+                                        text += parts[i];
+                                    }
                                 }
 
                                 let obj = {
