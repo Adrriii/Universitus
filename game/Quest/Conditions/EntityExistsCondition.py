@@ -5,11 +5,11 @@ import * from Condition
 
 # example:
 # Quest-example.quest
-# name: "Create a rock"
+# name: "Create a rock in the parc"
 # onStart: none
 # onResolve: none
 # steps: []
-# conditions: [EntityExistsCondition(Rock)]
+# conditions: [EntityExistsCondition(Rock("/Parc"))]
 
 class EntityExistsCondition(Condition):
     def __init__(self, entity):
