@@ -9,7 +9,7 @@ import * from Condition
 # onStart: none
 # onResolve: none
 # steps: []
-# conditions: [EntityExistsCondition(Rock("/Parc"))]
+# conditions: [EntityExists(Rock("/Parc"))]
 
 class EntityExistsCondition(Condition):
     def __init__(self, entity):
