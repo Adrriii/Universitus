@@ -95,9 +95,9 @@ var optsc = {
     'OpenStdin': true,
     'StdinOnce': false,
     'Env': null,
-    'Cmd': ['bash'],
+    'Cmd': [],
     'Dns': ['8.8.8.8', '8.8.4.4'],
-    'Image': 'ubuntu',
+    'Image': 'docker-game',
     'Volumes': {},
     'VolumesFrom': []
 };
