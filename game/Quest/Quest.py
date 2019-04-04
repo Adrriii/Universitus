@@ -1,6 +1,7 @@
-import * from Character
-import * from Event
-import * from Condition
+from Quest.Event import Event
+from Quest.Condition import Condition
+from Quest.Conditions.EntityExistsCondition import EntityExistsCondition
+from Quest.Conditions.PlaceExistsCondition import PlaceExistsCondition
 
 class Quest :
     def __init__(self) :
@@ -16,6 +17,3 @@ class Quest :
         self.conditions = [] #Condition[]  needed to resolve the quest
 
         self.next = [] #Quest[] unlocked on resolve
-
-
-    

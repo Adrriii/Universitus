@@ -1,6 +1,7 @@
 import os
 
 from Player import *
+from Quest.Quest import *
 
 player = Player()
 

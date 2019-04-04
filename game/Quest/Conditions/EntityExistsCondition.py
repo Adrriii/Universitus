@@ -1,4 +1,6 @@
-import * from Condition
+import sys
+sys.path.append("..")
+from Quest.Condition import Condition
 
 # Example for a simple condition.
 # Such structure will allow human readable quest conditions in config files
@@ -12,9 +14,11 @@ import * from Condition
 # conditions: [EntityExists(Rock("/Parc"))]
 
 class EntityExistsCondition(Condition):
-    def __init__(self, entity):
-        self.entity = entity
+    def __init__(self):
         pass
 
-    def met():
+    def met(self):
         return entity.exists()
+
+    def printItself(self):
+        print("EntityExistsCondition")
