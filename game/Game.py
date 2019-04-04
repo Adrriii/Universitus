@@ -12,9 +12,7 @@ class Game :
     root = ''
 
     def __init__(self) :
-
-        self.prefix = ["Parc"]
-        self.user_name = "TOTO"
+        self.user_name = "Player"
         self.quests = {}
 
         for subdir, dirs, files in os.walk("Quests"):
@@ -24,8 +22,9 @@ class Game :
                     self.quests[file[:-6]] = Quest(file)
 
     def start(self) :
+        Command.root = self.root
 
-        path_place = self.prefix[0]
+        # If needed, replay all quests
 
         while(True):
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
@@ -33,11 +32,16 @@ class Game :
 
             try:
                 command_string = args[0]
-                try:
-                    command = eval(command_string+"()")
 
-                    command.perform(args)
-                except:
-                    print("Unknown command \""+command_string+"\"")
+                if(command_string != "setup"):
+                    try:
+                        command = eval(command_string+"()")
+
+                        command.perform(args)
+                    except:
+                        print("Unknown command \""+command_string+"\"")
+                else:
+                    if(args[1] == "nick"):
+                        self.user_name = args[2]
             except:
                 pass

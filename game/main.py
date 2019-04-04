@@ -2,14 +2,13 @@
 import os
 from Game import *
 
-game = Game()
-
-for title,quest in game.quests.items():
-    print(title+": ")
-    print(quest.evalConditions())
+game = Game() 
 
 os.chdir("world")
 game.root = os.getcwd()
 os.chdir("Parc")
+
+print("Message de bienvenue")
+
 game.start()
 
