@@ -1,0 +1,7 @@
+name: "Créer une pierre"
+description: "(Quête d'exemple) Ta première quête ! Crées une pierre dans le parc grâce à tes pouvoirs de magicien."
+onStart: none
+onResolve: none
+steps: none
+conditions: [EntityExists(Rock("/Parc"))]
+next: [KillVoldeScript]
