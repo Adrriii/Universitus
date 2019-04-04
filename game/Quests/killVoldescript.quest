@@ -1,0 +1,7 @@
+name: "Tuez Voldescript"
+description: "Enfin."
+onStart: none
+onResolve: none
+steps: none
+conditions: [not EntityExistsCondition(Rock("/Parc"))]
+next: []
