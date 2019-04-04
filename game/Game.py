@@ -2,6 +2,7 @@ import os
 
 from Player import *
 from Quest.Quest import *
+from Entity.Items.Common import *
 
 player = Player()
 
@@ -50,8 +51,3 @@ class Game :
             if(os.system(input_string) != 0):
                 for i in range(nb_place_append):
                     self.prefix.pop()
-
-game = Game()
-
-for title,quest in game.quests.items():
-    print(quest.evalConditions())

@@ -13,12 +13,13 @@ from Quest.Condition import Condition
 # steps: []
 # conditions: [EntityExists(Rock("/Parc"))]
 
-class EntityExistsCondition(Condition):
-    def __init__(self):
+class EntityExists(Condition):
+    def __init__(self, entity):
+        self.entity = entity
         pass
 
     def met(self):
-        return entity.exists()
+        return self.entity.exists()
 
     def printItself(self):
-        print("EntityExistsCondition")
+        print("EntityExists")

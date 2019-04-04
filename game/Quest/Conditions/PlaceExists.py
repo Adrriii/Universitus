@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 from Quest.Condition import Condition
 
-class PlaceExistsCondition(Condition):
+class PlaceExists(Condition):
     def __init__(self):
         pass
 
@@ -10,4 +10,4 @@ class PlaceExistsCondition(Condition):
         return True # system call to check a folder
 
     def printItself(self):
-        print("PlaceExistsCondition")
+        print("PlaceExists")

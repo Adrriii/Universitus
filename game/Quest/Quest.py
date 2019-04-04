@@ -1,7 +1,8 @@
 from Quest.Event import Event
 from Quest.Condition import Condition
-from Quest.Conditions.EntityExistsCondition import EntityExistsCondition
-from Quest.Conditions.PlaceExistsCondition import PlaceExistsCondition
+from Quest.Conditions.EntityExists import EntityExists
+from Quest.Conditions.PlaceExists import PlaceExists
+from Entity.Items.Common import *
 
 class Quest :
     def __init__(self, filename) :
@@ -37,9 +38,10 @@ class Quest :
                 sp.pop(0)
                 toEval = "".join(sp)
 
-            met = eval(toEval)().met()
+            cond = eval(toEval)
+            met = cond.met()
             evals.append((not invert and met) or (invert and not met))
-        print(evals)
+            
         for ev in evals:
             if not ev:
                 return False

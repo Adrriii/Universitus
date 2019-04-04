@@ -1,4 +1,4 @@
-import * from Entity
+from Entity import Entity
 
 class Character(Entity) :
 

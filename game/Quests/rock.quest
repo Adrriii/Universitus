@@ -3,5 +3,5 @@ description: "(Quête d'exemple) Ta première quête ! Crées une pierre dans le
 onStart: none
 onResolve: none
 steps: none
-conditions: [EntityExistsCondition(Rock("/Parc"))]
+conditions: [EntityExists(Rock("/Parc"))]
 next: [KillVoldeScript]
