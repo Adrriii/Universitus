@@ -3,5 +3,5 @@ description: "Enfin."
 onStart: none
 onResolve: none
 steps: none
-conditions: [not EntityExists(Rock("/Parc"))]
+conditions: [not EntityExists(Rock("Parc"))]
 next: []
