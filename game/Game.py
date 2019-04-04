@@ -9,6 +9,8 @@ player = Player()
 
 class Game :
 
+    root = ''
+
     def __init__(self) :
 
         self.prefix = ["Parc"]
@@ -21,12 +23,12 @@ class Game :
                 if ext == ".quest":
                     self.quests[file[:-6]] = Quest(file)
 
-    def tick(self) :
+    def start(self) :
 
         path_place = self.prefix[0]
 
         while(True):
-            input_string = input(self.user_name + "@:" + path_place + "$ ")
+            input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
             args = input_string.split(' ')
 
             try:

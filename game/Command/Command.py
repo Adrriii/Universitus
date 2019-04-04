@@ -23,6 +23,6 @@ class cd(Command):
 
 class ls(Command):
     pass
-    
+
 class pwd(Command):
     pass
