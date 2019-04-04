@@ -1,5 +1,2 @@
 #!/usr/bin/python3
-from ...Player import *
-
-print("C'est un rock")
-player.say("Hello")
+print("*Un rocher")
