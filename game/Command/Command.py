@@ -1,4 +1,6 @@
 import os
+import subprocess
+from io import StringIO
 
 class Command:
 
@@ -8,7 +10,7 @@ class Command:
         pass
 
     def perform(self, args):
-        output = os.system(" ".join(args))
+        output = subprocess.check_output(args)
         return output
 
     def inbounds(self, path):
@@ -35,3 +37,25 @@ class ls(Command):
 
 class pwd(Command):
     pass
+
+class touch(Command):
+    pass
+
+class echo(Command):
+    pass
+
+class python(Command):
+    pass
+class edit(Command):
+
+    def perform(self, args):
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    with open(args[1],mode='r') as f:
+                        return bytes(f.read(), 'utf-8')
+            except:
+                print("You cannot edit \""+destination+"\"")
+        except:
+            print("Invalid file")

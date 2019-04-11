@@ -38,8 +38,9 @@ class Game :
                         command = eval(command_string+"()")
 
                         output = command.perform(args)
-                        print(output)
-                    except:
+                        if(output):
+                            print(output.decode("utf-8"))
+                    except Exception as e:
                         print("Unknown command \""+command_string+"\"")
                 else:
                     if(args[1] == "nick"):
