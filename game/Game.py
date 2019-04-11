@@ -37,11 +37,14 @@ class Game :
                     try:
                         command = eval(command_string+"()")
 
-                        command.perform(args)
+                        output = command.perform(args)
+                        print(output)
                     except:
                         print("Unknown command \""+command_string+"\"")
                 else:
                     if(args[1] == "nick"):
                         self.user_name = args[2]
+                    else:
+                        print("Unknown command \""+command_string+"\"")
             except:
                 pass
