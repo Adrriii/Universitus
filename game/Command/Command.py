@@ -10,7 +10,7 @@ class Command:
         pass
 
     def perform(self, args):
-        output = subprocess.check_output(args)
+        output = subprocess.check_output(args, shell=True)
         return output
 
     def inbounds(self, path):
@@ -41,8 +41,26 @@ class pwd(Command):
 class touch(Command):
     pass
 
-class echo(Command):
-    pass
+class edit_(Command):
+
+    def perform(self, args):
+        try:
+            command = ' '.join(args)
+            text = ('"'.join(('"'.join(command.split('"')[1:]).split('"'))[:-1])).replace('\\n','\n')
+            f_out = os.path.abspath(command.split(">")[-1].strip())
+
+            try:
+                
+                if(self.inbounds(f_out)):
+                    with open(f_out, 'w') as f:
+                        f.write(text)
+                        print("Wrote to "+f_out)
+                else:
+                    print("You are not allowed to go edit this file")
+            except:
+                print("You cannot edit \""+f_out+"\"")
+        except Exception as e:
+            print("Invalid file ("+str(e)+")")
 
 class python(Command):
     pass
