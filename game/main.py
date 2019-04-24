@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from Game import *
+import os
 
-print("Hello world !")
-
+os.system("clear")
 game = Game()
 game.tick()

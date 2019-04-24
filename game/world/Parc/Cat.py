@@ -10,8 +10,10 @@ while not directory.endswith('game'):
 if directory not in sys.path:
     sys.path.append(directory)
 
-from Player import *
+from PNJ import *
 
-player = Player()
-print("C'est un chat")
-player.say("Hello")
+
+cat = PNJ("Azrael")
+cat.append_text("Hey ! J'aime manger des petits trucs bleus.")
+cat.append_text("Et je vais te bouffer.")
+cat.parse_command(sys.argv)
