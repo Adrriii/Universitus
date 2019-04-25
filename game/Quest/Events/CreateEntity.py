@@ -5,10 +5,11 @@ from Entity.Entity import Entity
 
 class CreateEntity(Event):
     def __init__(self, entity):
+        self.entity = entity
         pass
 
     def do(self):
-        return True # system call to create an entity
+        self.entity.create()
 
     def printItself(self):
         super()

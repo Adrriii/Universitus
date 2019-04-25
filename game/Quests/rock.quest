@@ -4,4 +4,4 @@ onStart: [RemoveEntity(Rock("Parc"))]
 onResolve: none
 steps: none
 conditions: [EntityExists(Rock("Parc"))]
-next: [KillVoldeScript]
+next: [killVoldescript]

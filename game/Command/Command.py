@@ -39,7 +39,17 @@ class pwd(Command):
     pass
 
 class touch(Command):
-    pass
+
+    def perform(self, args):
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    open(destination,'a').close()
+            except:
+                print("You cannot edit \""+destination+"\"")
+        except:
+            print("Invalid destination")
 
 class restart(Command):
     def perform(self, args):

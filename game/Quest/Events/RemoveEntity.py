@@ -5,10 +5,11 @@ from Entity.Entity import Entity
 
 class RemoveEntity(Event):
     def __init__(self, entity):
+        self.entity = entity
         pass
 
     def do(self):
-        return True # system call to remove an entity
+        self.entity.remove()
 
     def printItself(self):
         super()

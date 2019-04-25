@@ -30,6 +30,7 @@ class Game :
 
     def checkQuests(self):
         toDelete = []
+        toStart = []
 
         for name, quest in self.activeQuests.items():
             resolved,nextQuests = quest.tryResolve()
@@ -38,7 +39,10 @@ class Game :
                 toDelete.append(name)
 
             for nextQuest in nextQuests:
-                self.startQuest(nextQuest)
+                toStart.append(nextQuest)
+        
+        for quest in toStart:
+            self.startQuest(quest)
         
         for quest in toDelete:
             del self.activeQuests[quest]
@@ -47,6 +51,7 @@ class Game :
         Command.root = self.root
 
         # If needed, replay all quests
+        self.quests["rock"].setAvailable()
         self.startQuest("rock")
 
         while(True):

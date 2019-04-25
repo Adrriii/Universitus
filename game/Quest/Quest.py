@@ -72,6 +72,8 @@ class Quest :
                             self.next.append(quest)
                     continue
 
+    def setAvailable(self):
+        self.status = QuestStatus.AVAILABLE
 
     def evalConditions(self):
         evals = []
