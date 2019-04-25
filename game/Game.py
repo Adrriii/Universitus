@@ -69,6 +69,8 @@ class Game :
                     if(output):
                         print(output.decode("utf-8"))
                 except:
+                    if(command_string == "restart"):
+                        exit()
                     print("Unknown command \""+command_string+"\"")
 
                 self.checkQuests()
