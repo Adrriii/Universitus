@@ -22,4 +22,5 @@ class EntityExists(Condition):
         return self.entity.exists()
 
     def printItself(self):
-        print("EntityExists")
+        super()
+        print(":EntityExists")

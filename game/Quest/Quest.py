@@ -94,7 +94,7 @@ class Quest :
     def isResolved(self):
         if self.status == QuestStatus.ENDED:
             return True
-        if not evalConditions():
+        if not self.evalConditions():
             return False
         
         for step in self.steps:
@@ -104,8 +104,8 @@ class Quest :
         return True
 
     def tryResolve(self):
-        if not self.status == QuestStatus.ENDED and isResolved():
-            resolve()
+        if not self.status == QuestStatus.ENDED and self.isResolved():
+            self.resolve()
 
     def start(self):
         if self.status == QuestStatus.AVAILABLE:

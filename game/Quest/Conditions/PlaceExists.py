@@ -10,4 +10,5 @@ class PlaceExists(Condition):
         return True # system call to check a folder
 
     def printItself(self):
-        print("PlaceExists")
+        super()
+        print(":PlaceExists")

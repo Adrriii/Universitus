@@ -10,4 +10,5 @@ class RemoveEntity(Event):
         return True # system call to remove an entity
 
     def printItself(self):
-        print("RemoveEntity")
+        super()
+        print(":RemoveEntity")

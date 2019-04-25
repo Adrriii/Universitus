@@ -4,3 +4,6 @@ class Condition:
 
     def met(self):
         return False
+
+    def printItself(self):
+        print("Condition")

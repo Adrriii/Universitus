@@ -10,4 +10,5 @@ class CreateEntity(Event):
         return True # system call to create an entity
 
     def printItself(self):
-        print("CreateEntity")
+        super()
+        print(":CreateEntity")
