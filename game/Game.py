@@ -76,10 +76,11 @@ class Game :
                     output = command.perform(args)
                     if(output):
                         print(output.decode("utf-8"))
-                except:
+                except Exception as e:
                     if(command_string == "restart"):
                         exit()
                     print("Unknown command \""+command_string+"\"")
+                    raise e
 
                 self.checkQuests()
             else:

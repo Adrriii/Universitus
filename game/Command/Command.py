@@ -1,5 +1,6 @@
 import os
 import subprocess
+import importlib
 from io import StringIO
 
 class Command:
@@ -31,13 +32,13 @@ class cd(Command):
                                 print(line, end = '')
                             print("\n")
                 else:
-                    print("You are not allowed to go there")
+                    print("Impossible d'aller ici.")
             except:
                 exit()
-                print("You cannot go to \""+destination+"\"")
+                print("Vous ne pouvez pas vous diriger vers \""+destination+"\"")
         except:
             exit()
-            print("Invalid destination")
+            print("Cette destination est invalide.")
 
 class cat(Command):
 
@@ -48,11 +49,11 @@ class cat(Command):
                 if(self.inbounds(destination)):
                     super.perform(args)
                 else:
-                    print("You are not allowed to go there")
+                    print("Impossible de voir ce qui se trouve à l'intérieur.")
             except:
-                print("You cannot go to \""+destination+"\"")
+                print("Cet endroit est inaccessible.")
         except:
-            print("Invalid destination")
+            print("Cet objet est invalide.")
 
 class ls(Command):
     pass
@@ -69,9 +70,33 @@ class touch(Command):
                 if(self.inbounds(destination)):
                     open(destination,'a').close()
             except:
-                print("You cannot edit \""+destination+"\"")
+                print("Vous ne pouvez pas créer \""+destination+"\"")
         except:
-            print("Invalid destination")
+            print("L'endroit auquel vous tentez d'accéder est incorrect.")
+
+class talk(Command):
+
+    def perform(self, args):
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    name = destination[:-3]
+                    if(destination[-3:] == ".py"):
+                        try:
+                            with open(destination,'r', encoding="utf-8") as f:
+                                text = ''.join(f.readlines())
+                                exec(text)
+                                character = eval(name+"()")
+                                character.talk([])
+                        except:
+                            print("*Bruits inintelligibles*")
+                    else:
+                        print("Ceci ne peut parler !")
+            except:
+                print("Vous ne pouvez pas vous adresser à "+destination)
+        except:
+            print("La personne à qui vous tentez de vous adresser est hors de portée.")
 
 class restart(Command):
     def perform(self, args):
@@ -90,13 +115,12 @@ class edit_(Command):
                 if(self.inbounds(f_out)):
                     with open(f_out, 'w') as f:
                         f.write(text)
-                        print("Wrote to "+f_out)
                 else:
-                    print("You are not allowed to go edit this file")
+                    print("Vous ne pouvez pas modifier cet objet.")
             except:
-                print("You cannot edit \""+f_out+"\"")
-        except Exception as e:
-            print("Invalid file ("+str(e)+")")
+                print("Vous ne pouvez pas modifier cet objet")
+        except:
+            print("L'objet que vous tentez de modifier est invalide.")
 
 class python(Command):
     pass
@@ -110,6 +134,6 @@ class edit(Command):
                     with open(args[1],mode='r') as f:
                         return bytes(f.read(), 'utf-8')
             except:
-                print("You cannot edit \""+destination+"\"")
+                print("Vous ne pouvez pas modifier cet objet.")
         except:
-            print("Invalid file")
+            print("L'objet que vous tentez de modifier est invalide.")

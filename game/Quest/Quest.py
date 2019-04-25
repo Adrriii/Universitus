@@ -19,6 +19,7 @@ class QuestStatus(Enum):
 class Quest :
     def __init__(self, filename) :
         itemSeparator = ';'
+        evalSeparator = '|'
 
         with open("Quests/"+filename, encoding="utf-8") as file:
             self.status = QuestStatus.UNAVAILABLE
@@ -47,31 +48,31 @@ class Quest :
                     continue
                 if(attr == "onStart"):
                     if(left != ' none\n'):
-                        events = left.split('{')[1].split('}')[0]
+                        events = left.split(evalSeparator)[1].split(evalSeparator)[0]
 
                         for event in events.split(itemSeparator):
                             self.onStart.append(eval(event))
                 if(attr == "onResolve"):
                     if(left != ' none\n'):
-                        events = left.split('{')[1].split('}')[0]
+                        events = left.split(evalSeparator)[1].split(evalSeparator)[0]
 
                         for event in events.split(itemSeparator):
                             self.onResolve.append(eval(event))
                 if(attr == "steps"):
                     if(left != ' none\n'):
-                        steps = left.split('{')[1].split('}')[0]
+                        steps = left.split(evalSeparator)[1].split(evalSeparator)[0]
 
                         for quest in steps.split(itemSeparator):
                             self.steps.append(quest)
                 if(attr == "conditions"):
                     if(left != ' none\n'):
-                        conditions = left.split('{')[1].split('}')[0]
+                        conditions = left.split(evalSeparator)[1].split(evalSeparator)[0]
 
                         for condition in conditions.split(itemSeparator):
                             self.conditions.append(condition)
                 if(attr == "next"):
                     if(left != ' none\n'):
-                        quests = left.split('{')[1].split('}')[0]
+                        quests = left.split(evalSeparator)[1].split(evalSeparator)[0]
 
                         for quest in quests.split(itemSeparator):
                             self.next.append(quest)

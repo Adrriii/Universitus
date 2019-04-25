@@ -6,7 +6,7 @@ class Characteristic() :
         self.value = value
 
     def toString(self):
-        return "        self."+ self.name + " = " + str(self.value)
+        return "\t\tself."+ self.name + " = " + str(self.value)
 
 class HP(Characteristic):
     def __init__(self, value) :

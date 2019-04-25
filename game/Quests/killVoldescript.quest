@@ -1,7 +1,7 @@
 name: Tuez Voldescript
 description: Enfin.
-onStart: {CreateCharacter(Character("VoldeScript","Parc",[HP(1000)]))}
+onStart: |CreateCharacter(Character("VoldeScript","Parc",[HP(1000)],{}))|
 onResolve: none
 steps: none
-conditions: {not EntityExists(Entity("VoldeScript","Parc"))}
-next: {}
+conditions: |not EntityExists(Entity("VoldeScript","Parc"))|
+next: ||
