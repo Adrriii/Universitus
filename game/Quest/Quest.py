@@ -91,5 +91,33 @@ class Quest :
                 return False
         return True
 
+    def isResolved(self):
+        if self.status == QuestStatus.ENDED:
+            return True
+        if not evalConditions():
+            return False
+        
+        for step in self.steps:
+            if not step.isResolved():
+                return False
+
+        return True
+
+    def tryResolve(self):
+        if not self.status == QuestStatus.ENDED and isResolved():
+            resolve()
+
+    def start(self):
+        if self.status == QuestStatus.AVAILABLE:
+            self.status = QuestStatus.STARTED
+            for event in self.onStart:
+                event.do()
+
+    def resolve(self):
+        if self.status == QuestStatus.STARTED:
+            self.status = QuestStatus.ENDED
+            for event in self.onResolve:
+                event.do()
+
             
     
