@@ -15,7 +15,7 @@ class QuestStatus(Enum):
 
 class Quest :
     def __init__(self, filename) :
-        with open("Quests/"+filename) as file:
+        with open("Quests/"+filename, encoding="utf-8") as file:
             self.status = QuestStatus.UNAVAILABLE
             self.onStart = []
             self.onResolve = []
@@ -31,14 +31,14 @@ class Quest :
                 
                 if(attr == "name"):
                     if(left != ' none\n'):
-                        self.name = left
+                        self.name = left.split('\n')[0]
                     continue
                 else:
                     #Invalidate the configuration, invalid quest
                     pass
                 if(attr == "description"):
                     if(left != ' none\n'):
-                        self.description = left
+                        self.description = left.split('\n')[0]
                     continue
                 if(attr == "onStart"):
                     if(left != ' none\n'):

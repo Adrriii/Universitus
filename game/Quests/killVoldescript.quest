@@ -1,5 +1,5 @@
-name: "Tuez Voldescript"
-description: "Enfin."
+name: Tuez Voldescript
+description: Enfin.
 onStart: none
 onResolve: none
 steps: none

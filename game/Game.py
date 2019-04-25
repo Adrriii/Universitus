@@ -23,8 +23,9 @@ class Game :
                     self.quests[file[:-6]] = Quest(file)
 
     def startQuest(self, name):
-        print("Started a new quest : "+name+" !")
         quest = self.quests[name]
+        print("Started a new quest : "+quest.name+" !")
+        print(quest.description)
         quest.start()
         self.activeQuests[name] = quest
 
@@ -35,7 +36,7 @@ class Game :
         for name, quest in self.activeQuests.items():
             resolved,nextQuests = quest.tryResolve()
             if resolved:
-                print("Completed quest : "+name+" !")
+                print("Completed quest : "+quest.name+" !")
                 toDelete.append(name)
 
             for nextQuest in nextQuests:

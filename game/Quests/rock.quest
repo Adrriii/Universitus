@@ -1,5 +1,5 @@
-name: "Créer une pierre"
-description: "(Quête d'exemple) Ta première quête ! Crées une pierre dans le parc grâce à tes pouvoirs de magicien."
+name: Créer une pierre
+description: (Quête d'exemple) Ta première quête ! Crées une pierre dans le parc grâce à tes pouvoirs de magicien.
 onStart: [RemoveEntity(Rock("Parc"))]
 onResolve: none
 steps: none
