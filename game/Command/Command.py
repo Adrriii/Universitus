@@ -32,6 +32,21 @@ class cd(Command):
         except:
             print("Invalid destination")
 
+class cat(Command):
+
+    def perform(self, args):
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    super.perform(args)
+                else:
+                    print("You are not allowed to go there")
+            except:
+                print("You cannot go to \""+destination+"\"")
+        except:
+            print("Invalid destination")
+
 class ls(Command):
     pass
 

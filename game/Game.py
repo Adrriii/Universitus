@@ -40,6 +40,7 @@ class Game :
                 toDelete.append(name)
 
             for nextQuest in nextQuests:
+                self.quests[nextQuest].setAvailable()
                 toStart.append(nextQuest)
         
         for quest in toStart:

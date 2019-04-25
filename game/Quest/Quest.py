@@ -4,7 +4,10 @@ from Quest.Conditions.EntityExists import EntityExists
 from Quest.Conditions.PlaceExists import PlaceExists
 from Quest.Events.CreateEntity import CreateEntity
 from Quest.Events.RemoveEntity import RemoveEntity
+from Quest.Events.CreateCharacter import CreateCharacter
 from Entity.Items.Common import *
+from Entity.Character import *
+from Entity.Characteristic import *
 from enum import Enum
 
 class QuestStatus(Enum):
@@ -15,6 +18,8 @@ class QuestStatus(Enum):
 
 class Quest :
     def __init__(self, filename) :
+        itemSeparator = ';'
+
         with open("Quests/"+filename, encoding="utf-8") as file:
             self.status = QuestStatus.UNAVAILABLE
             self.onStart = []
@@ -42,33 +47,33 @@ class Quest :
                     continue
                 if(attr == "onStart"):
                     if(left != ' none\n'):
-                        events = left.split('[')[1].split(']')[0]
+                        events = left.split('{')[1].split('}')[0]
 
-                        for event in events.split(','):
+                        for event in events.split(itemSeparator):
                             self.onStart.append(eval(event))
                 if(attr == "onResolve"):
                     if(left != ' none\n'):
-                        events = left.split('[')[1].split(']')[0]
+                        events = left.split('{')[1].split('}')[0]
 
-                        for event in events.split(','):
+                        for event in events.split(itemSeparator):
                             self.onResolve.append(eval(event))
                 if(attr == "steps"):
                     if(left != ' none\n'):
-                        steps = left.split('[')[1].split(']')[0]
+                        steps = left.split('{')[1].split('}')[0]
 
-                        for quest in steps.split(','):
+                        for quest in steps.split(itemSeparator):
                             self.steps.append(quest)
                 if(attr == "conditions"):
                     if(left != ' none\n'):
-                        conditions = left.split('[')[1].split(']')[0]
+                        conditions = left.split('{')[1].split('}')[0]
 
-                        for condition in conditions.split(','):
+                        for condition in conditions.split(itemSeparator):
                             self.conditions.append(condition)
                 if(attr == "next"):
                     if(left != ' none\n'):
-                        quests = left.split('[')[1].split(']')[0]
+                        quests = left.split('{')[1].split('}')[0]
 
-                        for quest in quests.split(','):
+                        for quest in quests.split(itemSeparator):
                             self.next.append(quest)
                     continue
 
