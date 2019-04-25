@@ -52,6 +52,13 @@ class Game :
     def start(self) :
         Command.root = self.root
 
+        # Lore example
+        with open("Parc/.lore",'w') as initialLore:
+            initialLore.write("Vous entrez dans le Parc")
+
+        # Emulate user command to show lore example
+        eval("cd()").perform(['cd',"Parc"])
+
         # If needed, replay all quests
         self.quests["rock"].setAvailable()
         self.startQuest("rock")

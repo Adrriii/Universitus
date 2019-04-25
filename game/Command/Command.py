@@ -25,11 +25,18 @@ class cd(Command):
             try:
                 if(self.inbounds(destination)):
                     os.chdir(args[1])
+                    if(os.path.isfile(".lore")):
+                        with open(".lore",'r') as f:
+                            for line in f.readlines():
+                                print(line, end = '')
+                            print("\n")
                 else:
                     print("You are not allowed to go there")
             except:
+                exit()
                 print("You cannot go to \""+destination+"\"")
         except:
+            exit()
             print("Invalid destination")
 
 class cat(Command):
