@@ -24,7 +24,7 @@ class Game :
 
     def startQuest(self, name):
         quest = self.quests[name]
-        print("Started a new quest : "+quest.name+" !")
+        print("Nouvelle quête : "+quest.name+" !")
         print(quest.description)
         quest.start()
         self.activeQuests[name] = quest
@@ -36,7 +36,7 @@ class Game :
         for name, quest in self.activeQuests.items():
             resolved,nextQuests = quest.tryResolve()
             if resolved:
-                print("Completed quest : "+quest.name+" !")
+                print("Quête complétée : "+quest.name+" !")
                 toDelete.append(name)
 
             for nextQuest in nextQuests:
@@ -68,7 +68,7 @@ class Game :
                     output = command.perform(args)
                     if(output):
                         print(output.decode("utf-8"))
-                except Exception as e:
+                except:
                     print("Unknown command \""+command_string+"\"")
 
                 self.checkQuests()

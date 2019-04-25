@@ -6,17 +6,19 @@ class Entity:
     def __init__(self, worldPath, name) :
         self.worldPath = worldPath
         self.name = name
+        self.path = os.path.abspath(self.baseDir+"/world/"+self.worldPath+"/"+self.name+".py")
 
     def exists(self):
-        path = os.path.abspath(self.baseDir+"/world/"+self.worldPath+"/"+self.name+".py")
-        exist = os.path.isfile(path)
+        exist = os.path.isfile(self.path)
         return exist
 
     def create(self):
-        path = os.path.abspath(self.baseDir+"/world/"+self.worldPath+"/"+self.name+".py")
-        open(path,'a').close()
+        open(self.path,'a').close()
 
     def remove(self):
-        path = os.path.abspath(self.baseDir+"/world/"+self.worldPath+"/"+self.name+".py")
-        if os.path.isfile(path):
-            os.remove(path)
+        if os.path.isfile(self.path):
+            os.remove(self.path)
+
+    def writeIn(self,text):
+        with open(self.path,'a') as f:
+            f.write(text)
