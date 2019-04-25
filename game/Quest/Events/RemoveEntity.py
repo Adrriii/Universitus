@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 from Quest.Event import Event
+from Entity.Entity import Entity
 
 class RemoveEntity(Event):
     def __init__(self, entity):

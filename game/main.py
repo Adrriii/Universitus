@@ -14,4 +14,4 @@ while(True):
     try:
         game.start()
     except:
-        print("Something unexpected happened, sorry ! Restarting...")
+        print("Restarting...")

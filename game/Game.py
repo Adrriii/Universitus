@@ -30,22 +30,19 @@ class Game :
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
             args = input_string.split(' ')
 
-            try:
-                command_string = args[0]
+            command_string = args[0]
 
-                if(command_string != "setup"):
-                    try:
-                        command = eval(command_string+"()")
+            if(command_string != "setup"):
+                try:
+                    command = eval(command_string+"()")
 
-                        output = command.perform(args)
-                        if(output):
-                            print(output.decode("utf-8"))
-                    except Exception as e:
-                        print("Unknown command \""+command_string+"\"")
+                    output = command.perform(args)
+                    if(output):
+                        print(output.decode("utf-8"))
+                except Exception as e:
+                    print("Unknown command \""+command_string+"\"")
+            else:
+                if(args[1] == "nick"):
+                    self.user_name = args[2]
                 else:
-                    if(args[1] == "nick"):
-                        self.user_name = args[2]
-                    else:
-                        print("Unknown command \""+command_string+"\"")
-            except:
-                pass
+                    print("Unknown command \""+command_string+"\"")

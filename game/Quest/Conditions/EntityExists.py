@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 from Quest.Condition import Condition
+from Entity.Entity import Entity
 
 # Example for a simple condition.
 # Such structure will allow human readable quest conditions in config files

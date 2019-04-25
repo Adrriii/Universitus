@@ -41,6 +41,10 @@ class pwd(Command):
 class touch(Command):
     pass
 
+class restart(Command):
+    def perform(self, args):
+        exit()
+
 class edit_(Command):
 
     def perform(self, args):
