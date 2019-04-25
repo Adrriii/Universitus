@@ -15,6 +15,7 @@ class Game :
         self.user_name = "Player"
         self.quests = {}
         self.activeQuests = {}
+        self.dialogues = {}
 
         for subdir, dirs, files in os.walk("Quests"):
             for file in files:
@@ -50,7 +51,7 @@ class Game :
             del self.activeQuests[quest]
 
     def start(self) :
-        Command.root = self.root
+        Command.game = self
 
         # Lore example
         with open("Parc/.lore",'w') as initialLore:

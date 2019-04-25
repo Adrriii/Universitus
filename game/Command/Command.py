@@ -5,7 +5,7 @@ from io import StringIO
 
 class Command:
 
-    root = '' # world root, initialized by the game
+    game = None # Access to the game
 
     def __init__(self):
         pass
@@ -16,7 +16,7 @@ class Command:
 
     def inbounds(self, path):
         full = os.path.abspath(path)
-        return Command.root in full
+        return self.game.root in full
 
 class cd(Command):
 
@@ -88,7 +88,31 @@ class talk(Command):
                                 text = ''.join(f.readlines())
                                 exec(text)
                                 character = eval(name+"()")
-                                character.talk([""])
+
+                                said = [""]
+                                if(name in self.game.dialogues.keys()):
+                                    # Continue talk
+                                    said = self.game.dialogues[name]
+                                    
+                                    dialogueTree = character.dialogue
+                                    next = character.dialogue
+                                    for choice in said:
+                                        dialogueTree = next[choice]
+                                        next = dialogueTree[1]
+
+                                    try:
+                                        i = 1
+                                        for choice,response in dialogueTree[1].items():
+                                            if i == int(args[2]):
+                                                said.append(choice)
+                                                break
+                                            i += 1
+                                    except Exception as e:
+                                        print("Choix invalide. ( "+str(e)+" )")
+                                        return
+                                        
+                                self.game.dialogues[name] = said
+                                character.talk(said)
                         except Exception as e:
                             print("*Bruits inintelligibles*")
                             print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
