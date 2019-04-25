@@ -17,6 +17,12 @@ class Quest :
     def __init__(self, filename) :
         with open("Quests/"+filename) as file:
             self.status = QuestStatus.UNAVAILABLE
+            self.onStart = []
+            self.onResolve = []
+            self.steps = []
+            self.conditions = []
+            self.next = []
+
 
             for line in file.readlines():
                 parts = line.split(':')
@@ -27,41 +33,39 @@ class Quest :
                     if(left != ' none\n'):
                         self.name = left
                     continue
+                else:
+                    #Invalidate the configuration, invalid quest
+                    pass
                 if(attr == "description"):
                     if(left != ' none\n'):
                         self.description = left
                     continue
                 if(attr == "onStart"):
                     if(left != ' none\n'):
-                        self.onStart = []
                         events = left.split('[')[1].split(']')[0]
 
                         for event in events.split(','):
                             self.onStart.append(eval(event))
                 if(attr == "onResolve"):
                     if(left != ' none\n'):
-                        self.onResolve = []
                         events = left.split('[')[1].split(']')[0]
 
                         for event in events.split(','):
                             self.onResolve.append(eval(event))
                 if(attr == "steps"):
                     if(left != ' none\n'):
-                        self.steps = []
                         steps = left.split('[')[1].split(']')[0]
 
                         for quest in steps.split(','):
                             self.steps.append(quest)
                 if(attr == "conditions"):
                     if(left != ' none\n'):
-                        self.conditions = []
                         conditions = left.split('[')[1].split(']')[0]
 
                         for condition in conditions.split(','):
                             self.conditions.append(condition)
                 if(attr == "next"):
                     if(left != ' none\n'):
-                        self.next = []
                         quests = left.split('[')[1].split(']')[0]
 
                         for quest in quests.split(','):
@@ -105,7 +109,9 @@ class Quest :
 
     def tryResolve(self):
         if not self.status == QuestStatus.ENDED and self.isResolved():
-            self.resolve()
+            nextQuests = self.resolve()
+            return True,nextQuests
+        return False,[]
 
     def start(self):
         if self.status == QuestStatus.AVAILABLE:
@@ -114,10 +120,19 @@ class Quest :
                 event.do()
 
     def resolve(self):
+        nextQuests = []
+
         if self.status == QuestStatus.STARTED:
             self.status = QuestStatus.ENDED
+
+
             for event in self.onResolve:
                 event.do()
+
+            for quest in self.next:
+                nextQuests.append(quest)
+            
+        return nextQuests
 
             
     

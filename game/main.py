@@ -2,6 +2,8 @@
 import os
 from Game import *
 
+DEBUG = True
+
 game = Game() 
 
 os.chdir("world")
@@ -13,5 +15,6 @@ print("Message de bienvenue")
 while(True):
     try:
         game.start()
-    except:
+    except Exception as e:
         print("Restarting...")
+        raise e

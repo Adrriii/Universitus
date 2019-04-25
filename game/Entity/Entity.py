@@ -8,6 +8,6 @@ class Entity:
         self.name = name
 
     def exists(self):
-        path = os.path.abspath(self.baseDir+"world/"+self.worldPath+"/"+self.name+".py")
+        path = os.path.abspath(self.baseDir+"/world/"+self.worldPath+"/"+self.name+".py")
         exist = os.path.isfile(path)
         return exist
