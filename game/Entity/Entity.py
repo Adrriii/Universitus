@@ -20,5 +20,5 @@ class Entity:
             os.remove(self.path)
 
     def writeIn(self,text):
-        with open(self.path,'a') as f:
+        with open(self.path,'a', encoding="utf-8") as f:
             f.write(text+"\n")

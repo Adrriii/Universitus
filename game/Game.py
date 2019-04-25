@@ -80,7 +80,6 @@ class Game :
                     if(command_string == "restart"):
                         exit()
                     print("Unknown command \""+command_string+"\"")
-                    raise e
 
                 self.checkQuests()
             else:

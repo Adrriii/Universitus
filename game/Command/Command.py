@@ -88,9 +88,10 @@ class talk(Command):
                                 text = ''.join(f.readlines())
                                 exec(text)
                                 character = eval(name+"()")
-                                character.talk([])
-                        except:
+                                character.talk([""])
+                        except Exception as e:
                             print("*Bruits inintelligibles*")
+                            print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
                     else:
                         print("Ceci ne peut parler !")
             except:

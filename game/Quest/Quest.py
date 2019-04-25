@@ -18,7 +18,6 @@ class QuestStatus(Enum):
 
 class Quest :
     def __init__(self, filename) :
-        itemSeparator = ';'
         evalSeparator = '|'
 
         with open("Quests/"+filename, encoding="utf-8") as file:
@@ -33,48 +32,38 @@ class Quest :
             for line in file.readlines():
                 parts = line.split(':')
                 attr = parts.pop(0)
-                left = "".join(parts)
+                left = (":".join(parts)).strip()
                 
                 if(attr == "name"):
-                    if(left != ' none\n'):
+                    if(left != 'none'):
                         self.name = left.split('\n')[0]
                     continue
                 else:
                     #Invalidate the configuration, invalid quest
                     pass
                 if(attr == "description"):
-                    if(left != ' none\n'):
+                    if(left != 'none'):
                         self.description = left.split('\n')[0]
                     continue
                 if(attr == "onStart"):
-                    if(left != ' none\n'):
-                        events = left.split(evalSeparator)[1].split(evalSeparator)[0]
-
-                        for event in events.split(itemSeparator):
+                    if(left != 'none'):
+                        for event in left.split(evalSeparator):
                             self.onStart.append(eval(event))
                 if(attr == "onResolve"):
-                    if(left != ' none\n'):
-                        events = left.split(evalSeparator)[1].split(evalSeparator)[0]
-
-                        for event in events.split(itemSeparator):
+                    if(left != 'none'):
+                        for event in left.split(evalSeparator):
                             self.onResolve.append(eval(event))
                 if(attr == "steps"):
-                    if(left != ' none\n'):
-                        steps = left.split(evalSeparator)[1].split(evalSeparator)[0]
-
-                        for quest in steps.split(itemSeparator):
+                    if(left != 'none'):
+                        for quest in left.split(evalSeparator):
                             self.steps.append(quest)
                 if(attr == "conditions"):
-                    if(left != ' none\n'):
-                        conditions = left.split(evalSeparator)[1].split(evalSeparator)[0]
-
-                        for condition in conditions.split(itemSeparator):
+                    if(left != 'none'):
+                        for condition in left.split(evalSeparator):
                             self.conditions.append(condition)
                 if(attr == "next"):
-                    if(left != ' none\n'):
-                        quests = left.split(evalSeparator)[1].split(evalSeparator)[0]
-
-                        for quest in quests.split(itemSeparator):
+                    if(left != 'none'):
+                        for quest in left.split(evalSeparator):
                             self.next.append(quest)
                     continue
 
