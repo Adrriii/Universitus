@@ -67,3 +67,107 @@ This one requires more understanding of python.
 
 `Dialogues as JSON` is a precise data structure allowing the user to interact with Characters. A special section is dedicated to this.
 
+**Characteristic**
+
+A Characteristic is just an attribute to a Character. It is an integer value and can be set for future, more advanced use.
+
+Example of an array of Characteristics, as passed to a Character:
+
+`[HP(10),Speed(5),Strength(5)]`
+
+These are theoretical and are not yet implemented in the game.
+
+**Dialogues**
+
+Dialogues in their current form are complex to design, but are a very powerful tool.
+
+Here is what a simple prettified JSON dialogue tree looks like:
+
+```json
+{
+    "completed_example": [
+        "I love Rocks ! Thank you for creating this Rock.",
+        {
+            "You are welcome, enjoy !": [
+                "Thank you again, have a nice day !",
+                {}
+            ],
+            "(Wow, such a weirdo..) Do you love Rocks that much ?": [
+                "Yes, I do love them ! Thank you again !",
+                {}
+            ],
+        }
+    ]
+}
+```
+
+The logic is the following:
+
+```json
+{
+    "Player Choice": [
+        "NPC answer",
+        {	// Dictionnary of answers
+            "Next Player Choice": [
+                "NPC's answer when the player makes this choice",
+                {} // No possible answer, but there could be
+            ],
+            "Other player Choice": [
+                "NPC's answer when the player makes this choice",
+                {}
+            ],
+        }
+    ]
+    // Possibly another introductory choice ! More later on that.
+}
+```
+
+The progress of the player's dialogues is saved automatically, so that he can continue talking to the NPC and still be at the same progress, even if he talks to other NPCs in the meantime.
+
+Soon, Events will be implemented like this :
+
+```json
+{
+	"Player Choice": [
+       "NPC's answer when the player makes this choice",
+       {}, // No possible answer
+       [CreateEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["other_example"])]
+  	]
+}
+```
+
+As you can see, a third element was added to the player's Choice Item. These events will be performed right after the NPC has said his line.
+
+Also, notice the last event, `NpcToPlayer`. This event is very useful for quests progression and dynamic interactions with NPCs. The Array of Strings passed as the second Parameter, `["other_example"]`, will replace the player's current dialogue tree. For example, see this tree : 
+
+```json
+{
+    "": [
+        "I love Rocks ! Thank you for creating this Rock.",
+        {
+            "You are welcome, enjoy !": [
+                "Thank you again, have a nice day !",
+                {},
+                [CreateEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["other_example"])]
+            ],
+            "(Wow, such a weirdo..) Do you love Rocks that much ?": [
+                "Yes, I do love them ! Thank you again !",
+                {},
+                [CreateEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["other_example"])]
+            ],
+        }
+    ],
+    "other_example": [
+        "Hey, it's good to see you since there was this NpcToPlayer event !",
+        {
+            "Right, now we can use a brand new tree to talk !": [
+                "I hope I don't forget you next time ...",
+                {},
+                [RemoveEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["completed_example"])]
+            ]
+        }
+    ]
+}
+```
+
+If you read this correctly, you will notice that it's a sad infinite loop for the Rock Lover...
