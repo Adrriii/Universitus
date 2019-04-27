@@ -15,6 +15,9 @@ class Entity:
     def create(self):
         open(self.path,'a').close()
 
+    def move(self, destination):
+        os.system("mv "+self.path+" "+os.path.abspath(self.baseDir+"/world/")+"/"+destination)
+
     def remove(self):
         if os.path.isfile(self.path):
             os.remove(self.path)

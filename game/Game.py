@@ -27,6 +27,7 @@ class Game :
         quest = self.quests[name]
         print("Nouvelle quête : "+quest.name+" !")
         print(quest.description)
+        print("")
         quest.start()
         self.activeQuests[name] = quest
 
@@ -53,16 +54,12 @@ class Game :
     def start(self) :
         Command.game = self
 
-        # Lore example
-        with open("Parc/.lore",'w') as initialLore:
-            initialLore.write("Vous entrez dans le Parc")
-
         # Emulate user command to show lore example
-        eval("cd()").perform(['cd',"Parc"])
+        eval("cd()").perform(['cd',"Universitus"])
 
         # If needed, replay all quests
-        self.quests["rock"].setAvailable()
-        self.startQuest("rock")
+        self.quests["init"].setAvailable()
+        self.startQuest("init")
 
         while(True):
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")

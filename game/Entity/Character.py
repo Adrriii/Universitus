@@ -27,8 +27,8 @@ class Character(Entity):
 
         self.writeIn("\tdef talk(self,saidToHim):")
 
-        if not self.characteristics:
-            self.writeIn("pass")
+        if not self.dialogues:
+            self.writeIn("\n\npass")
         else:
             self.writeIn("\t\tif not self.dialogue:")
             self.writeIn("\t\t\tprint(\"*Fait des gestes avec ses bras*\")")

@@ -1,1 +1,7 @@
-{"": ["Qu'attends-tu pour te battre ?", {"Rien, je suis prêt à t'affronter.": ["Très bien, que le combat commence !", {}], "Je ne suis pas encore prêt, attends un peu.": ["Ahahah, tu croyais vraiment avoir le choix ? Que le combat commence !", {}]}]}
+
+{
+    "": [
+        "Bienvenue dans le monde magique de la programmation ! Ici tu apprendras à te servir d'un pouvoir extrêment rare : l'Unixité. C'est une compétence que seuls les plus grands informagiciens peuvent maîtriser, mais grâce à ton parcours dans cette école tu sauras surement révéler ton potentiel ! Pour commencer, je vais t'apprendre à te téléporter d'un endroit à un autre. Pour cela, utilise la commande `cd <destination>`, par exemple : `cd Accueil`. Je t'attends là-bas !",
+        {}
+    ]
+}

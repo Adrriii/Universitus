@@ -2,9 +2,12 @@ from Quest.Event import Event
 from Quest.Condition import Condition
 from Quest.Conditions.EntityExists import EntityExists
 from Quest.Conditions.PlaceExists import PlaceExists
+from Quest.Conditions.CurrentPlayerDirectory import CurrentPlayerDirectory
 from Quest.Events.CreateEntity import CreateEntity
 from Quest.Events.RemoveEntity import RemoveEntity
+from Quest.Events.MoveEntity import MoveEntity
 from Quest.Events.CreateCharacter import CreateCharacter
+from Quest.Events.NpcToPlayer import NpcToPlayer
 from Entity.Items.Common import *
 from Entity.Character import *
 from Entity.Characteristic import *

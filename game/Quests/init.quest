@@ -1,0 +1,7 @@
+name: Bienvenue à Universitus
+description: Vous passez pour la première fois les portes de l'Ecole d'Informagie, Universitus. Un étrange personnage s'approche immédiatement de vous.
+onStart: CreateCharacter(Character("A_Grid","Universitus",[],{"":["Bienvenue dans le monde magique de la programmation ! Ici tu apprendras à te servir d'un pouvoir extrêment rare : l'Unixité. \nC'est une compétence que seuls les plus grands informagiciens peuvent maîtriser, mais grâce à ton parcours dans cette école tu sauras surement révéler ton potentiel ! \nPour commencer, je vais t'apprendre à te téléporter d'un endroit à un autre. Pour cela, utilise la commande `cd <destination>`, par exemple : `cd Accueil`. Je t'attends là-bas !",{}]}))|NpcToPlayer("A_Grid",[""])|MoveEntity(Entity("A_Grid","Universitus"),"Universitus/Accueil")
+onResolve: none
+steps: none
+conditions: CurrentPlayerDirectory("Universitus/Accueil")
+next: none
