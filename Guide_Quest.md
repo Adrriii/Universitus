@@ -148,13 +148,13 @@ Also, notice the last event, `NpcToPlayer`. This event is very useful for quests
             "You are welcome, enjoy !": [
                 "Thank you again, have a nice day !",
                 {},
-                [CreateEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["other_example"])]
+               "[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"
             ],
             "(Wow, such a weirdo..) Do you love Rocks that much ?": [
                 "Yes, I do love them ! Thank you again !",
                 {},
-                [CreateEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["other_example"])]
-            ],
+               "[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"
+            ]
         }
     ],
     "other_example": [
@@ -163,7 +163,7 @@ Also, notice the last event, `NpcToPlayer`. This event is very useful for quests
             "Right, now we can use a brand new tree to talk !": [
                 "I hope I don't forget you next time ...",
                 {},
-                [RemoveEntity(Rock("Parc")),NpcToPlayer("Rock_Lover",["completed_example"])]
+                "[RemoveEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['completed_example'])]"
             ]
         }
     ]
@@ -171,3 +171,41 @@ Also, notice the last event, `NpcToPlayer`. This event is very useful for quests
 ```
 
 If you read this correctly, you will notice that it's a sad infinite loop for the Rock Lover...
+
+Any way, there is something to remember though : The JSON must be minified to fit in one line, in order to be placed into the Character constructor. Let's add this dialogue to our Rock Lover :
+
+First, we need to create the Rock Lover Character, so we use the Character constructor :
+
+`Character()`
+
+Then we need to tell its name and location
+
+`Character("Name","Parc")`
+
+Then, add its characteristics.
+
+`Character("Name","Parc",[HP(5)])`
+
+And finally minify our tree with any online tool, like <https://www.cleancss.com/json-minify/>
+
+```json
+{"":["I love Rocks ! Thank you for creating this Rock.",{"You are welcome, enjoy !":["Thank you again, have a nice day !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"],"(Wow, such a weirdo..) Do you love Rocks that much ?":["Yes, I do love them ! Thank you again !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"]}],"other_example":["Hey, it's good to see you since there was this NpcToPlayer event !",{"Right, now we can use a brand new tree to talk !":["I hope I don't forget you next time ...",{},"[RemoveEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['completed_example'])]"]}]}
+```
+
+And then copy it into the last parameter for our Character :
+
+```json
+Character("Name","Parc",[HP(5)],{"":["I love Rocks ! Thank you for creating this Rock.",{"You are welcome, enjoy !":["Thank you again, have a nice day !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"],"(Wow, such a weirdo..) Do you love Rocks that much ?":["Yes, I do love them ! Thank you again !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"]}],"other_example":["Hey, it's good to see you since there was this NpcToPlayer event !",{"Right, now we can use a brand new tree to talk !":["I hope I don't forget you next time ...",{},"[RemoveEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['completed_example'])]"]}]})
+```
+
+Now, to generate it as an Event, just put it in a CreateCharacter Event :
+
+```json
+CreateCharacter(Character("Name","Parc",[HP(5)],{"":["I love Rocks ! Thank you for creating this Rock.",{"You are welcome, enjoy !":["Thank you again, have a nice day !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"],"(Wow, such a weirdo..) Do you love Rocks that much ?":["Yes, I do love them ! Thank you again !",{},"[CreateEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['other_example'])]"]}],"other_example":["Hey, it's good to see you since there was this NpcToPlayer event !",{"Right, now we can use a brand new tree to talk !":["I hope I don't forget you next time ...",{},"[RemoveEntity(Rock('Parc')),NpcToPlayer('Rock_Lover',['completed_example'])]"]}]}))
+```
+
+Put this line as any event and it will trigger at the desired time !
+
+To make this a lot lighter, we will most certainly use another directory to put non-minified JSON files, and just load them by their names but for now this is working like this.
+
+Thank you for reading.
