@@ -107,18 +107,23 @@ The logic is the following:
 {
     "Player Choice": [
         "NPC answer",
-        {	// Dictionnary of answers
-            "Next Player Choice": [
-                "NPC's answer when the player makes this choice",
-                {} // No possible answer, but there could be
+        {	// Dictionnaries of choices
+            "Next Player Choice": [ // Array of consequences for this choice
+                "NPC's answer when the player makes this choice", // NPC answer
+                {} // No possible answer, but we can add recursively, see next choice
             ],
             "Other player Choice": [
                 "NPC's answer when the player makes this choice",
-                {}
+                {
+                    "Deeper choice": [
+                        "NPC's answer when the player makes this choice",
+                        {}
+                    ],
+                }
             ],
         }
     ]
-    // Possibly another introductory choice ! More later on that.
+    // Possibly another introductory choice ! More on that later.
 }
 ```
 
