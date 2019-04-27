@@ -12,10 +12,8 @@ class NpcToPlayer(Event):
 
     def do(self):
         cmd = talk()
-        if self.said == [""]:
-            cmd.perform(["talk",self.name+".py"])
-        else:
-            cmd.perform(["talk",self.name+".py",self.said])
+        Command.game.dialogues[self.name] = self.said
+        cmd.perform(["talk",self.name+".py"])
 
     def printItself(self):
         super()

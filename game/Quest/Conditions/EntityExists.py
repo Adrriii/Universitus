@@ -8,11 +8,11 @@ from Entity.Entity import Entity
 
 # example:
 # Quest-example.quest
-# name: "Create a rock in the parc"
+# name: Create a rock in the parc
 # onStart: none
 # onResolve: none
-# steps: []
-# conditions: [EntityExists(Rock("/Parc"))]
+# steps: none
+# conditions: EntityExists(Rock("/Parc"))
 
 class EntityExists(Condition):
     def __init__(self, entity):

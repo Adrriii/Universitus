@@ -38,7 +38,6 @@ class Game :
         for name, quest in self.activeQuests.items():
             resolved,nextQuests = quest.tryResolve()
             if resolved:
-                print("Quête complétée : "+quest.name+" !")
                 toDelete.append(name)
 
             for nextQuest in nextQuests:
