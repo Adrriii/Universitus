@@ -117,6 +117,6 @@
    * Add message to the chat window
    */
   function addMessage(author, message, color, dt) {
-    content.append(message+"<br>");
+    content.append(message);
   }
 });
