@@ -11,6 +11,8 @@ class Game :
 
     root = ''
 
+    forbiddenCommands = ["help"]
+
     def __init__(self) :
         self.user_name = "Player"
         self.quests = {}
@@ -66,21 +68,24 @@ class Game :
 
             command_string = args[0]
 
-            if(command_string != "setup"):
-                try:
-                    command = eval(command_string+"()")
-
-                    output = command.perform(args)
-                    if(output):
-                        print(output.decode("utf-8"))
-                except Exception as e:
-                    if(command_string == "restart"):
-                        exit()
-                    print("Unknown command \""+command_string+"\"")
-
-                self.checkQuests()
+            if command_string in self.forbiddenCommands:
+                print("Unknown command \""+command_string+"\"")
             else:
-                if(args[1] == "nick"):
-                    self.user_name = args[2]
+                if(command_string != "setup"):
+                    try:
+                        command = eval(command_string+"()")
+
+                        output = command.perform(args)
+                        if(output):
+                            print(output.decode("utf-8"))
+                    except Exception as e:
+                        if(command_string == "restart"):
+                            exit()
+                        print("Unknown command \""+command_string+"\"")
+
+                    self.checkQuests()
                 else:
-                    print("Unknown command \""+command_string+"\"")
+                    if(args[1] == "nick"):
+                        self.user_name = args[2]
+                    else:
+                        print("Unknown command \""+command_string+"\"")

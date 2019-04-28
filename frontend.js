@@ -5,10 +5,10 @@ $(function () {
     var input = $('#input');
     var terminal = $('#terminal');
     var textarea = $('#textarea');
-    
+
     var buttonSave = $("input[name='buttonSave']");
     var buttonExit = $("input[name='buttonExit']");
-    
+
     var taTitle = $('#textareaTitle');
     var taText = $('#textareaText');
 
@@ -69,7 +69,7 @@ $(function () {
         if (json.type === 'color') {
             myColor = json.data;
             input.removeAttr('disabled').focus();
-        // from now user can start sending messages
+            // from now user can start sending messages
         } else if (json.type === 'history') { // entire message history
             // insert every single message to the chat window
             for (var i = 0; i < json.data.length; i++) {
@@ -96,7 +96,7 @@ $(function () {
             if (!msg) {
                 return;
             }
-            
+
             // send the message as an ordinary text
             connection.send(msg);
             $(this).val('');
@@ -131,40 +131,40 @@ $(function () {
         var line = message.split("\n");
         var pars = line[0].split(" ");
         // If the command is Edit, transition to text area window
-        if(pars[0] == "edit" && pars.length <= 3) {
+        if (pars[0] == "edit" && pars.length <= 3) {
             terminal.attr('style', 'display: none');
             textarea.attr('style', 'display: block');
             taTitle.val(pars[1]);
         }
     }
-    
+
     /**
      * Save button of the Edit Textarea
      */
-    buttonSave.click(function() {
+    buttonSave.click(function () {
         var text = 'edit_ "' + taText.val() + '" > ' + taTitle.val();
         connection.send(text);
-        
+
         terminal.attr('style', 'display: block');
         textarea.attr('style', 'display: none');
         taTitle.val('');
         taText.val('');
     });
-    
+
     /**
      * Exit button of the Edit Textarea
      */
-    buttonExit.click(function() {
+    buttonExit.click(function () {
         terminal.attr('style', 'display: block');
         textarea.attr('style', 'display: none');
         taTitle.val('');
         taText.val('');
     });
-    
+
     /**
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {
-        content.append(message + "<br>");
+        content.append(message);
     }
 });

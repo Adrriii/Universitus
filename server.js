@@ -237,7 +237,11 @@ wsServer.on('request', function (request) {
                 + connection.remoteAddress + " disconnected.");
             
             console.log("Removing container of " + userName);  
-            containeurs[userName].container_id.stop();
+            containeurs[userName].container_id.stop()
+            .catch(error => {
+                //Container already stoped
+            });
+
             console.log("Containeur succesfully removed !");
             
 
