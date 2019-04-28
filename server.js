@@ -157,8 +157,6 @@ wsServer.on('request', function (request) {
                             
                             stream.on('data', key => {
                                 var text = String(key);
-                                var parts = text.split("\n");
-                                text = parts;
 
                                 let obj = {
                                     time: (new Date()).getTime(),
