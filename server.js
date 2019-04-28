@@ -33,11 +33,6 @@ function htmlEntities(str) {
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Array with some colors
-var colors = ['red', 'green', 'blue', 'magenta', 'purple', 'plum', 'orange'];
-// ... in random order
-colors.sort(function (a, b) { return Math.random() > 0.5; });
-
 /**
  * HTTP server
  */
@@ -114,7 +109,6 @@ wsServer.on('request', function (request) {
     // we need to know client index to remove them on 'close' event
     var index = clients.push(connection) - 1;
     var userName = false;
-    var userColor = false;
 
     console.log((new Date()) + ' Connection accepted.');
 
@@ -161,9 +155,10 @@ wsServer.on('request', function (request) {
                                 let obj = {
                                     time: (new Date()).getTime(),
                                     text: convert.toHtml(text),
-                                    author: userName,
-                                    color: userColor
+                                    author: userName
                                 };
+                                console.log("Text : "+text);
+                                console.log("HTML : "+obj.text);
                                 let json = JSON.stringify({
                                     type: 'message',
                                     data: obj
@@ -179,8 +174,7 @@ wsServer.on('request', function (request) {
                                 let obj = {
                                     time: (new Date()).getTime(),
                                     text: "Ready !",
-                                    author: userName,
-                                    color: userColor
+                                    author: userName
                                 };
 
                                 let json = JSON.stringify({
@@ -207,16 +201,12 @@ wsServer.on('request', function (request) {
                     })
 
 
-                // get random color and send it back to the user
-                userColor = colors.shift();
                 connection.sendUTF(
                     JSON.stringify({
-                        type: 'color',
-                        data: userColor
+                        type: 'logged-in'
                     }));
 
-                console.log((new Date()) + ' User is known as: ' + userName +
-                    ' with ' + userColor + ' color.');
+                console.log((new Date()) + ' New user: ' + userName);
             } else {
                 containeurs[userName]['stdin'].write(message.utf8Data+"\n");
             }
@@ -225,7 +215,7 @@ wsServer.on('request', function (request) {
 
     // user disconnected
     connection.on('close', function (connection) {
-        if (userName !== false && userColor !== false) {
+        if (userName !== false) {
             console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
             
@@ -235,13 +225,11 @@ wsServer.on('request', function (request) {
                 //Container already stoped
             });
 
-            console.log("Containeur succesfully removed !");
+            console.log("Container succesfully removed !");
             
 
             // remove user from the list of connected clients
             clients.splice(index, 1);
-            // push back user's color to be reused by another user
-            colors.push(userColor);
         }
     });
 });
