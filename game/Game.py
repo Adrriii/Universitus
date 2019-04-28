@@ -64,6 +64,7 @@ class Game :
 
         while(True):
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
+            print("\n")
             args = input_string.split(' ')
 
             command_string = args[0]
@@ -77,7 +78,7 @@ class Game :
 
                         output = command.perform(args)
                         if(output):
-                            print(output.decode("utf-8"))
+                            print(output.decode("utf-8")+"\n")
                     except Exception as e:
                         if(command_string == "restart"):
                             exit()
