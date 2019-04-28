@@ -11,9 +11,7 @@ $(function () {
 
     var taTitle = $('#textareaTitle');
     var taText = $('#textareaText');
-
-    // my color assigned by the server
-    var myColor = false;
+    
     // my name sent to the server
     var myName = false;
 
@@ -63,25 +61,20 @@ $(function () {
             return;
         }
 
-        // NOTE: if you're not sure about the JSON structure
-        // check the server source code above
-        // first response from the server with user's color
-        if (json.type === 'color') {
-            myColor = json.data;
+        // Login
+        if (json.type === 'logged-in') {
             input.removeAttr('disabled').focus();
             // from now user can start sending messages
         } else if (json.type === 'history') { // entire message history
             // insert every single message to the chat window
             for (var i = 0; i < json.data.length; i++) {
-                addMessage(json.data[i].author, json.data[i].text,
-                    json.data[i].color, new Date(json.data[i].time));
+                addMessage(json.data[i].author, json.data[i].text, new Date(json.data[i].time));
             }
         } else if (json.type === 'message') { // it's a single message
             // let the user write another message
             input.removeAttr('disabled').focus();
             checkMessage(json.data.text);
-            addMessage(json.data.author, json.data.text,
-                json.data.color, new Date(json.data.time));
+            addMessage(json.data.author, json.data.text, new Date(json.data.time));
         } else {
             console.log('Hmm..., I\'ve never seen JSON like this:', json);
         }
