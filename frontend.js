@@ -24,7 +24,7 @@
   }
 
   // open connection
-  var connection = new WebSocket('http://universitus.rhythmgamers.net:1337');
+  var connection = new WebSocket('ws://universitus.rhythmgamers.net:1337');
 
 
 
