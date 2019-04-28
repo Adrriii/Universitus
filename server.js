@@ -169,6 +169,7 @@ wsServer.on('request', function (request) {
                             console.log("Starting container...");
                             container.start()
                             .then(container => {
+                                container.write("setup nick "+userName);
                                 console.log("Containeur for " + userName + " succefully created and ready !");
                             })
                         });
