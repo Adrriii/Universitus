@@ -62,6 +62,8 @@ class Game :
         self.quests["init"].setAvailable()
         self.startQuest("init")
 
+        print("SYSTEM:username_request")
+
         while(True):
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
             print("\n")

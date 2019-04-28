@@ -151,25 +151,30 @@ wsServer.on('request', function (request) {
                             
                             stream.on('data', key => {
                                 var text = String(key);
-                                text = text.replace("\n","<br>")
-
-                                let obj = {
-                                    time: (new Date()).getTime(),
-                                    text: convert.toHtml(text),
-                                    author: userName
-                                };
-                                
-                                let json = JSON.stringify({
-                                    type: 'message',
-                                    data: obj
-                                });
-                                clients[index].sendUTF(json);
+                                if(text == "SYSTEM:username_request") {
+                                    container.write("setup nick "+userName+"\n");
+                                } else {
+                                    if(text.substring(0,10) != "setup nick") {
+                                        text = text.replace("\n","<br>")
+        
+                                        let obj = {
+                                            time: (new Date()).getTime(),
+                                            text: convert.toHtml(text),
+                                            author: userName
+                                        };
+                                        
+                                        let json = JSON.stringify({
+                                            type: 'message',
+                                            data: obj
+                                        });
+                                        clients[index].sendUTF(json);
+                                    }
+                                }
                             })
                         
                             console.log("Starting container...");
                             container.start()
                             .then(container => {
-                                container.write("setup nick "+userName);
                                 console.log("Containeur for " + userName + " succefully created and ready !");
                             })
                         });
