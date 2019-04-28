@@ -31,8 +31,6 @@ class cd(Command):
                             for line in f.readlines():
                                 print(line, end = '')
                             print("\n")
-                    else:
-                        print("Destination invalide.")
                 else:
                     print("Impossible d'aller ici.")
             except:
