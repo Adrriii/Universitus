@@ -135,6 +135,7 @@ $(function () {
             terminal.attr('style', 'display: none');
             textarea.attr('style', 'display: block');
             taTitle.val(pars[1]);
+            taText.val(line[1]);
         }
     }
 
@@ -165,6 +166,7 @@ $(function () {
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {
-        content.append(message);
+        console.log(author + " : " + message + "(" + color + ")");
+        content.append('<span style="color:green";>' + author + '</span>$ ' + message + '<br>');
     }
 });
