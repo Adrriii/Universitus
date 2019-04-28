@@ -27,7 +27,7 @@ class Game :
 
     def startQuest(self, name):
         quest = self.quests[name]
-        print("\[\e[35m\]Nouvelle quête :\[\e[m\] "+quest.name+" !")
+        print(u"\u001b[35mNouvelle quête : \u001b[0m"+quest.name)
         print(quest.description)
         print("")
         quest.start()
