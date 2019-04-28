@@ -154,7 +154,7 @@ wsServer.on('request', function (request) {
                                 if(text == "SYSTEM:username_request") {
                                     containeurs[userName]['stdin'].write("setup nick "+userName);
                                 } else {
-                                    if(text.substring(0,10) != "setup nick") {
+                                    if(text.substring(0,10) != "setup nick" && text.substring(0,6) != "Player") {
                                         text = text.replace("\n","<br>")
         
                                         let obj = {
