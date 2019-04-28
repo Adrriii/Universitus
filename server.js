@@ -140,7 +140,7 @@ wsServer.on('request', function (request) {
                         containeurs[userName] = {
                             stdin: null,
                             stdout: null,
-                            container: null
+                            container_id: null
                         };
 
                         var attach_opts = {
@@ -150,7 +150,7 @@ wsServer.on('request', function (request) {
                             stderr: false
                         };
 
-                        containeurs[userName][container] = container;
+                        containeurs[userName].container_id = container;
 
                         //stdout
                         container.attach(attach_opts, (err, stream) => {
@@ -237,7 +237,7 @@ wsServer.on('request', function (request) {
                 + connection.remoteAddress + " disconnected.");
             
             console.log("Removing container of " + userName);  
-            containeurs[userName][container].stop();
+            containeurs[userName].container_id.stop();
             console.log("Containeur succesfully removed !");
             
 
