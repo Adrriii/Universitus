@@ -3,10 +3,11 @@ from Entity.Characteristic import *
 
 class Character(Entity):
 
-    def __init__(self, name, worldPath, characs, dialogue):
+    def __init__(self, name, worldPath, characs, dialogue, color = "\u001b[35m"):
         Entity.__init__(self, name, worldPath)
         self.characteristics = characs
         self.dialogues = dialogue
+        self.color = color
 
     def load(self, lines):
         pass
@@ -39,7 +40,9 @@ class Character(Entity):
             self.writeIn("\t\tfor listensTo in saidToHim:")
             self.writeIn("\t\t\tthinkingAbout = next[listensTo]")
             self.writeIn("\t\t\tnext = thinkingAbout[1]")
-            self.writeIn("\t\tprint(\""+self.name+": \"+thinkingAbout[0]+\"\\n\")")
+            self.writeIn("\t\tprint(u\""+self.color+self.name+": \")")
+            self.writeIn("\t\tfor line in thinkingAbout[0].split('\\n'):")
+            self.writeIn("\t\t\tprint(line+\"\\n\")")
             self.writeIn("\t\tr = 1")
             self.writeIn("\t\tfor choice,reponses in thinkingAbout[1].items():")
             self.writeIn("\t\t\tprint(str(r)+\": \"+choice  )")
