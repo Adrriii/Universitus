@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 node_modules/*
 server/node_modules/*
 package-lock.json
 game/__pycache__/
+=======
+
+*.pyc
+>>>>>>> jeu-python

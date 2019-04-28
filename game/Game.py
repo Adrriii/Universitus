@@ -1,123 +1,86 @@
 import os
 
 from Player import *
+from Quest.Quest import *
+from Command.Command import *
+from Entity.Items.Common import *
 
 player = Player()
 
 class Game :
 
+    root = ''
+
     def __init__(self) :
+        self.user_name = "Player"
+        self.quests = {}
+        self.activeQuests = {}
+        self.dialogues = {}
 
-        self.path_base = "world"
-        self.path_place = ""
-        self.prefix = ["Parc"]
-        self.user_name = "TOTO"
-        self.nb_place_append = 0
-        self.inventory = "Inventaire"
-        self.inventory_shortcut = "i"
-        self.place_save_path = []
+        for subdir, dirs, files in os.walk("Quests"):
+            for file in files:
+                ext = os.path.splitext(file)[-1].lower()
+                if ext == ".quest":
+                    self.quests[file[:-6]] = Quest(file)
 
+    def startQuest(self, name):
+        quest = self.quests[name]
+        print("Nouvelle quête : "+quest.name+" !")
+        print(quest.description)
+        print("")
+        quest.start()
+        self.activeQuests[name] = quest
 
-    def tick(self) :
+    def checkQuests(self):
+        toDelete = []
+        toStart = []
 
-        self.path_place = self.path_base
-        self.path_place += "/" + self.prefix[0] + "/"
+        for name, quest in self.activeQuests.items():
+            resolved,nextQuests = quest.tryResolve()
+            if resolved:
+                toDelete.append(name)
+
+            for nextQuest in nextQuests:
+                self.quests[nextQuest].setAvailable()
+                toStart.append(nextQuest)
+        
+        for quest in toStart:
+            self.startQuest(quest)
+        
+        for quest in toDelete:
+            del self.activeQuests[quest]
+
+    def start(self) :
+        Command.game = self
+
+        # Emulate user command to show lore example
+        eval("cd()").perform(['cd',"Universitus"])
+
+        # If needed, replay all quests
+        self.quests["init"].setAvailable()
+        self.startQuest("init")
 
         while(True):
+            input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
+            args = input_string.split(' ')
 
-            input_string = input(self.user_name + "@:" + self.path_place + "$ ")
-            
-            
-            self.nb_place_append = 0
+            command_string = args[0]
 
-            input_array = input_string.split(" && ")
+            if(command_string != "setup"):
+                try:
+                    command = eval(command_string+"()")
 
-            for input_string in input_array:
+                    output = command.perform(args)
+                    if(output):
+                        print(output.decode("utf-8"))
+                except Exception as e:
+                    if(command_string == "restart"):
+                        exit()
+                    print("Unknown command \""+command_string+"\"")
 
-                input_string = self.parse_input(input_string)
-
-                input_string = self.build_input(input_string)
-
-                if(os.system(input_string) != 0):
-                    for i in range(self.nb_place_append):
-                        self.prefix.pop()
-                    self.path_place = self.path_base
-                
-                    self.path_place += "/"
-
-                    for place in self.prefix:
-                        self.path_place += place + "/"
-
-
-    def parse_input(self, input_string):
-
-        if (input_string.startswith("cd")):
-
-            input_string = self.cd(input_string)
-
-        else:
-
-            input_string = " && " + input_string
-
-        return input_string
-
-
-    def build_input(self, input_string):
-
-        self.path_place = self.path_base
-                
-        self.path_place += "/"
-
-        for place in self.prefix:
-            self.path_place += place + "/"
-        
-        return "cd " + self.path_place + input_string
-
-
-    def cd(self, input_string):
-
-        path = input_string.split(" ")
-
-        if(len(path) <= 1):
-            return ""
-
-        path = path[1].split("/")
-
-        for place in path:
-
-            print(place)
-
-            if(place == self.inventory or place == self.inventory_shortcut):
-
-                for place in self.prefix:
-                    self.place_save_path.append(place)
-
-                for place in self.place_save_path:
-                    self.prefix.pop()
-
-                self.prefix.append(self.inventory)
-                self.nb_place_append += 1
-
-            elif(place == ".."):
-
-                if(self.prefix[len(self.prefix) - 1] == self.inventory):
-                    
-                    self.prefix.pop()
-
-                    for place_saved in self.place_save_path:
-                        
-                        self.prefix.append(place_saved)
-                        self.nb_place_append += 1
-
-                    for i in range (len(self.place_save_path)):
-                        self.place_save_path.pop()
-
-                elif(len(self.prefix) > 1):
-                    self.prefix.pop()
+                self.checkQuests()
             else:
-                self.prefix.append(place)
-                self.nb_place_append += 1
-
-        return ""
-
-            
+                if(args[1] == "nick"):
+                    self.user_name = args[2]
+                else:
+                    print("Unknown command \""+command_string+"\"")
