@@ -64,7 +64,7 @@ $(function () {
 
         // Login
         if (json.type === 'logged-in') {
-            input.removeAttr('disabled').focus();
+            input.focus();
             // from now user can start sending messages
         } else if (json.type === 'history') { // entire message history
             // insert every single message to the chat window
@@ -73,7 +73,7 @@ $(function () {
             }
         } else if (json.type === 'message') { // it's a single message
             // let the user write another message
-            input.removeAttr('disabled').focus();
+            input.focus();
             checkMessage(json.data.text);
             addMessage(json.data.author, json.data.text, new Date(json.data.time));
         } else {
@@ -94,9 +94,6 @@ $(function () {
             // send the message as an ordinary text
             connection.send(msg+"\n");
             $(this).val('');
-            // disable the input field to make the user wait until server
-            // sends back response
-            input.attr('disabled', 'disabled');
 
             // we know that the first message sent from a user their name
             if (myName === false) {
