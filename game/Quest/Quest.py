@@ -125,7 +125,7 @@ class Quest :
         if self.status == QuestStatus.STARTED:
             self.status = QuestStatus.ENDED
 
-            print("Quête complétée : "+self.name+" !")
+            print("\[\e[32m\]Quête complétée : \[\e[m\] "+self.name+" !")
 
             for event in self.onResolve:
                 event.do()
