@@ -151,14 +151,14 @@ wsServer.on('request', function (request) {
                             
                             stream.on('data', key => {
                                 var text = String(key);
+                                text = text.replace("\n","<br>")
 
                                 let obj = {
                                     time: (new Date()).getTime(),
                                     text: convert.toHtml(text),
                                     author: userName
                                 };
-                                console.log("Text : "+text);
-                                console.log("HTML : "+obj.text);
+                                
                                 let json = JSON.stringify({
                                     type: 'message',
                                     data: obj
@@ -208,7 +208,7 @@ wsServer.on('request', function (request) {
 
                 console.log((new Date()) + ' New user: ' + userName);
             } else {
-                containeurs[userName]['stdin'].write(message.utf8Data+"\n");
+                containeurs[userName]['stdin'].write(message.utf8Data);
             }
         }
     });

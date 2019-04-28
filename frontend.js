@@ -11,7 +11,7 @@ $(function () {
 
     var taTitle = $('#textareaTitle');
     var taText = $('#textareaText');
-    
+
     // my name sent to the server
     var myName = false;
 
@@ -159,7 +159,8 @@ $(function () {
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {
-        console.log(author + " : " + message + "(" + color + ")");
-        content.append('<span style="color:green";>' + author + '</span>$ ' + message + '<br>');
+        message = message.replace("\n","<br>");
+        message = message.replace("\t","<br>");
+        content.append(message);
     }
 });
