@@ -25,12 +25,16 @@ class cd(Command):
             destination = args[1]
             try:
                 if(self.inbounds(destination)):
+                    before = os.getcwd()
                     os.chdir(args[1])
-                    if(os.path.isfile(".lore")):
-                        with open(".lore",'r') as f:
-                            for line in f.readlines():
-                                print(line, end = '')
-                            print("\n")
+                    if before != os.getcwd():
+                        if(os.path.isfile(".lore")):
+                            with open(".lore",'r') as f:
+                                for line in f.readlines():
+                                    print(line, end = '')
+                                print("\n")
+                    else:
+                        print("Destination invalide.")
                 else:
                     print("Impossible d'aller ici.")
             except:
