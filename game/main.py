@@ -10,7 +10,7 @@ DEBUG = True
 game = Game() 
 
 os.chdir("world")
-game.root = os.getcwd()+"/"
+game.root = os.getcwd()
 
 while(True):
     try:

@@ -16,7 +16,7 @@ class Command:
 
     def inbounds(self, path):
         full = os.path.abspath(path)
-        return self.game.root in full
+        return os.path.abspath(self.game.root+"/") in full
 
 class cd(Command):
 
