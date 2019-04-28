@@ -23,7 +23,7 @@ class Quest :
     def __init__(self, filename) :
         evalSeparator = '|'
 
-        with open("Quests/"+filename, encoding="utf-8") as file:
+        with open("Quests/"+filename, encoding="UTF-8") as file:
             self.status = QuestStatus.UNAVAILABLE
             self.onStart = []
             self.onResolve = []
