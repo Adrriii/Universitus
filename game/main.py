@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# encoding: utf-8
+
 import os
 from Game import *
 import os

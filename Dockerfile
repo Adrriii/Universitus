@@ -6,4 +6,4 @@ RUN apt install python3 -y
 WORKDIR /game
 COPY game /game
 
-CMD python3 main.py
+CMD PYTHONIOENCODING=utf-8 python3 main.py
