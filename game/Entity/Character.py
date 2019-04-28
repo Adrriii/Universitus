@@ -3,7 +3,7 @@ from Entity.Characteristic import *
 
 class Character(Entity):
 
-    def __init__(self, name, worldPath, characs, dialogue, color = "\u001b[35m"):
+    def __init__(self, name, worldPath, characs, dialogue, color = "\u001b[36m"):
         Entity.__init__(self, name, worldPath)
         self.characteristics = characs
         self.dialogues = dialogue
@@ -40,7 +40,7 @@ class Character(Entity):
             self.writeIn("\t\tfor listensTo in saidToHim:")
             self.writeIn("\t\t\tthinkingAbout = next[listensTo]")
             self.writeIn("\t\t\tnext = thinkingAbout[1]")
-            self.writeIn("\t\tprint(u\""+self.color+self.name+": \")")
+            self.writeIn("\t\tprint(u\""+self.color+self.name+":\u001b[37m \", end = '')")
             self.writeIn("\t\tfor line in thinkingAbout[0].split('\\n'):")
             self.writeIn("\t\t\tprint(line+\"\\n\")")
             self.writeIn("\t\tr = 1")
