@@ -1,9 +1,11 @@
-<<<<<<< HEAD
 node_modules/*
 server/node_modules/*
 package-lock.json
 game/__pycache__/
-=======
 
 *.pyc
->>>>>>> jeu-python
+logs.uni
+run.sh
+update.sh
+update.uni
+
