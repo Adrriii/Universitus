@@ -169,20 +169,6 @@ wsServer.on('request', function (request) {
                             console.log("Starting container...");
                             container.start()
                             .then(container => {
-                                containeurs[userName]['stdout'] = stream;
-
-                                let obj = {
-                                    time: (new Date()).getTime(),
-                                    text: "Ready !",
-                                    author: userName
-                                };
-
-                                let json = JSON.stringify({
-                                    type: 'message',
-                                    data: obj
-                                });
-
-                                clients[index].sendUTF(json);
                                 console.log("Containeur for " + userName + " succefully created and ready !");
                             })
                         });
