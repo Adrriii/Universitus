@@ -152,7 +152,7 @@ wsServer.on('request', function (request) {
                             stream.on('data', key => {
                                 var text = String(key);
                                 if(text == "SYSTEM:username_request") {
-                                    container.write("setup nick "+userName+"\n");
+                                    containeurs[userName]['stdin'].write("setup nick "+userName+"\n");
                                 } else {
                                     if(text.substring(0,10) != "setup nick") {
                                         text = text.replace("\n","<br>")
