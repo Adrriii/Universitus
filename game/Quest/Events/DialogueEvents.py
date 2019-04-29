@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 from Quest.Event import Event
-from Command.Command import *
+from GetGame import GetGame
 
 class AppendDialogueChoice(Event):
     def __init__(self, npc, dialogue):
@@ -10,7 +10,7 @@ class AppendDialogueChoice(Event):
         pass
 
     def do(self):
-        Command.game.dialogues.append(self.dialogue)
+        GetGame.game.dialogues.append(self.dialogue)
 
     def printItself(self):
         super()
@@ -23,7 +23,7 @@ class SetDialogueChoice(Event):
         pass
 
     def do(self):
-        Command.game.dialogues = self.dialogues
+        GetGame.game.dialogues[self.npc] = self.dialogues
 
     def printItself(self):
         super()
@@ -36,8 +36,8 @@ class NpcToPlayer(Event):
         pass
 
     def do(self):
-        cmd = talk()
-        Command.game.dialogues[self.name] = self.said
+        cmd = GetGame.talk()
+        GetGame.game.dialogues[self.name] = self.said
         cmd.perform(["talk",self.name+".py"])
 
     def printItself(self):

@@ -2,10 +2,13 @@ import os
 import subprocess
 import importlib
 from io import StringIO
+from GetGame import GetGame
+from Quest.Events.DialogueEvents import *
+from Quest.Events.RemoveEvents import *
+from Quest.Events.MoveEntity import *
+from Quest.Events.CreateEvents import *
 
 class Command:
-
-    game = None # Access to the game
 
     def __init__(self):
         pass
@@ -35,7 +38,7 @@ class Command:
                         for line in l.readlines():
                             print(line)
                     return False
-        return os.path.abspath(self.game.root+"/") in full
+        return os.path.abspath(GetGame.game.root+"/") in full
 
 class cd(Command):
 
@@ -110,40 +113,43 @@ class talk(Command):
                                 text = ''.join(f.readlines())
                                 exec(text)
                                 character = eval(name+"()")
+                                events = []
 
-                                said = [""]
-                                if(name in self.game.dialogues.keys()):
+                                if(name in GetGame.game.dialogues.keys()):
                                     # Continue talk
-                                    said = self.game.dialogues[name]
+                                    said = GetGame.game.dialogues[name]
+                                else:
+                                    said = [""]
 
-                                    if len(args) > 2:
-                                        # No choice given
-                                        dialogueTree = character.dialogue
-                                        next = character.dialogue
-                                        events = []
-                                        for choice in said:
-                                            dialogueTree = next[choice]
-                                            next = dialogueTree[1]
-                                            if(len(dialogueTree)>2):
-                                                for ev in dialogueTree[2].split("|"):
-                                                    events.append(eval(ev))
+                                dialogueTree = character.dialogue
+                                next = character.dialogue
 
-                                        for event in events:
-                                            event.do()
+                                for choice in said:
+                                    dialogueTree = next[choice]
+                                    next = dialogueTree[1]
+                                    if(len(dialogueTree)>2):
+                                        for ev in dialogueTree[2].split("|"):
+                                            events.append(eval(ev))
 
-                                        try:
-                                            i = 1
-                                            for choice,response in dialogueTree[1].items():
-                                                if i == int(args[2]):
-                                                    said.append(choice)
-                                                    break
-                                                i += 1
-                                        except Exception as e:
-                                            print("Choix invalide. ( "+str(e)+" )")
-                                            return
+
+                                if len(args) > 2:
+                                    # No choice given
+                                    try:
+                                        i = 1
+                                        for choice,response in dialogueTree[1].items():
+                                            if i == int(args[2]):
+                                                said.append(choice)
+                                                break
+                                            i += 1
+                                    except Exception as e:
+                                        print("Choix invalide. ( "+str(e)+" )")
+                                        return
                                         
-                                self.game.dialogues[name] = said
+                                GetGame.game.dialogues[name] = said
                                 character.talk(said)
+
+                                for event in events:
+                                    event.do()
                         except Exception as e:
                             print("*Bruits inintelligibles*")
                             print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")

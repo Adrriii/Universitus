@@ -40,10 +40,9 @@ class Quest :
                 if(attr == "name"):
                     if(left != 'none'):
                         self.name = left.split('\n')[0]
+                    else:
+                        raise Exception
                     continue
-                else:
-                    #Invalidate the configuration, invalid quest
-                    pass
                 if(attr == "description"):
                     if(left != 'none'):
                         self.description = left.split('\n')[0]

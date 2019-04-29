@@ -3,6 +3,7 @@ import os
 from Quest.Quest import *
 from Command.Command import *
 from Entity.Items.Common import *
+from GetGame import GetGame
 
 class Game :
 
@@ -49,7 +50,9 @@ class Game :
             del self.activeQuests[quest]
 
     def start(self) :
-        Command.game = self
+        GetGame.game = self
+        GetGame.commands = Command
+        GetGame.talk = talk
 
         # Emulate user command to show lore example
         eval("cd()").perform(['cd',"Bethanie"])
