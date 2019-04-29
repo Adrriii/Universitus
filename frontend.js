@@ -64,6 +64,11 @@ $
         if (json.type === 'message') {
             // Refocus as a new message arrives
             input.focus();
+            if(json.data.password) {
+                input.prop('type','password');
+            } else {
+                input.prop('type','input');
+            }
             checkMessage(json.data.text);
             addMessage(json.data.author, json.data.text, new Date(json.data.time));
         } else {
@@ -147,13 +152,8 @@ $
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {    
-        var ansi_up = new AnsiUp;
-        console.log("Message de base : ");
-        console.log(message);
-        
+        var ansi_up = new AnsiUp;        
         var html = ansi_up.ansi_to_html(message);
-        console.log("After ansi_to_html : ");
-        console.log(html);
         
         content.append(html.replace(/(\\n)/g, '<br>'));
     }

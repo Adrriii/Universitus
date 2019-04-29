@@ -212,7 +212,7 @@ wsServer.on('request', function (request) {
     var userName = false;
 
     console.log((new Date()) + ' Connection accepted.');
-    sendMessage(index, "\\nEnter your login : ", true);
+    sendMessage(index, "Enter your login : ");
 
     // user sent some message
     connection.on('message', function (message) {
@@ -261,7 +261,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, "\\nRepeat Password : ", true);
+                    sendMessage(index, userName+"\\nRepeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
