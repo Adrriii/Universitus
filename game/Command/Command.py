@@ -115,23 +115,25 @@ class talk(Command):
                                 if(name in self.game.dialogues.keys()):
                                     # Continue talk
                                     said = self.game.dialogues[name]
-                                    
-                                    dialogueTree = character.dialogue
-                                    next = character.dialogue
-                                    for choice in said:
-                                        dialogueTree = next[choice]
-                                        next = dialogueTree[1]
 
-                                    try:
-                                        i = 1
-                                        for choice,response in dialogueTree[1].items():
-                                            if i == int(args[2]):
-                                                said.append(choice)
-                                                break
-                                            i += 1
-                                    except Exception as e:
-                                        print("Choix invalide. ( "+str(e)+" )")
-                                        return
+                                    if len(args) > 2:
+                                        # No choice given
+                                        dialogueTree = character.dialogue
+                                        next = character.dialogue
+                                        for choice in said:
+                                            dialogueTree = next[choice]
+                                            next = dialogueTree[1]
+
+                                        try:
+                                            i = 1
+                                            for choice,response in dialogueTree[1].items():
+                                                if i == int(args[2]):
+                                                    said.append(choice)
+                                                    break
+                                                i += 1
+                                        except Exception as e:
+                                            print("Choix invalide. ( "+str(e)+" )")
+                                            return
                                         
                                 self.game.dialogues[name] = said
                                 character.talk(said)
