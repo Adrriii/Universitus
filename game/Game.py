@@ -29,7 +29,7 @@ class Game :
         quest = self.quests[name]
         print(u"\u001b[35mNouvelle quête : \u001b[0m"+quest.name)
         print(quest.description)
-        print("\n")
+        print("\n\n")
         quest.start()
         self.activeQuests[name] = quest
 
