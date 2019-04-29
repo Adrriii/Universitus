@@ -14,9 +14,19 @@ class CreateLock(Event):
         with open(self.path+"/.lock", 'w') as f:
             f.write(self.message)
 
+class CreateLore(Event):
+    def __init__(self, path, message):
+        self.path = path
+        self.message = message
+        pass
+
+    def do(self):
+        with open(self.path+"/.lore", 'w') as f:
+            f.write(self.message)
+
     def printItself(self):
         super()
-        print(":CreateLock")
+        print(":CreateLore")
 
 class CreateEntity(Event):
     def __init__(self, entity):

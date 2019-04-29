@@ -16,6 +16,18 @@ class CreateLock(Event):
         super()
         print(":RemoveLock")
 
+class RemoveLore(Event):
+    def __init__(self, path):
+        self.path = path
+        pass
+
+    def do(self):
+        os.remove(self.path)
+
+    def printItself(self):
+        super()
+        print(":RemoveLore")
+
 class RemoveEntity(Event):
     def __init__(self, entity):
         self.entity = entity
