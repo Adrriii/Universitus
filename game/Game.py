@@ -64,7 +64,7 @@ class Game :
         print("SYSTEM:username_request")
 
         while(True):
-            input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
+            input_string = input(u"\033[93m"+self.user_name + "@:" + os.getcwd().replace(self.root,'') + u"$ \033[0m")
             args = input_string.split(' ')
 
             command_string = args[0]
