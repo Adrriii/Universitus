@@ -16,8 +16,7 @@ class A_Grid:
 		print(u"[36mA_Grid:[37m ", end = '')
 		for line in thinkingAbout[0].split('\n'):
 			print(u"[37m"+line)
-			print("\\n")
-		print("\\n")
+		print("")
 		r = 1
 		for choice,reponses in thinkingAbout[1].items():
 			print(str(r)+": "+choice  )

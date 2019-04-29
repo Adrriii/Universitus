@@ -14,8 +14,15 @@ class Command:
         output = subprocess.check_output(args, shell=True)
         return output
 
-    def inbounds(self, path):
+    def inbounds(self, path, noLock = False):
         full = os.path.abspath(path)
+        if not noLock:
+            lock = full+"/.lock"
+            if os.path.exists(lock):
+                with open(lock,'r') as l:
+                    for line in l.readlines():
+                        print(line)
+                return False
         return os.path.abspath(self.game.root+"/") in full
 
 class cd(Command):

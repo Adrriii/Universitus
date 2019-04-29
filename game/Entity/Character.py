@@ -43,7 +43,7 @@ class Character(Entity):
             self.writeIn("\t\tprint(u\""+self.color+self.name+":\u001b[37m \", end = '')")
             self.writeIn("\t\tfor line in thinkingAbout[0].split('\\n'):")
             self.writeIn("\t\t\tprint(u\"\u001b[37m\"+line)")
-            self.writeIn("\t\t\tprint(\"\")")
+            self.writeIn("\t\tprint(\"\")")
             self.writeIn("\t\tr = 1")
             self.writeIn("\t\tfor choice,reponses in thinkingAbout[1].items():")
             self.writeIn("\t\t\tprint(str(r)+\": \"+choice  )")
