@@ -1,11 +1,8 @@
 import os
 
-from Player import *
 from Quest.Quest import *
 from Command.Command import *
 from Entity.Items.Common import *
-
-player = Player()
 
 class Game :
 
