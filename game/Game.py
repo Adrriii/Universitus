@@ -24,8 +24,8 @@ class Game :
 
     def startQuest(self, name):
         quest = self.quests[name]
-        print(u"\u001b[35mNouvelle quête : \u001b[0m"+quest.name, end="\\n")
-        print(quest.description, end="\\n\\n")
+        sprint(u"\u001b[35mNouvelle quête : \u001b[0m"+quest.name)
+        sprint(quest.description, end="\\n\\n")
         quest.start()
         self.activeQuests[name] = quest
 
@@ -58,7 +58,7 @@ class Game :
         self.quests["init"].setAvailable()
         self.startQuest("init")
 
-        print("SYSTEM:username_request")
+        sprint("SYSTEM:username_request")
 
         while(True):
             input_string = input(self.user_name + "@:" + os.getcwd().replace(self.root,'') + "$ ")
@@ -67,7 +67,7 @@ class Game :
             command_string = args[0]
 
             if command_string in self.forbiddenCommands:
-                print("Unknown command \""+command_string+"\"")
+                sprint("Unknown command \""+command_string+"\"")
             else:
                 if(command_string != "setup"):
                     try:

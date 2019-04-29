@@ -6,4 +6,4 @@ class Condition:
         return False
 
     def printItself(self):
-        print("Condition")
+        sprint("Condition")

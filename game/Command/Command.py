@@ -29,14 +29,14 @@ class cd(Command):
                     if(os.path.isfile(".lore")):
                         with open(".lore",'r') as f:
                             for line in f.readlines():
-                                print(line, end = '')
-                            print("\n")
+                                sprint(line, end = '')
+                            sprint("\n")
                 else:
-                    print("Impossible d'aller ici.")
+                    sprint("Impossible d'aller ici.")
             except:
-                print("Vous ne pouvez pas vous diriger vers \""+destination+"\"")
+                sprint("Vous ne pouvez pas vous diriger vers \""+destination+"\"")
         except:
-            print("Cette destination est invalide.")
+            sprint("Cette destination est invalide.")
 
 class cat(Command):
 
@@ -47,11 +47,11 @@ class cat(Command):
                 if(self.inbounds(destination)):
                     super.perform(args)
                 else:
-                    print("Impossible de voir ce qui se trouve à l'intérieur.")
+                    sprint("Impossible de voir ce qui se trouve à l'intérieur.")
             except:
-                print("Cet endroit est inaccessible.")
+                sprint("Cet endroit est inaccessible.")
         except:
-            print("Cet objet est invalide.")
+            sprint("Cet objet est invalide.")
 
 class ls(Command):
     pass
@@ -68,9 +68,9 @@ class touch(Command):
                 if(self.inbounds(destination)):
                     open(destination,'a').close()
             except:
-                print("Vous ne pouvez pas créer \""+destination+"\"")
+                sprint("Vous ne pouvez pas créer \""+destination+"\"")
         except:
-            print("L'endroit auquel vous tentez d'accéder est incorrect.")
+            sprint("L'endroit auquel vous tentez d'accéder est incorrect.")
 
 class talk(Command):
 
@@ -106,20 +106,20 @@ class talk(Command):
                                                 break
                                             i += 1
                                     except Exception as e:
-                                        print("Choix invalide. ( "+str(e)+" )")
+                                        sprint("Choix invalide. ( "+str(e)+" )")
                                         return
                                         
                                 self.game.dialogues[name] = said
                                 character.talk(said)
                         except Exception as e:
-                            print("*Bruits inintelligibles*")
-                            print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
+                            sprint("*Bruits inintelligibles*")
+                            sprint("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
                     else:
-                        print("Ceci ne peut parler !")
+                        sprint("Ceci ne peut parler !")
             except:
-                print("Vous ne pouvez pas vous adresser à "+destination)
+                sprint("Vous ne pouvez pas vous adresser à "+destination)
         except:
-            print("La personne à qui vous tentez de vous adresser est hors de portée.")
+            sprint("La personne à qui vous tentez de vous adresser est hors de portée.")
 
 class restart(Command):
     def perform(self, args):
@@ -139,11 +139,11 @@ class edit_(Command):
                     with open(f_out, 'w') as f:
                         f.write(text)
                 else:
-                    print("Vous ne pouvez pas modifier cet objet.")
+                    sprint("Vous ne pouvez pas modifier cet objet.")
             except:
-                print("Vous ne pouvez pas modifier cet objet")
+                sprint("Vous ne pouvez pas modifier cet objet")
         except:
-            print("L'objet que vous tentez de modifier est invalide.")
+            sprint("L'objet que vous tentez de modifier est invalide.")
 
 class python(Command):
     pass
@@ -157,6 +157,6 @@ class edit(Command):
                     with open(args[1],mode='r') as f:
                         return bytes(f.read(), 'utf-8')
             except:
-                print("Vous ne pouvez pas modifier cet objet.")
+                sprint("Vous ne pouvez pas modifier cet objet.")
         except:
-            print("L'objet que vous tentez de modifier est invalide.")
+            sprint("L'objet que vous tentez de modifier est invalide.")
