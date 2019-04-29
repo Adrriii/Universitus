@@ -54,7 +54,6 @@ $(function () {
         // always returns JSON this should work without any problem but
         // we should make sure that the massage is not chunked or
         // otherwise damaged.
-        console.log(message);
         try {
             var json = JSON.parse(message.data);
         } catch (e) {
@@ -157,8 +156,10 @@ $(function () {
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {
+        console.log(message);
         message = message.replace("\n","<br>");
         message = message.replace("\t","<br>");
+        console.log(message);
         content.append(message);
     }
 });

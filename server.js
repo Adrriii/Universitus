@@ -1,12 +1,9 @@
 "use strict";
 let Stream = require('stream')
 let Docker = require('dockerode')
-let Convert = require('ansi-to-html')
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let moduleDocker = require('./moduleDocker');
 
-// used for formatting output into html
-var convert = new Convert();
 
 // Port where we'll run the websocket server
 var webSocketsServerPort = 1337;
@@ -159,7 +156,7 @@ wsServer.on('request', function (request) {
         
                                         let obj = {
                                             time: (new Date()).getTime(),
-                                            text: convert.toHtml(text),
+                                            text: text,
                                             author: userName
                                         };
                                         
