@@ -182,7 +182,7 @@ wsServer.on('request', function (request) {
                                 // TODO : load user's save
                                 createContainer(userName, index);
                             } else {
-                                sendMessage(index, "<br>Wrong password. Try again.<br>",true);
+                                sendMessage(index, "\nWrong password. Try again.\n",true);
                             }
                         }
                     )
@@ -193,7 +193,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, "<br>Repeat Password : ", true);
+                    sendMessage(index, "\nRepeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
@@ -204,7 +204,7 @@ wsServer.on('request', function (request) {
                                 createContainer(userName, index);
                                 clients_status[index] = status.GAME;
                             } else {
-                                sendMessage(index, "<br>An error occured. Try again!<br>");
+                                sendMessage(index, "\nAn error occured. Try again!\n");
                                 clients_status[index] = status.INIT;
                             }
                         }
