@@ -583,6 +583,6 @@ $(function () {
         console.log("After ansi_to_html : ");
         console.log(html);
         
-        content.append(html.replace('\\n',"<br>"));
+        content.append(html.replace(/(\\n)/g, '<br>'));
     }
 });
