@@ -10,7 +10,8 @@ class CurrentPlayerDirectory(Condition):
         pass
 
     def met(self):
-        return os.getcwd().replace(Command.game.root,'').replace("\\","/") == self.path
+        path = os.getcwd().replace(Command.game.root,'').replace("\\","/")
+        return path[1:] == self.path
 
     def printItself(self):
         super()
