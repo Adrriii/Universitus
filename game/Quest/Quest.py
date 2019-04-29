@@ -8,7 +8,6 @@ from Quest.Events.CreateEvents import *
 from Quest.Events.RemoveEvents import *
 from Quest.Events.DialogueEvents import *
 from Quest.Events.MoveEntity import MoveEntity
-from Quest.Events.NpcToPlayer import NpcToPlayer
 from Entity.Items.Common import *
 from Entity.Character import *
 from Entity.Characteristic import *
