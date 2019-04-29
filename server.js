@@ -125,6 +125,79 @@ var optsc = {
     'VolumesFrom': []
 };
 
+createContainer(userName, index) {
+    console.log("Creating containeur for " + userName + "...");
+    docker.createContainer(optsc)
+        .then(container => {
+            containeurs[userName] = {
+                stdin: null,
+                stdout: null,
+                container_id: null
+            };
+
+            var attach_opts = {
+                stream: true,
+                stdin: false,
+                stdout: true,
+                stderr: false
+            };
+
+            containeurs[userName].container_id = container;
+
+            //stdout
+            container.attach(attach_opts, (err, stream) => {
+                
+                stream.on('data', key => {
+                    var text = String(key);
+                    if(text == "SYSTEM:username_request") {
+                        containeurs[userName]['stdin'].write("setup nick "+userName);
+                    } else {
+                        if(text.substring(0,10) != "setup nick" && text.substring(0,6) != "Player") {
+                            text = text.replace(/(\n)/g, '\\n');
+                            let obj = {
+                                time: (new Date()).getTime(),
+                                text: text,
+                                author: userName
+                            };
+                            
+                            let json = JSON.stringify({
+                                type: 'message',
+                                data: obj
+                            });
+                            clients[index].sendUTF(json);
+                        }
+                    }
+                })
+            
+                console.log("Starting container...");
+                container.start()
+                .then(container => {
+                    console.log("Containeur for " + userName + " succefully created and ready !");
+                })
+            });
+
+            var attach_opts = {
+                stream: true,
+                stdin: true,
+                stdout: false,
+                stderr: false
+            };
+
+            //stdin
+            container.attach(attach_opts, (err, stream) => {
+                containeurs[userName]['stdin'] = stream;
+            });
+        })
+
+
+    connection.sendUTF(
+        JSON.stringify({
+            type: 'logged-in'
+        }));
+
+    console.log((new Date()) + ' New user: ' + userName);
+}
+
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function (request) {
