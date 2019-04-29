@@ -576,7 +576,13 @@ $(function () {
      */
     function addMessage(author, message, color, dt) {    
         var ansi_up = new AnsiUp;
+        console.log("Message de base : ");
+        console.log(message);
+        
         var html = ansi_up.ansi_to_html(message);
-        content.append(html.replace('\n',"<br>"));
+        console.log("After ansi_to_html : ");
+        console.log(html);
+        
+        content.append(html.replace('\\n',"<br>"));
     }
 });
