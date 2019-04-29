@@ -3,5 +3,5 @@ description : A_Grid vous conseille de demander la direction du Guichet Unique �
 onStart : CreateCharacter(Character("M.Rusarg", "Bethanie/Parc", [], {"1" : ["La direction du Guichet Unique ? Vous ne savez pas lire ? Elle est indiquée sur tous les panneaux aux alentours ! Débrouillez-vous. \nMais attention ! Les premières années sont toujours les pires, et vous n'avez pas une bouille angélique. Je vous ai à l'oeil..."{}]}))
 onResolve : NpcToPlayer("A_Grid", ["3"]) | MoveEntity(Entity("A_Grid", "Bethanie"), "Bethanie")
 steps : none
-conditions : CurrentPlayerDirectory("Bethanie/")
+conditions : CurrentDialogueChoice("M.Rusarg", "3")
 next : none
