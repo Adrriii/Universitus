@@ -6,4 +6,4 @@ class Event:
         pass
 
     def printItself(self):
-        sprint("Event")
+        print("Event")

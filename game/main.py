@@ -5,9 +5,6 @@ import os
 from Game import *
 import os
 
-def sprint(message, end = "\\n"):
-    print(message,end)
-
 DEBUG = True
 
 game = Game() 
@@ -21,4 +18,4 @@ while(True):
     except Exception as e:
         if DEBUG:
             raise e
-        sprint("Restarting...")
+        print("Restarting...")
