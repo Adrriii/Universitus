@@ -52,7 +52,7 @@ class Game :
         Command.game = self
 
         # Emulate user command to show lore example
-        eval("cd()").perform(['cd',"Universitus"])
+        eval("cd()").perform(['cd',"Bethanie"])
 
         # If needed, replay all quests
         self.quests["init"].setAvailable()
