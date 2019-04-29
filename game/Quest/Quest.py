@@ -3,8 +3,10 @@ from Quest.Condition import Condition
 from Quest.Conditions.EntityExists import EntityExists
 from Quest.Conditions.PlaceExists import PlaceExists
 from Quest.Conditions.CurrentPlayerDirectory import CurrentPlayerDirectory
+from Quest.Conditions.CurrentDialogueChoice import CurrentDialogueChoice
 from Quest.Events.CreateEvents import *
 from Quest.Events.RemoveEvents import *
+from Quest.Events.DialogueEvents import *
 from Quest.Events.MoveEntity import MoveEntity
 from Quest.Events.NpcToPlayer import NpcToPlayer
 from Entity.Items.Common import *
