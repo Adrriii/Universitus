@@ -120,9 +120,16 @@ class talk(Command):
                                         # No choice given
                                         dialogueTree = character.dialogue
                                         next = character.dialogue
+                                        events = []
                                         for choice in said:
                                             dialogueTree = next[choice]
                                             next = dialogueTree[1]
+                                            if(len(dialogueTree)>2):
+                                                for ev in dialogueTree[2].split("|"):
+                                                    events.append(eval(ev))
+
+                                        for event in events:
+                                            event.do()
 
                                         try:
                                             i = 1
