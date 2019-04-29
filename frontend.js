@@ -60,18 +60,9 @@ $(function () {
             console.log('Invalid JSON: ', message.data);
             return;
         }
-
-        // Login
-        if (json.type === 'logged-in') {
-            input.focus();
-            // from now user can start sending messages
-        } else if (json.type === 'history') { // entire message history
-            // insert every single message to the chat window
-            for (var i = 0; i < json.data.length; i++) {
-                addMessage(json.data[i].author, json.data[i].text, new Date(json.data[i].time));
-            }
-        } else if (json.type === 'message') { // it's a single message
-            // let the user write another message
+$
+        if (json.type === 'message') {
+            // Refocus as a new message arrives
             input.focus();
             checkMessage(json.data.text);
             addMessage(json.data.author, json.data.text, new Date(json.data.time));

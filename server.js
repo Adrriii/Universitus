@@ -189,12 +189,6 @@ function createContainer(userName, index) {
             });
         })
 
-
-    connection.sendUTF(
-        JSON.stringify({
-            type: 'logged-in'
-        }));
-
     console.log((new Date()) + ' New user: ' + userName);
 }
 
@@ -218,6 +212,7 @@ wsServer.on('request', function (request) {
     var userName = false;
 
     console.log((new Date()) + ' Connection accepted.');
+    sendMessage(index, "\\nEnter your login : ", true);
 
     // user sent some message
     connection.on('message', function (message) {
@@ -235,11 +230,11 @@ wsServer.on('request', function (request) {
                             // New user
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
-                            sendMessage(index, "New Password for " + userName + " : ", true);
+                            sendMessage(index, "\\nNew Password for " + userName + " : ", true);
                         } else {
                             // Existing user, asking for identification
                             clients_status[index] = status.LOGIN;
-                            sendMessage(index, "Password for " + userName + " : ", true);
+                            sendMessage(index, "\\nPassword for " + userName + " : ", true);
                         }
                     });
                     break;
@@ -255,7 +250,7 @@ wsServer.on('request', function (request) {
                                 // TODO : load user's save
                                 createContainer(userName, index);
                             } else {
-                                sendMessage(index, "\nWrong password. Try again.\n",true);
+                                sendMessage(index, "\\nWrong password. Try again.\n",true);
                             }
                         }
                     )
@@ -266,7 +261,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, "\nRepeat Password : ", true);
+                    sendMessage(index, "\\nRepeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
