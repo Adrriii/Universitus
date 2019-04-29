@@ -19,7 +19,7 @@ class Command:
         full = os.path.abspath(path)
         if(os.path.isfile(full)):
             full = os.path.dirname(full)
-            
+
         if not noLock:
             lockhere = curr+"/.lock"
             lock = full+"/.lock"
@@ -46,10 +46,15 @@ class cd(Command):
                 if(self.inbounds(destination)):
                     os.chdir(args[1])
                     if(os.path.isfile(".lore")):
+                        destroy = False
                         with open(".lore",'r') as f:
                             for line in f.readlines():
-                                print(line, end = '')
+                                if(line == "destroy" or line == "destroy\n"):
+                                    destroy = True
+                                else:
+                                    print(line, end = '')
                             print("\n")
+                        os.remove(".lore")
                 else:
                     print("Impossible d'aller ici.")
             except:
