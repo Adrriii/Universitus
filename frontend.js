@@ -157,8 +157,6 @@ $(function () {
      */
     function addMessage(author, message, color, dt) {
         console.log(message);
-        message = message.replace("\n","<br>");
-        message = message.replace("\t","<br>");
         console.log(message);
         content.append(message);
     }
