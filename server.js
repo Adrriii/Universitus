@@ -125,7 +125,7 @@ var optsc = {
     'VolumesFrom': []
 };
 
-createContainer(userName, index) {
+function createContainer(userName, index) {
     console.log("Creating containeur for " + userName + "...");
     docker.createContainer(optsc)
         .then(container => {
