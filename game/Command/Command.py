@@ -15,14 +15,26 @@ class Command:
         return output
 
     def inbounds(self, path, noLock = False):
+        curr = os.getcwd()
         full = os.path.abspath(path)
+        if(os.path.isfile(full)):
+            full = os.path.dirname(full)
+            
         if not noLock:
+            lockhere = curr+"/.lock"
             lock = full+"/.lock"
-            if os.path.exists(lock):
-                with open(lock,'r') as l:
-                    for line in l.readlines():
-                        print(line)
-                return False
+            
+            if lockhere != lock:
+                if os.path.exists(lockhere):
+                    with open(lockhere,'r') as l:
+                        for line in l.readlines():
+                            print(line)
+                    return False
+                if os.path.exists(lock):
+                    with open(lock,'r') as l:
+                        for line in l.readlines():
+                            print(line)
+                    return False
         return os.path.abspath(self.game.root+"/") in full
 
 class cd(Command):
