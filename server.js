@@ -178,7 +178,7 @@ wsServer.on('request', function (request) {
                         if (!rows || !rows.length) {
                             // New user
                             console.log((new Date()) + ' New user registering : ' + userName + ':'+uuid+'.');
-                            sendMessage(uuid, uuid + "\\nNew Password for " + userName + " : ", true);
+                            sendMessage(uuid, userName + "\\nNew Password for " + userName + " : ", true);
                             // Go in state 2 for registration
                             clients.get(uuid).status = status.REGISTER;
                         } else {
