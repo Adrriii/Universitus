@@ -199,9 +199,3 @@ class edit(Command):
                 print("Vous ne pouvez pas modifier cet objet.")
         except:
             print("L'objet que vous tentez de modifier est invalide.")
-            
-class nick(Command):
-
-    def perform(self, args):
-        if len(args) >1:
-            self.game.user_name = args[2]

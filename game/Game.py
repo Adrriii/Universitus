@@ -54,6 +54,8 @@ class Game :
         GetGame.commands = Command
         GetGame.talk = talk
 
+        self.user_name = input("Veuillez saisir un nom d'utilisateur: ")
+
         # Emulate user command to show lore example
         eval("cd()").perform(['cd',"Bethanie"])
 
