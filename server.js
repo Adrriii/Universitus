@@ -127,7 +127,7 @@ var optsc = {
 
 async function createContainer(userName, index) {
     console.log("Creating containeur for " + userName + "...");
-    await docker.createContainer(optsc)
+    docker.createContainer(optsc)
         .then(container => {
             containeurs[userName] = {
                 stdin: null,
@@ -185,8 +185,6 @@ async function createContainer(userName, index) {
                 containeurs[userName]['stdin'] = stream;
             });
         })
-
-    console.log((new Date()) + ' New user: ' + userName);
 }
 
 // This callback function is called every time someone
@@ -227,11 +225,11 @@ wsServer.on('request', function (request) {
                             // New user
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
-                            sendMessage(index, "New Password for " + userName + " : ", true);
+                            sendMessage(index, userName+"\\nNew Password for " + userName + " : ", true);
                         } else {
                             // Existing user, asking for identification
                             clients_status[index] = status.LOGIN;
-                            sendMessage(index, "Password for " + userName + " : ", true);
+                            sendMessage(index, "\\nPassword for " + userName + " : ", true);
                         }
                     });
                     break;
@@ -248,7 +246,7 @@ wsServer.on('request', function (request) {
                                     clients_status[index] = status.GAME;
                                 });
                             } else {
-                                sendMessage(index, "Wrong password. Try again.\n", true);
+                                sendMessage(index, "\\nWrong password. Try again.\n", true);
                             }
                         }
                     )
@@ -259,7 +257,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, userName + "Repeat Password : ", true);
+                    sendMessage(index, userName + "\\nRepeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
