@@ -2,6 +2,7 @@ $(function () {
     "use strict";
     // for better performance - to avoid searching in DOM
     var content = $('#content');
+    var text = $('#text');
     var input = $('#input');
     var terminal = $('#terminal');
     var textarea = $('#textarea');
@@ -42,7 +43,7 @@ $(function () {
 
     connection.onerror = function (error) {
         // just in there were some problems with connection...
-        content.html($('<p>', {
+        text.html($('<p>', {
             text: 'Sorry, but there\'s a problem with your ' +
                 'connection or the server is down.'
         }));
@@ -60,14 +61,14 @@ $(function () {
             console.log('Invalid JSON: ', message.data);
             return;
         }
-$
+        $
         if (json.type === 'message') {
             // Refocus as a new message arrives
             input.focus();
-            if(json.data.password) {
-                input.prop('type','password');
+            if (json.data.password) {
+                input.prop('type', 'password');
             } else {
-                input.prop('type','input');
+                input.prop('type', 'input');
             }
             checkMessage(json.data.text);
             addMessage(json.data.author, json.data.text, new Date(json.data.time));
@@ -87,7 +88,7 @@ $
             }
 
             // send the message as an ordinary text
-            connection.send(msg+"\n");
+            connection.send(msg + "\n");
             $(this).val('');
 
             // we know that the first message sent from a user their name
@@ -151,10 +152,14 @@ $
     /**
      * Add message to the chat window
      */
-    function addMessage(author, message, color, dt) {    
-        var ansi_up = new AnsiUp;        
+    function addMessage(author, message, color, dt) {
+        var ansi_up = new AnsiUp;
         var html = ansi_up.ansi_to_html(message);
-        
-        content.append(html.replace(/(\\n)/g, '<br>'));
+
+        text.append(html.replace(/(\\n)/g, '<br>'));
     }
+    function resizeInput() {
+        this.style.width = this.value.length + "ch";
+      }
+    input.on('input', resizeInput);
 });
