@@ -170,7 +170,7 @@ wsServer.on('request', function (request) {
             switch (clients.get(uuid).status) {
                 case status.INIT:
                     // remember user name
-                    userName = htmlEntities(message.utf8Data);
+                    userName = htmlEntities(message.utf8Data).split("\n")[0];
 
                     console.log((new Date()) + ' Username request : ' + userName + '.');
                     // Challenge username with the database
