@@ -92,7 +92,11 @@ var optsc = {
     'Dns': ['8.8.8.8', '8.8.4.4'],
     'Image': 'docker-game',
     'Volumes': {},
-    'VolumesFrom': []
+    'VolumesFrom': [],
+    'HostConfig': {
+        "Memory": 8000000,
+        "DiskQuota": 8000000,
+    }
 };
 
 async function createContainer(userName, uuid) {
