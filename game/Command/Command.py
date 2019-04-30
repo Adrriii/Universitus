@@ -185,7 +185,7 @@ class edit_(Command):
         except:
             print("L'objet que vous tentez de modifier est invalide.")
 
-class python(Command):
+class python3(Command):
     pass
 class edit(Command):
 
