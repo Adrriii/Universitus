@@ -83,14 +83,14 @@ server.listen(webSocketsServerPort, function () {
 //         AttachStdout: true,
 //         AttachStderr: true
 //     };
-    
+
 //     container.exec(options, function (err, exec) {
 //         if (err) return;
 //         exec.start(function (err, stream) {
 //             if (err) return;
-    
+
 //             container.modem.demuxStream(stream, s, s);
-    
+
 //         });
 //     });
 
@@ -146,34 +146,31 @@ function createContainer(userName, index) {
 
             //stdout
             container.attach(attach_opts, (err, stream) => {
-                
+
                 stream.on('data', key => {
                     var text = String(key);
-                    if(text == "SYSTEM:username_request") {
-                        containeurs[userName]['stdin'].write("setup nick "+userName);
-                    } else {
-                        if(text.substring(0,10) != "setup nick" && text.substring(0,6) != "Player") {
-                            text = text.replace(/(\n)/g, '\\n');
-                            let obj = {
-                                time: (new Date()).getTime(),
-                                text: text,
-                                author: userName
-                            };
-                            
-                            let json = JSON.stringify({
-                                type: 'message',
-                                data: obj
-                            });
-                            clients[index].sendUTF(json);
-                        }
-                    }
+
+                    text = text.replace(/(\n)/g, '\\n');
+                    let obj = {
+                        time: (new Date()).getTime(),
+                        text: text,
+                        author: userName
+                    };
+
+                    let json = JSON.stringify({
+                        type: 'message',
+                        data: obj
+                    });
+                    clients[index].sendUTF(json);
+
+
                 })
-            
+
                 console.log("Starting container...");
                 container.start()
-                .then(container => {
-                    console.log("Containeur for " + userName + " succefully created and ready !");
-                })
+                    .then(container => {
+                        console.log("Containeur for " + userName + " succefully created and ready !");
+                    })
             });
 
             var attach_opts = {
@@ -230,11 +227,11 @@ wsServer.on('request', function (request) {
                             // New user
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
-                            sendMessage(index, "\\nNew Password for " + userName + " : ", true);
+                            sendMessage(index, "New Password for " + userName + " : ", true);
                         } else {
                             // Existing user, asking for identification
                             clients_status[index] = status.LOGIN;
-                            sendMessage(index, "\\nPassword for " + userName + " : ", true);
+                            sendMessage(index, "Password for " + userName + " : ", true);
                         }
                     });
                     break;
@@ -250,7 +247,7 @@ wsServer.on('request', function (request) {
                                 // TODO : load user's save
                                 createContainer(userName, index);
                             } else {
-                                sendMessage(index, "\\nWrong password. Try again.\n",true);
+                                sendMessage(index, "Wrong password. Try again.\n", true);
                             }
                         }
                     )
@@ -261,7 +258,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, userName+"\\nRepeat Password : ", true);
+                    sendMessage(index, userName + "Repeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
@@ -272,7 +269,7 @@ wsServer.on('request', function (request) {
                                 createContainer(userName, index);
                                 clients_status[index] = status.GAME;
                             } else {
-                                sendMessage(index, "\nAn error occured. Try again!\n");
+                                sendMessage(index, "An error occured. Try again!\n");
                                 clients_status[index] = status.INIT;
                             }
                         }
@@ -291,15 +288,15 @@ wsServer.on('request', function (request) {
         if (userName !== false) {
             console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
-            
-            console.log("Removing container of " + userName);  
+
+            console.log("Removing container of " + userName);
             containeurs[userName].container_id.stop()
-            .catch(error => {
-                //Container already stoped
-            });
+                .catch(error => {
+                    //Container already stoped
+                });
 
             console.log("Container succesfully removed !");
-            
+
 
             // remove user from the list of connected clients
             clients.splice(index, 1);

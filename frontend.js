@@ -87,6 +87,7 @@ $
             }
 
             // send the message as an ordinary text
+            addMessage("","\n");
             connection.send(msg+"\n");
             $(this).val('');
 

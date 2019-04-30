@@ -2,13 +2,10 @@ import os
 import subprocess
 import importlib
 from io import StringIO
-from GetGame import GetGame
-from Quest.Events.DialogueEvents import *
-from Quest.Events.RemoveEvents import *
-from Quest.Events.MoveEntity import *
-from Quest.Events.CreateEvents import *
 
 class Command:
+
+    game = None # Access to the game
 
     def __init__(self):
         pass
@@ -17,28 +14,9 @@ class Command:
         output = subprocess.check_output(args, shell=True)
         return output
 
-    def inbounds(self, path, noLock = False):
-        curr = os.getcwd()
+    def inbounds(self, path):
         full = os.path.abspath(path)
-        if(os.path.isfile(full)):
-            full = os.path.dirname(full)
-
-        if not noLock:
-            lockhere = curr+"/.lock"
-            lock = full+"/.lock"
-            
-            if lockhere != lock:
-                if os.path.exists(lockhere):
-                    with open(lockhere,'r') as l:
-                        for line in l.readlines():
-                            print(line)
-                    return False
-                if os.path.exists(lock):
-                    with open(lock,'r') as l:
-                        for line in l.readlines():
-                            print(line)
-                    return False
-        return os.path.abspath(GetGame.game.root+"/") in full
+        return self.game.root in full
 
 class cd(Command):
 
@@ -49,20 +27,17 @@ class cd(Command):
                 if(self.inbounds(destination)):
                     os.chdir(args[1])
                     if(os.path.isfile(".lore")):
-                        destroy = False
                         with open(".lore",'r') as f:
                             for line in f.readlines():
-                                if(line == "destroy" or line == "destroy\n"):
-                                    destroy = True
-                                else:
-                                    print(line, end = '')
+                                print(line, end = '')
                             print("\n")
-                        os.remove(".lore")
                 else:
                     print("Impossible d'aller ici.")
             except:
+                exit()
                 print("Vous ne pouvez pas vous diriger vers \""+destination+"\"")
         except:
+            exit()
             print("Cette destination est invalide.")
 
 class cat(Command):
@@ -81,10 +56,20 @@ class cat(Command):
             print("Cet objet est invalide.")
 
 class ls(Command):
-    pass
 
-class pwd(Command):
-    pass
+    def perform(self, args):
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    output = subprocess.check_output(args, shell=True)
+                    return output
+                else:
+                    print("Vous ne pouvez pas regarder dans \""+destination+"\"")
+            except:
+                print("Vous ne pouvez pas regarder dans \""+destination+"\"")
+        except:
+            print("L'endroit que vous tentez d'inspecter est innaccessible.")
 
 class touch(Command):
 
@@ -104,7 +89,7 @@ class talk(Command):
     def perform(self, args):
         try:
             destination = args[1]
-            try:
+            try:    
                 if(self.inbounds(destination)):
                     name = destination[:-3]
                     if(destination[-3:] == ".py"):
@@ -113,27 +98,18 @@ class talk(Command):
                                 text = ''.join(f.readlines())
                                 exec(text)
                                 character = eval(name+"()")
-                                events = []
 
-                                if(name in GetGame.game.dialogues.keys()):
+                                said = [""]
+                                if(name in self.game.dialogues.keys()):
                                     # Continue talk
-                                    said = GetGame.game.dialogues[name]
-                                else:
-                                    said = [""]
+                                    said = self.game.dialogues[name]
+                                    
+                                    dialogueTree = character.dialogue
+                                    next = character.dialogue
+                                    for choice in said:
+                                        dialogueTree = next[choice]
+                                        next = dialogueTree[1]
 
-                                dialogueTree = character.dialogue
-                                next = character.dialogue
-
-                                for choice in said:
-                                    dialogueTree = next[choice]
-                                    next = dialogueTree[1]
-                                    if(len(dialogueTree)>2):
-                                        for ev in dialogueTree[2].split("|"):
-                                            events.append(eval(ev))
-
-
-                                if len(args) > 2:
-                                    # No choice given
                                     try:
                                         i = 1
                                         for choice,response in dialogueTree[1].items():
@@ -145,11 +121,8 @@ class talk(Command):
                                         print("Choix invalide. ( "+str(e)+" )")
                                         return
                                         
-                                GetGame.game.dialogues[name] = said
+                                self.game.dialogues[name] = said
                                 character.talk(said)
-
-                                for event in events:
-                                    event.do()
                         except Exception as e:
                             print("*Bruits inintelligibles*")
                             print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
@@ -199,3 +172,9 @@ class edit(Command):
                 print("Vous ne pouvez pas modifier cet objet.")
         except:
             print("L'objet que vous tentez de modifier est invalide.")
+
+class nick(Command):
+
+    def perform(self, args):
+        if len(args) >1:
+            self.game.user_name = args[2]
