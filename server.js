@@ -1,6 +1,7 @@
 "use strict";
 let Stream = require('stream')
 let Docker = require('dockerode')
+const uuidv4 = require('uuid/v4'); // random uuid
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let moduleDocker = require('./moduleDocker');
 
@@ -19,10 +20,8 @@ var http = require('http');
 /**
  * Global variables
  */
-// list of currently connected clients (users)
-var clients = [];
-// list of users' state (see enum)
-var clients_status = [];
+
+var clients = new Map();
 
 let status = {
     INIT: 0,
@@ -44,7 +43,7 @@ function htmlEntities(str) {
 
 
 
-function sendMessage(index, text, password = false) {
+function sendMessage(uuid, text, password = false) {
     let obj = {
         time: (new Date()).getTime(),
         text: text,
@@ -58,7 +57,7 @@ function sendMessage(index, text, password = false) {
         data: obj
     });
 
-    clients[index].sendUTF(json);
+    clients.get(uuid).connection.sendUTF(json);
 }
 
 /**
@@ -96,11 +95,11 @@ var optsc = {
     'VolumesFrom': []
 };
 
-async function createContainer(userName, index) {
-    console.log("Creating containeur for " + userName + "...");
+async function createContainer(userName, uuid) {
+    console.log("Creating containeur for " + userName + ':' +uuid + "...");
     docker.createContainer(optsc)
         .then(container => {
-            containeurs[userName] = {
+            containeurs[uuid] = {
                 stdin: null,
                 stdout: null,
                 container_id: null
@@ -113,7 +112,7 @@ async function createContainer(userName, index) {
                 stderr: false
             };
 
-            containeurs[userName].container_id = container;
+            containeurs[uuid].container_id = container;
 
             //stdout
             container.attach(attach_opts, (err, stream) => {
@@ -122,13 +121,13 @@ async function createContainer(userName, index) {
                     var text = String(key);
 
                     text = text.replace(/(\n)/g, '\\n');
-                    sendMessage(index, text, false);
+                    sendMessage(uuid, text, false);
                 })
 
                 console.log("Starting container...");
                 container.start()
                     .then(container => {
-                        console.log("Containeur for " + userName + " succefully created and ready !");
+                        console.log("Containeur for " + uuid + " succefully created and ready !");
                     })
             });
 
@@ -141,7 +140,7 @@ async function createContainer(userName, index) {
 
             //stdin
             container.attach(attach_opts, (err, stream) => {
-                containeurs[userName]['stdin'] = stream;
+                containeurs[uuid]['stdin'] = stream;
             });
         })
 }
@@ -152,24 +151,23 @@ wsServer.on('request', function (request) {
     console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
     var connection = request.accept(null, request.origin);
+    var uuid = uuidv4();
 
-    var index = clients.push(connection) - 1;
-
-    // potentially initialize the client
-    if (!clients_status[index]) {
-        clients_status[index] = 0;
-    }
+    clients.set(uuid,{
+        connection: connection,
+        status: 0
+    });
 
     var userName = false;
 
-    console.log((new Date()) + ' Connection accepted with index ' + index);
-    sendMessage(index, "Enter your login : ");
+    console.log((new Date()) + ' Connection accepted with uuid ' + uuid);
+    sendMessage(uuid, "Enter your login : ");
 
     // user sent some message
     connection.on('message', async function (message) {
         if (message.type === 'utf8') {
 
-            switch (clients_status[index]) {
+            switch (clients.get(uuid).status) {
                 case status.INIT:
                     // remember user name
                     userName = htmlEntities(message.utf8Data);
@@ -179,21 +177,21 @@ wsServer.on('request', function (request) {
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
                             // New user
-                            console.log((new Date()) + ' New user registering : ' + userName + '.');
-                            sendMessage(index, userName + "\\nNew Password for " + userName + " : ", true);
+                            console.log((new Date()) + ' New user registering : ' + userName + ':'+uuid+'.');
+                            sendMessage(uuid, uuid + "\\nNew Password for " + userName + " : ", true);
                             // Go in state 2 for registration
-                            clients_status[index] = status.REGISTER;
+                            clients.get(uuid).status = status.REGISTER;
                         } else {
                             // Existing user, asking for identification
-                            console.log((new Date()) + " " + userName + " logging in.");
-                            sendMessage(index, userName + "\\nPassword for " + userName + " : ", true);
-                            clients_status[index] = status.LOGIN;
+                            console.log((new Date()) + " " +  userName + ':'+uuid+ + " logging in.");
+                            sendMessage(uuid, userName + "\\nPassword for " + userName + " : ", true);
+                            clients.get(uuid).status = status.LOGIN;
                         }
                     });
                     break;
                 case status.LOGIN:
                     // Check password and either connect (state 4) or simply retry.
-                    sendMessage(index, "\\n\\n");
+                    sendMessage(uuid, "\\n\\n");
 
                     await dm.checkUserLogin(userName, message.utf8Data).then(
                         rows => {
@@ -201,11 +199,11 @@ wsServer.on('request', function (request) {
 
                                 // Temporary container, since saves don't work yet
                                 // TODO : load user's save
-                                createContainer(userName, index).then(function (v) {
-                                    clients_status[index] = status.GAME;
+                                createContainer(userName, uuid).then(function (v) {
+                                    clients.get(uuid).status = status.GAME;
                                 });
                             } else {
-                                sendMessage(index, "\\nWrong password. Try again.\n", true);
+                                sendMessage(uuid, "\\nWrong password. Try again.\n", true);
                             }
                         }
                     )
@@ -215,30 +213,30 @@ wsServer.on('request', function (request) {
 
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
-                    sendMessage(index, "\\nRepeat Password : ", true);
-                    clients_status[index] = status.CONFIRM;
+                    sendMessage(uuid, "\\nRepeat Password : ", true);
+                    clients.get(uuid).status = status.CONFIRM;
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
-                    sendMessage(index, "\\n\\n");
+                    sendMessage(uuid, "\\n\\n");
 
-                    await dm.registerUser(userName, message.utf8Data).then(
+                    await dm.registerUser(uuid, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
                                 console.log((new Date()) + " " + userName + " registered.");
-                                createContainer(userName, index).then(function (v) {
-                                    clients_status[index] = status.GAME;
+                                createContainer(userName, uuid).then(function (v) {
+                                    clients.get(uuid).status = status.GAME;
                                 });
                             } else {
-                                sendMessage(index, "An error occured. Try again!\n");
-                                clients_status[index] = status.INIT;
+                                sendMessage(uuid, "An error occured. Try again!\n");
+                                clients.get(uuid).status = status.INIT;
                             }
                         }
                     )
                     break;
                 case status.GAME:
-                    if (containeurs[userName]) {
-                        containeurs[userName]['stdin'].write(message.utf8Data);
+                    if (containeurs[uuid]) {
+                        containeurs[uuid]['stdin'].write(message.utf8Data);
                     }
                     break;
             }
@@ -250,10 +248,10 @@ wsServer.on('request', function (request) {
     connection.on('close', function (connection) {
         console.log((new Date()) + " Peer "
             + connection.remoteAddress + " disconnected.");
-        if (userName !== false && containeurs[userName]) {
+        if (uuid !== false && containeurs[uuid]) {
 
-            console.log("Removing container of " + userName);
-            containeurs[userName].container_id.stop()
+            console.log("Removing container of " + uuid);
+            containeurs[uuid].container_id.stop()
                 .catch(error => {
                     //Container already stoped
                 });
@@ -262,8 +260,7 @@ wsServer.on('request', function (request) {
 
 
             // remove user from the list of connected clients
-            clients.splice(index, 1);
-            clients_status.splice(index, 1);
+           delete clients[uuid];
         }
     });
 });
