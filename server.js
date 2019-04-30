@@ -193,6 +193,7 @@ wsServer.on('request', function (request) {
                     break;
                 case status.LOGIN:
                     // Check password and either connect (state 4) or simply retry.
+                    sendMessage(index, "\\n\\n");
 
                     await dm.checkUserLogin(userName, message.utf8Data).then(
                         rows => {
@@ -219,7 +220,7 @@ wsServer.on('request', function (request) {
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
-                    sendMessage(index, "\\n");
+                    sendMessage(index, "\\n\\n");
 
                     await dm.registerUser(userName, message.utf8Data).then(
                         rows => {
