@@ -207,6 +207,7 @@ wsServer.on('request', function (request) {
                     // remember user name
                     userName = htmlEntities(message.utf8Data);
 
+                    console.log((new Date()) + ' Username request : '+userName+'.');
                     // Challenge username with the database
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
