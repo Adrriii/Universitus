@@ -13,6 +13,8 @@ $(function () {
     var taTitle = $('#textareaTitle');
     var taText = $('#textareaText');
 
+    var hist = [];
+
     // my name sent to the server
     var myName = false;
 
@@ -77,11 +79,13 @@ $(function () {
         }
     };
 
+    var hist_index = -1;
     /**
      * Send message when user presses Enter key
      */
     input.keydown(function (e) {
         if (e.keyCode === 13) {
+            // Enter
             var msg = $(this).val();
             if (!msg) {
                 return;
@@ -89,6 +93,11 @@ $(function () {
 
             // send the message as an ordinary text
             connection.send(msg + "\n");
+            // handle sent history
+            if($(this).attr('type') != "password") {
+                hist.unshift(msg);
+            }
+            hist_index = -1;
             $(this).val('');
 
             // we know that the first message sent from a user their name
@@ -96,6 +105,26 @@ $(function () {
                 myName = msg;
             }
         }
+        if (e.keyCode === 38) {
+            // Up
+            if(hist_index+1<hist.length) {
+                hist_index++;
+            }
+            $(this).val(hist[hist_index]);
+        }
+        if (e.keyCode === 40) {
+            // Down
+            if(hist_index>-1) {
+                hist_index--;
+            }
+            if(hist_index>-1) {
+                $(this).val(hist[hist_index]);
+            } else {
+                $(this).val('');
+            }
+        }
+        var l = this.value.length > 5 ? this.value.length : 5;
+        this.style.width = l + "ch";
     });
 
     /**
