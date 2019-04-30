@@ -222,7 +222,7 @@ wsServer.on('request', function (request) {
                     // Check if the password is good then either create the container and connect (state 4) or retry
                     sendMessage(uuid, "\\n\\n");
 
-                    await dm.registerUser(uuid, message.utf8Data).then(
+                    await dm.registerUser(userName, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
                                 console.log((new Date()) + " " + userName + " registered.");
