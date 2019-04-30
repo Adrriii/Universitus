@@ -142,6 +142,8 @@ async function createContainer(userName, uuid) {
             container.attach(attach_opts, (err, stream) => {
                 containeurs[uuid]['stdin'] = stream;
             });
+        }).err(e => {
+            sendMessage(uuid,"Désolé, le serveur est actuellement surchargé. Veuillez réessayer ultérieurement. "+e);
         })
 }
 
