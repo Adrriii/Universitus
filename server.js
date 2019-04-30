@@ -127,7 +127,7 @@ var optsc = {
 
 function createContainer(userName, index) {
     console.log("Creating containeur for " + userName + "...");
-    docker.createContainer(optsc)
+    var pro = docker.createContainer(optsc)
         .then(container => {
             containeurs[userName] = {
                 stdin: null,
@@ -187,6 +187,7 @@ function createContainer(userName, index) {
         })
 
     console.log((new Date()) + ' New user: ' + userName);
+    return pro;
 }
 
 // This callback function is called every time someone
@@ -241,11 +242,12 @@ wsServer.on('request', function (request) {
                     dm.checkUserLogin(userName, message.utf8Data).then(
                         rows => {
                             if (rows.length) {
-                                clients_status[index] = status.GAME;
 
                                 // Temporary container, since saves don't work yet
                                 // TODO : load user's save
-                                createContainer(userName, index);
+                                createContainer(userName, index).then(function(v) {
+                                    clients_status[index] = status.GAME;
+                                });
                             } else {
                                 sendMessage(index, "Wrong password. Try again.\n", true);
                             }
@@ -266,8 +268,9 @@ wsServer.on('request', function (request) {
                     dm.registerUser(userName, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
-                                createContainer(userName, index);
-                                clients_status[index] = status.GAME;
+                                createContainer(userName, index).then(function(v) {
+                                    clients_status[index] = status.GAME;
+                                });
                             } else {
                                 sendMessage(index, "An error occured. Try again!\n");
                                 clients_status[index] = status.INIT;
