@@ -65,7 +65,7 @@ function sendMessage(index, text, password = false) {
  * HTTP server
  * Base server on which the WebSocket server will run
  */
-var server = http.createServer(function (request, response) {});
+var server = http.createServer(function (request, response) { });
 server.listen(webSocketsServerPort, function () {
     console.log((new Date()) + " Server is listening on port "
         + webSocketsServerPort);
@@ -117,19 +117,19 @@ async function createContainer(userName, index) {
 
             //stdout
             container.attach(attach_opts, (err, stream) => {
-                
+
                 stream.on('data', key => {
                     var text = String(key);
-                    
+
                     text = text.replace(/(\n)/g, '\\n');
-                    sendMessage(index,text,false);
+                    sendMessage(index, text, false);
                 })
-            
+
                 console.log("Starting container...");
                 container.start()
-                .then(container => {
-                    console.log("Containeur for " + userName + " succefully created and ready !");
-                })
+                    .then(container => {
+                        console.log("Containeur for " + userName + " succefully created and ready !");
+                    })
             });
 
             var attach_opts = {
@@ -152,7 +152,7 @@ wsServer.on('request', function (request) {
     console.log((new Date()) + ' Connection from origin ' + request.origin + '.');
 
     var connection = request.accept(null, request.origin);
-    
+
     var index = clients.push(connection) - 1;
 
     // potentially initialize the client
@@ -162,7 +162,7 @@ wsServer.on('request', function (request) {
 
     var userName = false;
 
-    console.log((new Date()) + ' Connection accepted with index '+index);
+    console.log((new Date()) + ' Connection accepted with index ' + index);
     sendMessage(index, "Enter your login : ");
 
     // user sent some message
@@ -174,18 +174,18 @@ wsServer.on('request', function (request) {
                     // remember user name
                     userName = htmlEntities(message.utf8Data);
 
-                    console.log((new Date()) + ' Username request : '+userName+'.');
+                    console.log((new Date()) + ' Username request : ' + userName + '.');
                     // Challenge username with the database
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
                             // New user
-                            console.log((new Date()) + ' New user registering : '+userName+'.');
-                            sendMessage(index, userName+"\\nNew Password for " + userName + " : ", true);
+                            console.log((new Date()) + ' New user registering : ' + userName + '.');
+                            sendMessage(index, userName + "\\nNew Password for " + userName + " : ", true);
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
                         } else {
                             // Existing user, asking for identification
-                            console.log((new Date()) + " " + userName+" logging in.");
+                            console.log((new Date()) + " " + userName + " logging in.");
                             sendMessage(index, userName + "\\nPassword for " + userName + " : ", true);
                             clients_status[index] = status.LOGIN;
                         }
@@ -201,7 +201,7 @@ wsServer.on('request', function (request) {
 
                                 // Temporary container, since saves don't work yet
                                 // TODO : load user's save
-                                createContainer(userName, index).then(function(v) {
+                                createContainer(userName, index).then(function (v) {
                                     clients_status[index] = status.GAME;
                                 });
                             } else {
@@ -225,8 +225,8 @@ wsServer.on('request', function (request) {
                     await dm.registerUser(userName, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
-                                console.log((new Date()) + " " + userName+" registered.");
-                                createContainer(userName, index).then(function(v) {
+                                console.log((new Date()) + " " + userName + " registered.");
+                                createContainer(userName, index).then(function (v) {
                                     clients_status[index] = status.GAME;
                                 });
                             } else {
@@ -237,7 +237,7 @@ wsServer.on('request', function (request) {
                     )
                     break;
                 case status.GAME:
-                    if(containeurs[userName]) {
+                    if (containeurs[userName]) {
                         containeurs[userName]['stdin'].write(message.utf8Data);
                     }
                     break;
@@ -248,9 +248,9 @@ wsServer.on('request', function (request) {
 
     // user disconnected
     connection.on('close', function (connection) {
-        if (userName !== false) {
-            console.log((new Date()) + " Peer "
-                + connection.remoteAddress + " disconnected.");
+        console.log((new Date()) + " Peer "
+            + connection.remoteAddress + " disconnected.");
+        if (userName !== false && containeurs[userName]) {
 
             console.log("Removing container of " + userName);
             containeurs[userName].container_id.stop()
