@@ -61,8 +61,6 @@ class Game :
         self.quests["init"].setAvailable()
         self.startQuest("init")
 
-        print("SYSTEM:username_request")
-
         while(True):
             input_string = input(u"\033[93m"+self.user_name + "@:" + os.getcwd().replace(self.root,'') + u"$ \033[0m")
             args = input_string.split(' ')
@@ -72,21 +70,15 @@ class Game :
             if command_string in self.forbiddenCommands:
                 print("Unknown command \""+command_string+"\"")
             else:
-                if(command_string != "setup"):
-                    try:
-                        command = eval(command_string+"()")
+                try:
+                    command = eval(command_string+"()")
 
-                        output = command.perform(args)
-                        if(output):
-                            print(output.decode("utf-8"))
-                    except Exception as e:
-                        if(command_string == "restart"):
-                            exit()
-                        print("Unknown command \""+command_string+"\"")
-
-                    self.checkQuests()
-                else:
-                    if(args[1] == "nick"):
-                        self.user_name = args[2]
-                    else:
-                        print("Unknown command \""+command_string+"\"")
+                    output = command.perform(args)
+                    if(output):
+                        print(output.decode("utf-8"))
+                except Exception as e:
+                    if(command_string == "restart"):
+                        exit()
+                    print("Unknown command \""+command_string+"\"")
+                        
+                self.checkQuests()

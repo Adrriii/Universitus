@@ -60,19 +60,15 @@ $(function () {
             console.log('Invalid JSON: ', message.data);
             return;
         }
-
-        // Login
-        if (json.type === 'logged-in') {
+$
+        if (json.type === 'message') {
+            // Refocus as a new message arrives
             input.focus();
-            // from now user can start sending messages
-        } else if (json.type === 'history') { // entire message history
-            // insert every single message to the chat window
-            for (var i = 0; i < json.data.length; i++) {
-                addMessage(json.data[i].author, json.data[i].text, new Date(json.data[i].time));
+            if(json.data.password) {
+                input.prop('type','password');
+            } else {
+                input.prop('type','input');
             }
-        } else if (json.type === 'message') { // it's a single message
-            // let the user write another message
-            input.focus();
             checkMessage(json.data.text);
             addMessage(json.data.author, json.data.text, new Date(json.data.time));
         } else {
@@ -91,6 +87,7 @@ $(function () {
             }
 
             // send the message as an ordinary text
+            addMessage("","\n");
             connection.send(msg+"\n");
             $(this).val('');
 
@@ -156,13 +153,8 @@ $(function () {
      * Add message to the chat window
      */
     function addMessage(author, message, color, dt) {    
-        var ansi_up = new AnsiUp;
-        console.log("Message de base : ");
-        console.log(message);
-        
+        var ansi_up = new AnsiUp;        
         var html = ansi_up.ansi_to_html(message);
-        console.log("After ansi_to_html : ");
-        console.log(html);
         
         content.append(html.replace(/(\\n)/g, '<br>'));
     }

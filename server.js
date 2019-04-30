@@ -4,6 +4,10 @@ let Docker = require('dockerode')
 let docker = new Docker({ socketPath: '/var/run/docker.sock' })
 let moduleDocker = require('./moduleDocker');
 
+const data_manager = require('./data_manager');
+
+console.log("Connecting to mysql server ...");
+const dm = new data_manager();
 
 // Port where we'll run the websocket server
 var webSocketsServerPort = 1337;
@@ -15,10 +19,18 @@ var http = require('http');
 /**
  * Global variables
  */
-// latest 100 messages
-var history = [];
 // list of currently connected clients (users)
 var clients = [];
+// list of users' state (see enum)
+var clients_status = [];
+
+let status = {
+    INIT: 0,
+    LOGIN: 1,
+    REGISTER: 2,
+    CONFIRM: 3,
+    GAME: 4,
+}
 
 let containeurs = {};
 /**
@@ -28,6 +40,25 @@ function htmlEntities(str) {
     return String(str)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;')
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+
+
+function sendMessage(index, text, password = false) {
+    let obj = {
+        time: (new Date()).getTime(),
+        text: text,
+        author: "",
+        color: false,
+        password: password
+    };
+
+    let json = JSON.stringify({
+        type: 'message',
+        data: obj
+    });
+
+    clients[index].sendUTF(json);
 }
 
 /**
@@ -52,14 +83,14 @@ server.listen(webSocketsServerPort, function () {
 //         AttachStdout: true,
 //         AttachStderr: true
 //     };
-    
+
 //     container.exec(options, function (err, exec) {
 //         if (err) return;
 //         exec.start(function (err, stream) {
 //             if (err) return;
-    
+
 //             container.modem.demuxStream(stream, s, s);
-    
+
 //         });
 //     });
 
@@ -94,6 +125,70 @@ var optsc = {
     'VolumesFrom': []
 };
 
+async function createContainer(userName, index) {
+    console.log("Creating containeur for " + userName + "...");
+    await docker.createContainer(optsc)
+        .then(container => {
+            containeurs[userName] = {
+                stdin: null,
+                stdout: null,
+                container_id: null
+            };
+
+            var attach_opts = {
+                stream: true,
+                stdin: false,
+                stdout: true,
+                stderr: false
+            };
+
+            containeurs[userName].container_id = container;
+
+            //stdout
+            container.attach(attach_opts, (err, stream) => {
+
+                stream.on('data', key => {
+                    var text = String(key);
+
+                    text = text.replace(/(\n)/g, '\\n');
+                    let obj = {
+                        time: (new Date()).getTime(),
+                        text: text,
+                        author: userName
+                    };
+
+                    let json = JSON.stringify({
+                        type: 'message',
+                        data: obj
+                    });
+                    clients[index].sendUTF(json);
+
+
+                })
+
+                console.log("Starting container...");
+                container.start()
+                    .then(container => {
+                        console.log("Containeur for " + userName + " succefully created and ready !");
+                    })
+            });
+
+            var attach_opts = {
+                stream: true,
+                stdin: true,
+                stdout: false,
+                stderr: false
+            };
+
+            //stdin
+            container.attach(attach_opts, (err, stream) => {
+                containeurs[userName]['stdin'] = stream;
+            });
+        })
+
+    console.log((new Date()) + ' New user: ' + userName);
+}
+
 // This callback function is called every time someone
 // tries to connect to the WebSocket server
 wsServer.on('request', function (request) {
@@ -105,99 +200,88 @@ wsServer.on('request', function (request) {
     var connection = request.accept(null, request.origin);
     // we need to know client index to remove them on 'close' event
     var index = clients.push(connection) - 1;
+
+    // potentially initialize the client
+    if (!clients_status[index]) {
+        clients_status[index] = 0;
+    }
+
     var userName = false;
 
     console.log((new Date()) + ' Connection accepted.');
-
-    // send back chat history
-    if (history.length > 0) {
-        connection.sendUTF(
-            JSON.stringify({ type: 'history', data: history }));
-    }
+    sendMessage(index, "Enter your login : ");
 
     // user sent some message
     connection.on('message', function (message) {
         if (message.type === 'utf8') { // accept only text
             // first message sent by user is their name
 
-            if (userName === false) {
-                // remember user name
-                userName = htmlEntities(message.utf8Data);
+            switch (clients_status[index]) {
+                case status.INIT:
+                    // remember user name
+                    userName = htmlEntities(message.utf8Data);
 
+                    // Challenge username with the database
+                    dm.getUserFromUsername(userName).then(rows => {
+                        if (!rows || !rows.length) {
+                            // New user
+                            // Go in state 2 for registration
+                            clients_status[index] = status.REGISTER;
+                            sendMessage(index, "New Password for " + userName + " : ", true);
+                        } else {
+                            // Existing user, asking for identification
+                            clients_status[index] = status.LOGIN;
+                            sendMessage(index, "Password for " + userName + " : ", true);
+                        }
+                    });
+                    break;
+                case status.LOGIN:
+                    // Check password and either connect (state 4) or simply retry.
 
-                console.log("Creating containeur for " + userName + "...");
-                docker.createContainer(optsc)
-                    .then(container => {
-                        containeurs[userName] = {
-                            stdin: null,
-                            stdout: null,
-                            container_id: null
-                        };
+                    dm.checkUserLogin(userName, message.utf8Data).then(
+                        rows => {
+                            if (rows.length) {
 
-                        var attach_opts = {
-                            stream: true,
-                            stdin: false,
-                            stdout: true,
-                            stderr: false
-                        };
+                                // Temporary container, since saves don't work yet
+                                // TODO : load user's save
+                                createContainer(userName, index).then(function(v) {
+                                    clients_status[index] = status.GAME;
+                                });
+                            } else {
+                                sendMessage(index, "Wrong password. Try again.\n", true);
+                            }
+                        }
+                    )
 
-                        containeurs[userName].container_id = container;
+                    break;
+                case status.REGISTER:
 
-                        //stdout
-                        container.attach(attach_opts, (err, stream) => {
-                            
-                            stream.on('data', key => {
-                                var text = String(key);
-                                if(text == "SYSTEM:username_request") {
-                                    containeurs[userName]['stdin'].write("setup nick "+userName);
-                                } else {
-                                    if(text.substring(0,10) != "setup nick" && text.substring(0,6) != "Player") {
-                                        text = text.replace(/(\n)/g, '\\n');
-                                        let obj = {
-                                            time: (new Date()).getTime(),
-                                            text: text,
-                                            author: userName
-                                        };
-                                        
-                                        let json = JSON.stringify({
-                                            type: 'message',
-                                            data: obj
-                                        });
-                                        clients[index].sendUTF(json);
-                                    }
-                                }
-                            })
-                        
-                            console.log("Starting container...");
-                            container.start()
-                            .then(container => {
-                                console.log("Containeur for " + userName + " succefully created and ready !");
-                            })
-                        });
+                    // Check if the password is good and either ask for validation (state 3) or simply retry
 
-                        var attach_opts = {
-                            stream: true,
-                            stdin: true,
-                            stdout: false,
-                            stderr: false
-                        };
+                    clients_status[index] = status.CONFIRM;
+                    sendMessage(index, userName + "Repeat Password : ", true);
+                    break;
+                case status.CONFIRM:
+                    // Check if the password is good then either create the container and connect (state 4) or retry
 
-                        //stdin
-                        container.attach(attach_opts, (err, stream) => {
-                            containeurs[userName]['stdin'] = stream;
-                        });
-                    })
-
-
-                connection.sendUTF(
-                    JSON.stringify({
-                        type: 'logged-in'
-                    }));
-
-                console.log((new Date()) + ' New user: ' + userName);
-            } else {
-                containeurs[userName]['stdin'].write(message.utf8Data);
+                    dm.registerUser(userName, message.utf8Data).then(
+                        rows => {
+                            if (rows.insertId > 0) {
+                                createContainer(userName, index).then(function(v) {
+                                    clients_status[index] = status.GAME;
+                                });
+                            } else {
+                                sendMessage(index, "An error occured. Try again!\n");
+                                clients_status[index] = status.INIT;
+                            }
+                        }
+                    )
+                    break;
+                case status.GAME:
+                    containeurs[userName]['stdin'].write(message.utf8Data + "\n");
+                    break;
             }
+
         }
     });
 
@@ -206,15 +290,15 @@ wsServer.on('request', function (request) {
         if (userName !== false) {
             console.log((new Date()) + " Peer "
                 + connection.remoteAddress + " disconnected.");
-            
-            console.log("Removing container of " + userName);  
+
+            console.log("Removing container of " + userName);
             containeurs[userName].container_id.stop()
-            .catch(error => {
-                //Container already stoped
-            });
+                .catch(error => {
+                    //Container already stoped
+                });
 
             console.log("Container succesfully removed !");
-            
+
 
             // remove user from the list of connected clients
             clients.splice(index, 1);
