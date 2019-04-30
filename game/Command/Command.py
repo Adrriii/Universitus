@@ -177,6 +177,7 @@ class edit_(Command):
                 if(self.inbounds(f_out)):
                     with open(f_out, 'w', encoding="utf-8") as f:
                         f.write(text)
+                    print("Fichier sauvegardé.")
                 else:
                     print("Vous n'avez pas accès à cet objet.")
             except Exception as e:
@@ -195,7 +196,6 @@ class edit(Command):
                 if(self.inbounds(destination)):
                     with open(args[1],mode='r', encoding="utf-8") as f:
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
-                    print("Fichier sauvegardé.")
                 else:
                     print("Vous n'avez pas accès à cet objet.")
             except:
