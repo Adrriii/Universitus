@@ -5,12 +5,6 @@
     <meta charset="utf-8">
     <title>Universitus</title>
     <style>
-        * {
-            font-family: monospace;
-            font-size: 15px;
-            padding: 0px;
-            margin: 0px;
-        }
 
         body {
             background-color: #000;
@@ -54,6 +48,10 @@
         
         #terminal {
             display: block;
+            font-family: monospace;
+            font-size: 15px;
+            padding: 0px;
+            margin: 0px;
         }
 
         #content {
@@ -63,13 +61,24 @@
         }
 
         #input {
+            font-family: monospace;
+            font-size: 15px;
             background: #000;
             width: fit-content;
             color: #fff;
             overflow-y: hidden;
             padding: 5px 5px 5px 5px;
             border: none;
-    outline: none;
+            outline: none;
+        }
+
+        #textareaText {
+            height: 400px;
+            width: 80%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
         }
     </style>
     <script src="ansi.js" type="text/javascript"></script>
@@ -77,8 +86,8 @@
 
 <body>
     <div id="textarea">
-        <textarea id="textareaTitle" rows="1" style="text-align: center;" readonly></textarea>
-        <textarea id="textareaText" rows="10"></textarea>
+        <textarea id="textareaTitle" rows="1" readonly></textarea>
+        <div id="textareaText">class test:</div>
         <div id="menu">
             <input type="button" name="buttonSave" value="Save" style="width: 15%;">
             <input type="button" name="buttonExit" value="Exit" style="width: 15%;">
@@ -89,7 +98,14 @@
         <div id="content"><span id="text"></span><input type="text" id="input" disabled="disabled" autofocus/></div>*
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="./frontend.js"></script>
+    <script>
+        var editor = ace.edit("textareaText");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+        editor.setFontSize(14);
+    </script>
 </body>
 
 </html>

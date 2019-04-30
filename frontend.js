@@ -19,7 +19,8 @@ $(function () {
     var editerrors = [
         "Vous ne pouvez pas modifier cet objet.",
         "L'objet que vous tentez de modifier est invalide."
-    ]
+    ];
+    var editorExitMsg = "";
 
     // my name sent to the server
     var myName = false;
@@ -94,7 +95,9 @@ $(function () {
                 if(editerrors.includes(text)) {
                     addMessage(json.data.author, text);
                 } else {
+                    editorExitMsg = rest;
                     showEditor(command.split(" ")[1],text);
+                    input.focus();
                 }
             } else {
                 // Refocus as a new message arrives
@@ -166,7 +169,9 @@ $(function () {
      * to notify the user that something is wrong.
      */
     setInterval(function () {
-        input.focus();
+        if(!editmode) {
+            input.focus();
+        }
         if (connection.readyState !== 1) {
             input.attr('disabled', 'disabled').val(
                 'Unable to communicate with the WebSocket server.');
@@ -194,21 +199,21 @@ $(function () {
         terminal.attr('style', 'display: none');
         textarea.attr('style', 'display: block');
         taTitle.val(title);
-        taText.val(contents);
+        editor.setValue(contents,-1);
     }
 
     /**
      * Save button of the Edit Textarea
      */
     buttonSave.click(function () {
-        var text = 'edit_ "' + taText.val().replace(/(\n)/g, "\\n") + '" > ' + taTitle.val();
+        var text = 'edit_ "' + editor.getValue().replace(/(\n)/g, "\\n") + '" > ' + taTitle.val();
         connection.send(text);
         console.log(text);
 
         terminal.attr('style', 'display: block');
         textarea.attr('style', 'display: none');
         taTitle.val('');
-        taText.val('');
+        editor.setValue('',-1);
         editmode = false;
         editcatch = true;
     });
@@ -221,6 +226,7 @@ $(function () {
         textarea.attr('style', 'display: none');
         taTitle.val('');
         taText.val('');
+        addMessage("",editorExitMsg);
         editmode = false;
     });
 
