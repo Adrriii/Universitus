@@ -208,7 +208,7 @@ wsServer.on('request', function (request) {
                     userName = htmlEntities(message.utf8Data);
 
                     // Challenge username with the database
-                    dm.getUserFromUsername(userName).then(rows => {
+                    await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
                             // New user
                             // Go in state 2 for registration
@@ -217,14 +217,14 @@ wsServer.on('request', function (request) {
                         } else {
                             // Existing user, asking for identification
                             clients_status[index] = status.LOGIN;
-                            sendMessage(index, "\\nPassword for " + userName + " : ", true);
+                            sendMessage(index, userName + "\\nPassword for " + userName + " : ", true);
                         }
                     });
                     break;
                 case status.LOGIN:
                     // Check password and either connect (state 4) or simply retry.
 
-                    dm.checkUserLogin(userName, message.utf8Data).then(
+                    await dm.checkUserLogin(userName, message.utf8Data).then(
                         rows => {
                             if (rows.length) {
 
@@ -244,13 +244,13 @@ wsServer.on('request', function (request) {
 
                     // Check if the password is good and either ask for validation (state 3) or simply retry
 
+                    sendMessage(index, "\\nRepeat Password : ", true);
                     clients_status[index] = status.CONFIRM;
-                    sendMessage(index, userName + "\\nRepeat Password : ", true);
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
 
-                    dm.registerUser(userName, message.utf8Data).then(
+                    await dm.registerUser(userName, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
                                 createContainer(userName, index).then(function(v) {
