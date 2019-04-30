@@ -125,9 +125,9 @@ var optsc = {
     'VolumesFrom': []
 };
 
-function createContainer(userName, index) {
+async function createContainer(userName, index) {
     console.log("Creating containeur for " + userName + "...");
-    var pro = docker.createContainer(optsc)
+    await docker.createContainer(optsc)
         .then(container => {
             containeurs[userName] = {
                 stdin: null,
@@ -187,7 +187,6 @@ function createContainer(userName, index) {
         })
 
     console.log((new Date()) + ' New user: ' + userName);
-    return pro;
 }
 
 // This callback function is called every time someone
