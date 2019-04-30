@@ -78,6 +78,7 @@ $(function () {
                     addMessage(json.data.author, parts[parts.length-2]+"\\n");
                     addMessage(json.data.author, parts[parts.length-1]);
                     editcatch = false;
+                    input.focus();
                     return;
                 }
                 // This message is to add to the contents of our editor's textarea
@@ -94,6 +95,7 @@ $(function () {
 
                 if(editerrors.includes(text)) {
                     addMessage(json.data.author, text);
+                    input.focus();
                 } else {
                     editorExitMsg = rest;
                     showEditor(command.split(" ")[1],text);
@@ -169,14 +171,20 @@ $(function () {
      * to notify the user that something is wrong.
      */
     setInterval(function () {
-        if(!editmode) {
-            input.focus();
-        }
         if (connection.readyState !== 1) {
             input.attr('disabled', 'disabled').val(
                 'Unable to communicate with the WebSocket server.');
         }
     }, 3000);
+    
+    /**
+     * Force the user to stay on the terminal
+     */
+    setInterval(function () {
+        if(!editmode) {
+            input.focus();
+        }
+    }, 1000);
 
     /**
      * Check if message starts with edit:
@@ -206,7 +214,7 @@ $(function () {
      * Save button of the Edit Textarea
      */
     buttonSave.click(function () {
-        var text = 'edit_ "' + editor.getValue().replace(/(\n)/g, "\\n") + '" > ' + taTitle.val();
+        var text = 'edit_ "' + editor.getValue().replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r") + '" > ' + taTitle.val();
         connection.send(text);
         console.log(text);
 

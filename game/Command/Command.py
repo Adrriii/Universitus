@@ -169,7 +169,7 @@ class edit_(Command):
     def perform(self, args):
         try:
             command = ' '.join(args)
-            text = ('"'.join(('"'.join(command.split('"')[1:]).split('"'))[:-1])).replace('\\n','\n')
+            text = ('"'.join(('"'.join(command.split('"')[1:]).split('"'))[:-1])).replace('\\n','\n').replace('\\r','\r')
             f_out = os.path.abspath(command.split(">")[-1].strip())
 
             try:
