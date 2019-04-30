@@ -133,6 +133,7 @@ $(function () {
      * to notify the user that something is wrong.
      */
     setInterval(function () {
+        input.focus();
         if (connection.readyState !== 1) {
             input.attr('disabled', 'disabled').val(
                 'Unable to communicate with the WebSocket server.');
