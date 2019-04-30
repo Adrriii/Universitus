@@ -211,11 +211,13 @@ wsServer.on('request', function (request) {
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
                             // New user
+                            console.log((new Date()) + ' New user registering : '+userName+'.');
                             sendMessage(index, userName+"\\nNew Password for " + userName + " : ", true);
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
                         } else {
                             // Existing user, asking for identification
+                            console.log((new Date()) + " " + userName+" logging in.");
                             sendMessage(index, userName + "\\nPassword for " + userName + " : ", true);
                             clients_status[index] = status.LOGIN;
                         }
@@ -249,10 +251,12 @@ wsServer.on('request', function (request) {
                     break;
                 case status.CONFIRM:
                     // Check if the password is good then either create the container and connect (state 4) or retry
+                    sendMessage(index, "\\n");
 
                     await dm.registerUser(userName, message.utf8Data).then(
                         rows => {
                             if (rows.insertId > 0) {
+                                console.log((new Date()) + " " + userName+" registered.");
                                 createContainer(userName, index).then(function(v) {
                                     clients_status[index] = status.GAME;
                                 });
