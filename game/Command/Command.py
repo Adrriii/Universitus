@@ -194,7 +194,8 @@ class edit(Command):
             try:
                 if(self.inbounds(destination)):
                     with open(args[1],mode='r', encoding="utf-8") as f:
-                        return bytes(f.read(), 'utf-8')
+                        return bytes(f.read(), 'utf-8')+"\\eof"
+
             except Exception as e:
                 print("Vous ne pouvez pas modifier cet objet."+str(e))
         except:

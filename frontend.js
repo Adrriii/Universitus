@@ -15,6 +15,7 @@ $(function () {
 
     var hist = [];
     var editmode = false;
+    var editcatch = false;
     var editerrors = [
         "Vous ne pouvez pas modifier cet objet.",
         "L'objet que vous tentez de modifier est invalide."
@@ -70,17 +71,19 @@ $(function () {
         }
         
         if (json.type === 'message') {
-            if(editmode) {
+            if(editmode || editcatch) {
+                if(editcatch) {
+                    return;
+                }
                 // This message is to add to the contents of our editor's textarea
                 console.log("append "+json.data.text);
-                textarea.append(json.data.text);
 
-                var parts = json.data.text.split("\n");
+                var parts = json.data.text.split("\\n");
                 // Add the normal message to the console (the command typed by the user)
                 var command = parts.shift();
-                addMessage(command);
+                addMessage(command+"\\n");
 
-                text = parts.join("\n");
+                text = parts.join("").split("\\eof")[0];
 
                 if(editerrors.includes(text)) {
                     addMessage(text);
@@ -199,6 +202,8 @@ $(function () {
         textarea.attr('style', 'display: none');
         taTitle.val('');
         taText.val('');
+        editmode = false;
+        editcatch = true;
     });
 
     /**
