@@ -88,7 +88,7 @@ var optsc = {
     'OpenStdin': true,
     'StdinOnce': false,
     'Env': null,
-    'Cmd': ['storage-opt "size=50MB"'],
+    'Cmd': [],
     'Dns': ['8.8.8.8', '8.8.4.4'],
     'Image': 'docker-game',
     'Volumes': {},
