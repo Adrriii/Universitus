@@ -14,6 +14,11 @@ $(function () {
     var taText = $('#textareaText');
 
     var hist = [];
+    var editmode = false;
+    var editerrors = [
+        "Vous ne pouvez pas modifier cet objet.",
+        "L'objet que vous tentez de modifier est invalide."
+    ]
 
     // my name sent to the server
     var myName = false;
@@ -63,17 +68,35 @@ $(function () {
             console.log('Invalid JSON: ', message.data);
             return;
         }
-        $
+        
         if (json.type === 'message') {
-            // Refocus as a new message arrives
-            input.focus();
-            if (json.data.password) {
-                input.prop('type', 'password');
+            if(editmode) {
+                // This message is to add to the contents of our editor's textarea
+                console.log("append "+json.data.text);
+                textarea.append(json.data.text);
+
+                var parts = json.data.text.split("\n");
+                // Add the normal message to the console (the command typed by the user)
+                var command = parts.shift();
+                addMessage(command);
+
+                text = parts.join("\n");
+
+                if(editerrors.includes(text)) {
+                    addMessage(text);
+                } else {
+                    showEditor(command.split(" ")[1],text);
+                }
             } else {
-                input.prop('type', 'input');
+                // Refocus as a new message arrives
+                input.focus();
+                if (json.data.password) {
+                    input.prop('type', 'password');
+                } else {
+                    input.prop('type', 'input');
+                }
+                addMessage(json.data.author, json.data.text, new Date(json.data.time));
             }
-            checkMessage(json.data.text);
-            addMessage(json.data.author, json.data.text, new Date(json.data.time));
         } else {
             console.log('Hmm..., I\'ve never seen JSON like this:', json);
         }
@@ -92,6 +115,7 @@ $(function () {
             }
 
             // send the message as an ordinary text
+            checkMessage(msg);
             connection.send(msg + "\n");
             // handle sent history
             if($(this).attr('type') != "password") {
@@ -145,15 +169,23 @@ $(function () {
      * Transition from terminal style window to a textarea
      */
     function checkMessage(message) {
-        var line = message.split("\n");
-        var pars = line[0].split(" ");
-        // If the command is Edit, transition to text area window
-        if (pars[0] == "edit" && pars.length <= 3) {
-            terminal.attr('style', 'display: none');
-            textarea.attr('style', 'display: block');
-            taTitle.val(pars[1]);
-            taText.val(line[1]);
+        var pars = message.split(" ");
+        // If the command is Edit, set editmode to true
+        if (pars[0] == "edit") {
+            console.log("edit active");
+            editmode = true;
         }
+    }
+
+
+    /**
+     *  Enables the editor window
+     */
+    function showEditor(title, contents) {
+        terminal.attr('style', 'display: none');
+        textarea.attr('style', 'display: block');
+        taTitle.val(title);
+        taText.val(contents);
     }
 
     /**
@@ -177,6 +209,7 @@ $(function () {
         textarea.attr('style', 'display: none');
         taTitle.val('');
         taText.val('');
+        editmode = false;
     });
 
     /**
