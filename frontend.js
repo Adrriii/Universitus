@@ -73,21 +73,29 @@ $(function () {
         if (json.type === 'message') {
             if(editmode || editcatch) {
                 if(editcatch) {
+                    var parts = json.data.text.split("\\n");
+                    addMessage(json.data.author, parts[parts.length-2]);
+                    addMessage(json.data.author, parts[parts.length-1]);
+                    editcatch = false;
                     return;
                 }
                 // This message is to add to the contents of our editor's textarea
-                console.log("append "+json.data.text);
 
                 var parts = json.data.text.split("\\n");
                 // Add the normal message to the console (the command typed by the user)
                 var command = parts.shift();
-                addMessage(command+"\\n");
+                console.log("message: "+command)
+                addMessage(json.data.author, command+"\\n");
 
-                text = parts.join("").split("\\eof")[0];
+                var parts2 = parts.join("").split("\\eof");
+                var text = parts2.shift();
+                var rest = parts2.join("\\eof");
 
                 if(editerrors.includes(text)) {
-                    addMessage(text);
+                    addMessage(json.data.author, text);
                 } else {
+                    console.log("rest: "+rest)
+                    addMessage(json.data.author, rest);
                     showEditor(command.split(" ")[1],text);
                 }
             } else {
@@ -195,8 +203,9 @@ $(function () {
      * Save button of the Edit Textarea
      */
     buttonSave.click(function () {
-        var text = 'edit_ "' + taText.val() + '" > ' + taTitle.val();
+        var text = 'edit_ "' + taText.val().replace(/(\n)/g, "\\n") + '" > ' + taTitle.val();
         connection.send(text);
+        console.log(text);
 
         terminal.attr('style', 'display: block');
         textarea.attr('style', 'display: none');
@@ -220,7 +229,12 @@ $(function () {
     /**
      * Add message to the chat window
      */
-    function addMessage(author, message, color, dt) {
+    function addMessage(author, message, color, dt, raw = false) {
+        if(raw) {
+            text.append(message.replace(/(\\n)/g, '<br>'));
+            return;
+        }
+
         var ansi_up = new AnsiUp;
         var html = ansi_up.ansi_to_html(message);
 

@@ -175,7 +175,7 @@ class edit_(Command):
             try:
                 
                 if(self.inbounds(f_out)):
-                    with open(f_out, 'w') as f:
+                    with open(f_out, 'w', encoding="utf-8") as f:
                         f.write(text)
                 else:
                     print("Vous ne pouvez pas modifier cet objet.")
@@ -195,8 +195,10 @@ class edit(Command):
                 if(self.inbounds(destination)):
                     with open(args[1],mode='r', encoding="utf-8") as f:
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
-
-            except Exception as e:
-                print("Vous ne pouvez pas modifier cet objet."+str(e))
+                    print("Fichier sauvegardé.")
+                else:
+                    print("Vous n'avez pas le droit de modifier cet objet.")
+            except:
+                print("Vous ne pouvez pas modifier cet objet.")
         except:
             print("L'objet que vous tentez de modifier est invalide.")
