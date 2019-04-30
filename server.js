@@ -146,31 +146,19 @@ async function createContainer(userName, index) {
 
             //stdout
             container.attach(attach_opts, (err, stream) => {
-
+                
                 stream.on('data', key => {
                     var text = String(key);
-
+                    
                     text = text.replace(/(\n)/g, '\\n');
-                    let obj = {
-                        time: (new Date()).getTime(),
-                        text: text,
-                        author: userName
-                    };
-
-                    let json = JSON.stringify({
-                        type: 'message',
-                        data: obj
-                    });
-                    clients[index].sendUTF(json);
-
-
+                    sendMessage(index,text,false);
                 })
-
+            
                 console.log("Starting container...");
                 container.start()
-                    .then(container => {
-                        console.log("Containeur for " + userName + " succefully created and ready !");
-                    })
+                .then(container => {
+                    console.log("Containeur for " + userName + " succefully created and ready !");
+                })
             });
 
             var attach_opts = {
