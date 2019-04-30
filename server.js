@@ -211,13 +211,13 @@ wsServer.on('request', function (request) {
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
                             // New user
+                            sendMessage(index, userName+"\\nNew Password for " + userName + " : ", true);
                             // Go in state 2 for registration
                             clients_status[index] = status.REGISTER;
-                            sendMessage(index, userName+"\\nNew Password for " + userName + " : ", true);
                         } else {
                             // Existing user, asking for identification
-                            clients_status[index] = status.LOGIN;
                             sendMessage(index, userName + "\\nPassword for " + userName + " : ", true);
+                            clients_status[index] = status.LOGIN;
                         }
                     });
                     break;
