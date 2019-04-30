@@ -142,7 +142,7 @@ async function createContainer(userName, uuid) {
             container.attach(attach_opts, (err, stream) => {
                 containeurs[uuid]['stdin'] = stream;
             });
-        }).err(e => {
+        }).catch(e => {
             sendMessage(uuid,"Désolé, le serveur est actuellement surchargé. Veuillez réessayer ultérieurement. "+e);
         })
 }
@@ -174,7 +174,7 @@ wsServer.on('request', function (request) {
                     // remember user name
                     userName = htmlEntities(message.utf8Data).split("\n")[0];
 
-                    console.log((new Date()) + ' Username request : ' + userName + '.');
+                    console.log((new Date()) + ' Login request : ' + userName + '.');
                     // Challenge username with the database
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
