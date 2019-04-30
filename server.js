@@ -198,7 +198,7 @@ wsServer.on('request', function (request) {
     sendMessage(index, "Enter your login : ");
 
     // user sent some message
-    connection.on('message', function (message) {
+    connection.on('message', async function (message) {
         if (message.type === 'utf8') { // accept only text
             // first message sent by user is their name
 
