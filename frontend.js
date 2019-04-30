@@ -74,7 +74,7 @@ $(function () {
             if(editmode || editcatch) {
                 if(editcatch) {
                     var parts = json.data.text.split("\\n");
-                    addMessage(json.data.author, parts[parts.length-2]);
+                    addMessage(json.data.author, parts[parts.length-2]+"\\n");
                     addMessage(json.data.author, parts[parts.length-1]);
                     editcatch = false;
                     return;
@@ -94,8 +94,6 @@ $(function () {
                 if(editerrors.includes(text)) {
                     addMessage(json.data.author, text);
                 } else {
-                    console.log("rest: "+rest)
-                    addMessage(json.data.author, rest);
                     showEditor(command.split(" ")[1],text);
                 }
             } else {
@@ -109,7 +107,7 @@ $(function () {
                 addMessage(json.data.author, json.data.text, new Date(json.data.time));
             }
         } else {
-            console.log('Hmm..., I\'ve never seen JSON like this:', json);
+            console.log('JSON encoding error:', json);
         }
     };
 

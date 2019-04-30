@@ -178,9 +178,9 @@ class edit_(Command):
                     with open(f_out, 'w', encoding="utf-8") as f:
                         f.write(text)
                 else:
-                    print("Vous ne pouvez pas modifier cet objet.")
-            except:
-                print("Vous ne pouvez pas modifier cet objet")
+                    print("Vous n'avez pas accès à cet objet.")
+            except Exception as e:
+                print("Vous ne pouvez pas modifier cet objet. "+str(e))
         except:
             print("L'objet que vous tentez de modifier est invalide.")
 
@@ -197,7 +197,7 @@ class edit(Command):
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
                     print("Fichier sauvegardé.")
                 else:
-                    print("Vous n'avez pas le droit de modifier cet objet.")
+                    print("Vous n'avez pas accès à cet objet.")
             except:
                 print("Vous ne pouvez pas modifier cet objet.")
         except:
