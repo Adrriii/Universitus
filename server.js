@@ -265,7 +265,7 @@ wsServer.on('request', function (request) {
                     break;
                 case status.GAME:
                     if(containeurs[userName]) {
-                        containeurs[userName]['stdin'].write(message.utf8Data + "\n");
+                        containeurs[userName]['stdin'].write(message.utf8Data);
                     }
                     break;
             }
