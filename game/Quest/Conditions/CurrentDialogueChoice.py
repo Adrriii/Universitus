@@ -11,7 +11,9 @@ class CurrentDialogueChoice(Condition):
         pass
 
     def met(self):
-        return GetGame.game.dialogues[-1] == self.dialogue
+        if not self.npc in GetGame.game.dialogues:
+            return False
+        return GetGame.game.dialogues[self.npc] == self.dialogue
 
     def printItself(self):
         super()

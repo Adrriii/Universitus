@@ -120,6 +120,7 @@ class talk(Command):
                                     said = GetGame.game.dialogues[name]
                                 else:
                                     said = [""]
+                                    print("premiere interaction")
 
                                 dialogueTree = character.dialogue
                                 next = character.dialogue

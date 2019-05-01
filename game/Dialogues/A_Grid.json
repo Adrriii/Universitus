@@ -5,7 +5,7 @@
         "SetDialogueChoice('A_Grid', ['3'])"
     ],
     "2": [
-        "Très bien! Comme tu peux le voir en bas, il y a marqué \"Universitus/Accueil\". C'est ce qui indique ton emplacement dans le monde. \nJe te propose de t'adresser à monsieur Argus Rusarg afin qu'il te dise où te rendre pour ton inscription. \nPour lui parler, utilise la commande `talk M.Rusarg.py`. Oui, son extension est .py, comme toutes les entités de ce monde.",
+        "Très bien! Comme tu peux le voir en bas, il y a marqué \"Universitus/Accueil\". C'est ce qui indique ton emplacement dans le monde. \nJe te propose de t'adresser à monsieur Argus Rusarg afin qu'il te dise où te rendre pour ton inscription. \nPour lui parler, utilise la commande `talk Rusarg.py`. Oui, son extension est .py, comme toutes les entités de ce monde.",
         {}
     ],
     "3": [
