@@ -1,6 +1,6 @@
-class Rusarg:
+class Receptionniste:
 	def __init__(self):
-		self.dialogue = {'': ["La direction du Guichet Unique ? Vous ne savez pas lire ? Elle est indiquée sur tous les panneaux aux alentours ! Débrouillez-vous. \nMais attention ! Les première année sont toujours les pires, et vous n'avez pas une bouille angélique. Maintenant depeche toi de recuperer tes papiers d'inscription au guichet unique. Je vous ai à l'oeil...", {}]}
+		self.dialogue = {'': ['Bonjour, Mr ...\n Quel est votre nom ?', {'Mon nom est {username}': ['Très bien {username}, Votre inscription est maintenant terminée, voici vos papiers, les autres vous attendent deja pour la ceremonie. Depechez vous ou le professeur Dumbleblin vous lancera un mauvais processort', {}]}]}
 
 
 	def talk(self,saidToHim):
@@ -13,7 +13,7 @@ class Rusarg:
 		for listensTo in saidToHim:
 			thinkingAbout = next[listensTo]
 			next = thinkingAbout[1]
-		print(u"[36mRusarg:[37m ", end = '')
+		print(u"[36mReceptionniste:[37m ", end = '')
 		for line in thinkingAbout[0].split('\n'):
 			print(u"[37m"+line)
 		print("")
