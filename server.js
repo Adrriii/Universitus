@@ -17,6 +17,8 @@ var webSocketsServerPort = 1337;
 var webSocketServer = require('websocket').server;
 var http = require('http');
 
+var enableRegistration = false;
+
 /**
  * Global variables
  */
@@ -182,11 +184,15 @@ wsServer.on('request', function (request) {
                     // Challenge username with the database
                     await dm.getUserFromUsername(userName).then(rows => {
                         if (!rows || !rows.length) {
-                            // New user
-                            console.log((new Date()) + ' New user registering : ' + userName + ':'+uuid+'.');
-                            sendMessage(uuid, userName + "\\nNew Password for " + userName + " : ", true);
-                            // Go in state 2 for registration
-                            clients.get(uuid).status = status.REGISTER;
+                            if(enableRegistration) {
+                                // New user
+                                console.log((new Date()) + ' New user registering : ' + userName + ':'+uuid+'.');
+                                sendMessage(uuid, userName + "\\nNew Password for " + userName + " : ", true);
+                                // Go in state 2 for registration
+                                clients.get(uuid).status = status.REGISTER;
+                            } else {
+                                sendMessage(uuid, userName + "\\nUnknown login, please try again with a new one : ");
+                            }
                         } else {
                             // Existing user, asking for identification
                             console.log((new Date()) + " " +  userName + ':'+uuid+ + " logging in.");
