@@ -1,6 +1,6 @@
 class Receptionniste:
 	def __init__(self):
-		self.dialogue = {'': ['Bonjour, Mr ...\n Quel est votre nom ?', {'Mon nom est {username}': ['Très bien {username}, Votre inscription est maintenant terminée, voici vos papiers, les autres vous attendent deja pour la ceremonie. Depechez vous ou le professeur Dumbleblin vous lancera un mauvais processort', {}]}]}
+		self.dialogue = {'': ['Bonjour, Mr ...\n Quel est votre nom ?', {'Mon nom est Adri': ['Très bien Adri, Votre inscription est maintenant terminée, voici vos papiers, les autres vous attendent deja pour la ceremonie. Depechez vous ou le professeur Dumbleblin vous lancera un mauvais processort', {}]}]}
 
 
 	def talk(self,saidToHim):
