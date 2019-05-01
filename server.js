@@ -94,7 +94,7 @@ var optsc = {
     'Volumes': {},
     'VolumesFrom': [],
     'HostConfig': {
-        "Memory": 8000000,
+        "Memory": 32000000,
         "DiskQuota": 8000000,
     }
 };
