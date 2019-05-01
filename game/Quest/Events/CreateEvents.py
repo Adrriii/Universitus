@@ -22,7 +22,7 @@ class CreateLore(Event):
         pass
 
     def do(self):
-        with open(os.path.abspath(GetGame.game.root+"/"+self.path+"/.lore"), 'w') as f:
+        with open(os.path.abspath(GetGame.game.root+"/"+self.path+"/.lore"), 'w', encoding='utf-8') as f:
             f.write(self.message)
 
     def printItself(self):
