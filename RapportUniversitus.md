@@ -48,5 +48,7 @@ Notre jeu est une surcouche du système, dans lequel le joueur est bloqué. Le j
 
 ## Gestion du projet
 
+Pour la gestion de notre projet, nous avons utilisé les fonctionnalités fourni par GitLab. Nous avons ainsi les taches planifiées dans un ScrumBoard, nous permettant de générer automatiquement le diagramme de Gantt.
 
+La première partie du projet à été la réalisation du cahier des charges.
 
