@@ -202,7 +202,7 @@ class edit(Command):
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
                 else:
                     print("Vous n'avez pas accès à cet objet.")
-            except:
-                print("Vous ne pouvez pas modifier cet objet.")
+            except Exception as e:
+                print("Vous ne pouvez pas modifier cet objet. "+str(e))
         except:
             print("L'objet que vous tentez de modifier est invalide.")
