@@ -4,4 +4,4 @@ onStart: CreateCharacter(Character("A_Grid","Bethanie",[]))|NpcToPlayer("A_Grid"
 onResolve: NpcToPlayer("A_Grid",["2"]) | MoveEntity(Entity("A_Grid","Bethanie"),"Bethanie/Parc")
 steps: none
 conditions: CurrentPlayerDirectory("Bethanie/Parc")
-next: none
+next: findRusarg
