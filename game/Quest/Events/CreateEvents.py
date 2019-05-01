@@ -3,6 +3,7 @@ import os
 sys.path.append("..")
 from Quest.Event import Event
 from Entity.Entity import Entity
+from GetGame import GetGame
 
 class CreateLock(Event):
     def __init__(self, path, message="Cet endroit est verrouillé."):
@@ -21,7 +22,7 @@ class CreateLore(Event):
         pass
 
     def do(self):
-        with open(self.path+"/.lore", 'w') as f:
+        with open(os.path.abspath(GetGame.game.root+"/"+self.path+"/.lore"), 'w') as f:
             f.write(self.message)
 
     def printItself(self):

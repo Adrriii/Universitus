@@ -113,24 +113,21 @@ class talk(Command):
                                 text = ''.join(f.readlines())
                                 exec(text)
                                 character = eval(name+"()")
-                                events = []
 
                                 if(name in GetGame.game.dialogues.keys()):
                                     # Continue talk
                                     said = GetGame.game.dialogues[name]
                                 else:
                                     said = [""]
-                                    print("premiere interaction")
 
                                 dialogueTree = character.dialogue
+                                finalTree = dialogueTree
                                 next = character.dialogue
 
                                 for choice in said:
                                     dialogueTree = next[choice]
+                                    finalTree = dialogueTree
                                     next = dialogueTree[1]
-                                    if(len(dialogueTree)>2):
-                                        for ev in dialogueTree[2].split("|"):
-                                            events.append(eval(ev))
 
 
                                 if len(args) > 2:
@@ -140,6 +137,7 @@ class talk(Command):
                                         for choice,response in dialogueTree[1].items():
                                             if i == int(args[2]):
                                                 said.append(choice)
+                                                finalTree = response
                                                 break
                                             i += 1
                                     except Exception as e:
@@ -149,8 +147,13 @@ class talk(Command):
                                 GetGame.game.dialogues[name] = said
                                 character.talk(said)
 
-                                for event in events:
-                                    event.do()
+                                events = []
+
+                                if(len(finalTree)>2):
+                                    for ev in finalTree[2].split("|"):
+                                        events.append(eval(ev))
+                                    for event in events:
+                                        event.do()
                         except Exception as e:
                             print("*Bruits inintelligibles*")
                             print("Quelque chose ne va pas avec cette créature... ( "+str(e)+" )")
