@@ -14,9 +14,16 @@ class Game :
 
     def __init__(self) :
         GetGame.game = self
+        self.user_name = input("Veuillez saisir un nom d'utilisateur: ")
         self.quests = {}
         self.activeQuests = {}
         self.dialogues = {}
+
+        for subdir, dirs, files in os.walk("Quests"):
+            for file in files:
+                ext = os.path.splitext(file)[-1].lower()
+                if ext == ".quest":
+                    self.quests[file[:-6]] = Quest(file)
 
     def startQuest(self, name):
         quest = self.quests[name]
@@ -47,18 +54,6 @@ class Game :
     def start(self) :
         GetGame.commands = Command
         GetGame.talk = talk
-
-        self.user_name = input("Veuillez saisir un nom d'utilisateur: ")
-        
-        # Init quests
-        for subdir, dirs, files in os.walk("Quests"):
-            for file in files:
-                ext = os.path.splitext(file)[-1].lower()
-                if ext == ".quest":
-                    self.quests[file[:-6]] = Quest(file)
-                    
-        os.chdir("world")
-        self.root = os.getcwd()
 
         # Emulate user command to show lore example
         eval("cd()").perform(['cd',"Bethanie"])
