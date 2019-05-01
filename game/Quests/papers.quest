@@ -1,0 +1,7 @@
+name: Recuperer les papiers
+description: Rusarg vous dis de finaliser votre inscription, allons-y!
+onStart: CreateCharacter(Character("Receptionniste", "Universitus/Accueil", []))
+onResolve: CreateCharacter(Character("Stupidix", "Universitus/Accueil",[])) | NpcToPlayer("Stupidix", [""]) | MoveEntity(Entity("Stupidix", "Universitus/Accueil"), "Universitus/A22/Grande_Salle") | SetDialogueChoice("Stupidix", ["1"])
+steps: none
+conditions: CurrentDialogueChoice("Receptionniste", ["Mon nom est {username}"])
+next: none

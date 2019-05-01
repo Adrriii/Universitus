@@ -4,4 +4,4 @@ onStart: CreateCharacter(Character("Rusarg", "Bethanie/Parc", []))
 onResolve: NpcToPlayer("A_Grid", ["4"]) | MoveEntity(Entity("A_Grid", "Bethanie/Parc"), "Bethanie") | SetDialogueChoice("A_Grid", ["3"])
 steps: none
 conditions: CurrentDialogueChoice("Rusarg", [""])
-next: none
+next: papers
