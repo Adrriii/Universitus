@@ -17,7 +17,7 @@ var webSocketsServerPort = 1337;
 var webSocketServer = require('websocket').server;
 var http = require('http');
 
-var enableRegistration = false;
+var enableRegistration = true;
 
 /**
  * Global variables
