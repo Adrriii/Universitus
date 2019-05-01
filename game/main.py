@@ -5,10 +5,9 @@ import os
 from Game import *
 import os
 
-DEBUG = False
+DEBUG = True
 
 game = Game() 
-
 os.chdir("world")
 game.root = os.getcwd()
 

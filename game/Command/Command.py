@@ -186,7 +186,22 @@ class edit_(Command):
             print("L'objet que vous tentez de modifier est invalide.")
 
 class python3(Command):
-    pass
+    def perform(self, args):
+        
+        try:
+            destination = args[1]
+            try:
+                if(self.inbounds(destination)):
+                    output = subprocess.check_output(args, shell=True)
+                    return output
+                else:
+                    print("Vous n'avez pas accès à cet objet.")
+                    
+            except:
+                print("Vous ne pouvez pas modifier cet objet.")
+        except:
+            print("L'objet que vous tentez de modifier est invalide.")
+
 class edit(Command):
 
     def perform(self, args):
@@ -202,7 +217,7 @@ class edit(Command):
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
                 else:
                     print("Vous n'avez pas accès à cet objet.")
-            except Exception as e:
-                print("Vous ne pouvez pas modifier cet objet. "+str(e))
+            except:
+                print("Vous ne pouvez pas modifier cet objet.")
         except:
             print("L'objet que vous tentez de modifier est invalide.")

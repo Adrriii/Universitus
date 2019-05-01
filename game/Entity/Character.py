@@ -1,12 +1,24 @@
 from Entity.Entity import Entity
 from Entity.Characteristic import *
+from GetGame import GetGame
+import json
+import os
 
 class Character(Entity):
 
-    def __init__(self, name, worldPath, characs, dialogue, color = "\u001b[36m"):
+    def __init__(self, name, worldPath, characs, color = "\u001b[36m"):
         Entity.__init__(self, name, worldPath)
         self.characteristics = characs
-        self.dialogues = dialogue
+        dialogueFile = os.path.abspath(GetGame.game.gameRoot+"/Dialogues/"+self.name+".json")
+        try:
+            if os.path.exists(dialogueFile):
+                with open(dialogueFile, 'r', encoding="utf-8") as f:
+                    jsonText = json.loads("".join(f.readlines()))
+                    self.dialogues = jsonText
+            else:
+                self.dialogues = None
+        except Exception as e:
+            print(str(e))
         self.color = color
 
     def load(self, lines):

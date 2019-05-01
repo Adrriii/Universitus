@@ -8,10 +8,12 @@ from GetGame import GetGame
 class Game :
 
     root = ''
+    gameRoot = os.getcwd()
 
     forbiddenCommands = ["help"]
 
     def __init__(self) :
+        GetGame.game = self
         self.user_name = "Player"
         self.quests = {}
         self.activeQuests = {}
@@ -50,7 +52,6 @@ class Game :
             del self.activeQuests[quest]
 
     def start(self) :
-        GetGame.game = self
         GetGame.commands = Command
         GetGame.talk = talk
 
