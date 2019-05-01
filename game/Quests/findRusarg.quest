@@ -1,7 +1,7 @@
 name: Trouver Argus Rusargument
-description: A_Grid vous conseille de demander la direction du Guichet Unique à Monsieur Rusarg, le concierge d'Universitus. Mais où se trouve-t-il ?
+description: A_Grid vous conseille de demander la direction du Guichet Unique à Monsieur Rusarg, le concierge d'Universitus.
 onStart: CreateCharacter(Character("Rusarg", "Bethanie/Parc", []))
-onResolve: NpcToPlayer("A_Grid", ["3"]) | MoveEntity(Entity("A_Grid", "Bethanie"), "Bethanie")
+onResolve: NpcToPlayer("A_Grid", ["3"]) | MoveEntity(Entity("A_Grid", "Bethanie/Parc"), "Bethanie")
 steps: none
-conditions: CurrentDialogueChoice("Rusarg", "3")
+conditions: CurrentDialogueChoice("Rusarg", [""])
 next: none
