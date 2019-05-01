@@ -5,7 +5,7 @@ import os
 from Game import *
 import os
 
-DEBUG = False
+DEBUG = True
 
 game = Game() 
 
