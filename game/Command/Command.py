@@ -50,7 +50,7 @@ class cd(Command):
                     os.chdir(destination)
                     if(os.path.isfile(".lore")):
                         destroy = False
-                        with open(".lore",'r') as f:
+                        with open(".lore",'r', encoding='utf-8') as f:
                             for line in f.readlines():
                                 if(line == "destroy" or line == "destroy\n"):
                                     destroy = True
