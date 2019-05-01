@@ -13,8 +13,9 @@ class Character(Entity):
         try:
             if os.path.exists(dialogueFile):
                 with open(dialogueFile, 'r', encoding="utf-8") as f:
-                    jsonText = json.loads("".join(f.readlines()))
-                    self.dialogues = jsonText
+                    jsonText = "".join(f.readlines())
+                    jsonText = jsonText.replace("{username}",GetGame.game.user_name)
+                    self.dialogues = json.loads(jsonText)
             else:
                 self.dialogues = None
         except Exception as e:

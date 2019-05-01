@@ -14,7 +14,7 @@ class Game :
 
     def __init__(self) :
         GetGame.game = self
-        self.user_name = "Player"
+        self.user_name = input("Veuillez saisir un nom d'utilisateur: ")
         self.quests = {}
         self.activeQuests = {}
         self.dialogues = {}
@@ -54,8 +54,6 @@ class Game :
     def start(self) :
         GetGame.commands = Command
         GetGame.talk = talk
-
-        self.user_name = input("Veuillez saisir un nom d'utilisateur: ")
 
         # Emulate user command to show lore example
         eval("cd()").perform(['cd',"Bethanie"])

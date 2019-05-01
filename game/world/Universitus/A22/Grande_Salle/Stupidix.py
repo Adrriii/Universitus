@@ -1,6 +1,6 @@
-class Rusarg:
+class Stupidix:
 	def __init__(self):
-		self.dialogue = {'': ["La direction du Guichet Unique ? Vous ne savez pas lire ? Elle est indiquée sur tous les panneaux aux alentours ! Débrouillez-vous. \nMais attention ! Les première année sont toujours les pires, et vous n'avez pas une bouille angélique. Maintenant depeche toi de recuperer tes papiers d'inscription au guichet unique. Je vous ai à l'oeil...", {}]}
+		self.dialogue = {'': ["OHHHH, toi aussi tu as terminé ton inscription à l'universitus ?? AHAHAHAH je le savais !! Maintenant depeche toi de me rejoindre dans la grande salle pour la ceremonie ... Nous sommes deja en retard !! SERPYTHON 4 EVER <3", {}], '1': ["AHAHA tu as trouvé la grande salle GG <3 ! Allons-y let's go c'est parti l'ami, nous allons y assister je sais qu'on va y arriver !! Ou allons nous ?? A SERPYTHON <3", {}]}
 
 
 	def talk(self,saidToHim):
@@ -13,7 +13,7 @@ class Rusarg:
 		for listensTo in saidToHim:
 			thinkingAbout = next[listensTo]
 			next = thinkingAbout[1]
-		print(u"[36mRusarg:[37m ", end = '')
+		print(u"[36mStupidix:[37m ", end = '')
 		for line in thinkingAbout[0].split('\n'):
 			print(u"[37m"+line)
 		print("")
