@@ -2,7 +2,7 @@
 
 ## Introduction
 
-### Présentation du context
+
 
 Ce projet s'inscrit dans le cours de Projet de Communication Transdisciplinaire. <br> Nous devons mettre en place un guide pour les nouveaux étudiants en informatique, leur permettant de faire connaissance avec les services disponibles à l'université, et leur permettant d'apprendre les commandes de base de Linux.
 
@@ -30,7 +30,19 @@ Côté serveur, nous avons décidé d'utiliser NodeJs. Ce choix nous permettais 
 
 Nous avons décidé d'utiliser Docker, qui permet de fournir à l'utilisateur un univers *bac-à-sable* dans lequel il pourra réaliser des actions qui seraient normalement *dangereuse*. Ainsi, même si l'utilisateur parvient à supprimer des éléments importants du système entrainant un crash du conteneur, on pourra facilement le relancer. Et cela sans impacter les autres utilisateurs.
 
+Les conteneurs sont géré par le serveur, grâce à Dockerode. Le conteneur est créé à la connexion de l'utilisateur, et est fermé lorsqu'il quitte l'application.
+
 #### Jeu
+
+Pour le jeu, nous pouvions utiliser n'importe quel langages grâce à l'utilisation des conteneurs. Nous devions utiliser un langage nous permettant de faire des appels aux commandes Linux.
+
+Nous avons choisi Python 3, car c'est un langage que nous avons tous vue en cours, et notre application ne demande pas des performances très élevées. De plus, Python est un langage de haut niveau, qui nous permet de gagner du temps de développement et de traiter facilement les chaines de caractères.
+
+Notre jeu a été réalisé en gardant à l'esprit qu'un utilisateur puisse facilement ajouter du contenue. Ainsi l'ajout de quête et de personnages se font à l'aide de fichier de configuration.
+
+Notre jeu est une surcouche du système, dans lequel le joueur est bloqué. Le joueur évolue donc dans l'arborescence du système, dans lequel le jeu ajoute du contenu.
+
+
 
 ## Fonctionnalités
 
