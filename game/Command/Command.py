@@ -38,7 +38,7 @@ class Command:
                         for line in l.readlines():
                             print(line)
                     return False
-        return os.path.abspath(GetGame.game.root+"/") in full
+        return os.path.abspath(GetGame.game.root) in full
 
 class cd(Command):
 
@@ -47,7 +47,7 @@ class cd(Command):
             destination = args[1]
             try:
                 if(self.inbounds(destination)):
-                    os.chdir(args[1])
+                    os.chdir(destination)
                     if(os.path.isfile(".lore")):
                         destroy = False
                         with open(".lore",'r') as f:
@@ -57,7 +57,8 @@ class cd(Command):
                                 else:
                                     print(line, end = '')
                             print("\n")
-                        os.remove(".lore")
+                        if destroy:
+                            os.remove(".lore")
                 else:
                     print("Impossible d'aller ici.")
             except:
