@@ -84,9 +84,6 @@ class cat(Command):
 class ls(Command):
     pass
 
-class pwd(Command):
-    pass
-
 class touch(Command):
 
     def perform(self, args):
@@ -187,23 +184,6 @@ class edit_(Command):
                     print("Vous n'avez pas accès à cet objet.")
             except Exception as e:
                 print("Vous ne pouvez pas modifier cet objet. "+str(e))
-        except:
-            print("L'objet que vous tentez de modifier est invalide.")
-
-class python3(Command):
-    def perform(self, args):
-        
-        try:
-            destination = args[1]
-            try:
-                if(self.inbounds(destination)):
-                    output = subprocess.check_output(args, shell=True)
-                    return output
-                else:
-                    print("Vous n'avez pas accès à cet objet.")
-                    
-            except:
-                print("Vous ne pouvez pas modifier cet objet.")
         except:
             print("L'objet que vous tentez de modifier est invalide.")
 
