@@ -194,7 +194,11 @@ class edit(Command):
             destination = args[1]
             try:
                 if(self.inbounds(destination)):
-                    with open(args[1],mode='r', encoding="utf-8") as f:
+                    if(not os.path.isfile(destination)):
+                        with open(destination,mode='w') as f:
+                            f.write('')
+                            
+                    with open(destination,mode='r', encoding="utf-8") as f:
                         return bytes(f.read(), 'utf-8')+bytes("\\eof", 'utf-8')
                 else:
                     print("Vous n'avez pas accès à cet objet.")

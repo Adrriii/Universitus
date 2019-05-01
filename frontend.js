@@ -90,16 +90,21 @@ $(function () {
                 addMessage(json.data.author, command+"\\n");
 
                 var parts2 = parts.join("").split("\\eof");
-                var text = parts2.shift();
-                var rest = parts2.join("\\eof");
 
-                if(editerrors.includes(text)) {
-                    addMessage(json.data.author, text);
-                    input.focus();
+                if(parts2.length > 2) {
+                    var text = parts2.shift();
+                    var rest = parts2.join("\\eof");
+    
+                    if(editerrors.includes(text)) {
+                        addMessage(json.data.author, text);
+                        input.focus();
+                    } else {
+                        editorExitMsg = rest;
+                        showEditor(command.split(" ")[1],text);
+                        input.focus();
+                    }
                 } else {
-                    editorExitMsg = rest;
-                    showEditor(command.split(" ")[1],text);
-                    input.focus();
+                    addMessage(json.data.author, json.data.text);
                 }
             } else {
                 // Refocus as a new message arrives
