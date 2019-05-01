@@ -1,6 +1,7 @@
-class Receptionniste:
+class Dumbleblin:
 	def __init__(self):
-		self.dialogue = {'': ['Bonjour, Mr ...\n Quel est votre nom ?', {'Mon nom est Adri': ['Très bien Adri, Votre inscription est maintenant terminée, voici vos papiers, les autres vous attendent deja pour la ceremonie. Depechez vous ou le professeur Dumbleblin vous lancera un mauvais processort', {}]}]}
+		self.HP = 10000
+		self.dialogue = {'1': ["Stupidix Malfalse et Adri, venez vous asseoir devant s'il vous plait. Il est important de bien suivre cette présentation.", {}]}
 
 
 	def talk(self,saidToHim):
@@ -13,7 +14,7 @@ class Receptionniste:
 		for listensTo in saidToHim:
 			thinkingAbout = next[listensTo]
 			next = thinkingAbout[1]
-		print(u"[36mReceptionniste:[37m ", end = '')
+		print(u"[36mDumbleblin:[37m ", end = '')
 		for line in thinkingAbout[0].split('\n'):
 			print(u"[37m"+line)
 		print("")
