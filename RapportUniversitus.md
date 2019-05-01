@@ -20,7 +20,11 @@ Nous avons donc décidé de réaliser le terminal nous même, inspiré de divers
 
 Nous avons donc utilisé du HTML 5, CSS 3 et Javascript ES6. Notre application est donc compatible avec une large majorité de navigateur web.
 
+Le terminal permet d'avoir une coloration basique, et permet l'utilisation d'un  éditeur de texte, ace, pour que le joueur puisse facilement modifier des fichiers.
+
 Pour la communication avec le serveur, nous avons utilisé dans un premier temps des appels Ajax. Puis en testant différentes technologies, nous avons décidés d'utiliser les WebSocket. Permettant de grandement simplifier la communication avec le serveur, toujours en gardant une compatibilité avec les navigateurs web les plus utilisés.
+
+
 
 #### Back-End
 
@@ -66,6 +70,6 @@ Le projet est publiable automatiquement grâce à une image Docker, et il est po
 
 ### Conclusion
 
-Ce projet nous a permis de découvrire la programmation web, et l'organisation d'un projet sur le long terme.
+Ce projet nous a permis de découvrir la programmation web, et l'organisation d'un projet sur le long terme.
 
-Il nous a permis de découvrir des outils tels que le ScrumBoard et le diagramme de Gantt
+Il nous a permis de découvrir des outils tels que le ScrumBoard et le diagramme de Gantt.
