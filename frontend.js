@@ -87,11 +87,11 @@ $(function () {
                 // Add the normal message to the console (the command typed by the user)
                 var command = parts.shift();
                 console.log("message: "+command)
-                addMessage(json.data.author, command+"\\n");
 
                 var parts2 = parts.join("").split("\\eof");
 
-                if(parts2.length > 2) {
+                if(parts2.length > 1) {
+                    addMessage(json.data.author, command+"\\n");
                     var text = parts2.shift();
                     var rest = parts2.join("\\eof");
     
