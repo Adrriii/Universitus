@@ -1,6 +1,6 @@
 {
     "1": [
-        "Bienvenue dans le monde magique de la programmation ! Ici tu apprendras à te servir d'un pouvoir extrêment rare : l'Unixité. \nC'est une compétence que seuls les plus grands informagiciens peuvent maîtriser, mais grâce à ton parcours dans cette école tu sauras surement révéler ton potentiel ! \nPour commencer, je vais t'apprendre à te téléporter d'un endroit à un autre. Pour cela, utilise la commande `cd <destination>`, par exemple : `cd Parc`. Je t'attends là-bas !",
+        "Bienvenue dans le monde magique de la programmation {username} ! Ici tu apprendras à te servir d'un pouvoir extrêment rare : l'Unixité. \nC'est une compétence que seuls les plus grands informagiciens peuvent maîtriser, mais grâce à ton parcours dans cette école tu sauras surement révéler ton potentiel ! \nPour commencer, je vais t'apprendre à te téléporter d'un endroit à un autre. Pour cela, utilise la commande `cd <destination>`, par exemple : `cd Parc`. Je t'attends là-bas !",
         {},
         "SetDialogueChoice('A_Grid', ['3'])"
     ],

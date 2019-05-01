@@ -8,8 +8,7 @@ import os
 DEBUG = True
 
 game = Game() 
-os.chdir("world")
-game.root = os.getcwd()
+game.user_name = "Player"
 
 while(True):
     try:

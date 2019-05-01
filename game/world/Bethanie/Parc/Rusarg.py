@@ -1,6 +1,6 @@
 class Rusarg:
 	def __init__(self):
-		self.dialogue = {'': ["La direction du Guichet Unique ? Vous ne savez pas lire ? Elle est indiquée sur tous les panneaux aux alentours ! Débrouillez-vous. \nMais attention ! Les première année sont toujours les pires, et vous n'avez pas une bouille angélique. Je vous ai à l'oeil...", {}]}
+		self.dialogue = {'': ["La direction du Guichet Unique ? Vous ne savez pas lire ? Elle est indiquée sur tous les panneaux aux alentours ! Débrouillez-vous. \nMais attention ! Les première année sont toujours les pires, et vous n'avez pas une bouille angélique. Maintenant depeche toi de recuperer tes papiers d'inscription à l'accueil. Je vous ai à l'oeil...", {}]}
 
 
 	def talk(self,saidToHim):
