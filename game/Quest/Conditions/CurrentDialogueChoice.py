@@ -7,6 +7,7 @@ import os
 class CurrentDialogueChoice(Condition):
     def __init__(self, npc, dialogue):
         self.npc = npc
+        dialogue = dialogue.replace("{username}", GetGame.game.user_name)
         self.dialogue = dialogue
         pass
 
