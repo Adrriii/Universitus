@@ -1,5 +1,9 @@
 # Rapport Universitus
 
+## https://gitlab.com/Adri-/universitus
+
+
+
 ## Introduction
 
 
@@ -72,4 +76,4 @@ Le projet est publiable automatiquement grâce à une image Docker, et il est po
 
 Ce projet nous a permis de découvrir la programmation web, et l'organisation d'un projet sur le long terme.
 
-Il nous a permis de découvrir des outils tels que le ScrumBoard et le diagramme de Gantt.
+Il nous a permis de découvrir des outils tels que le ScrumBoard et le diagramme de Gantt, ainsi que de prendre en  compte les besoins non-fonctionnels d'un client, puis d'adapter notre vision du projet à la sienne.
